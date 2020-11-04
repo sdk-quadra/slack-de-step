@@ -18,6 +18,9 @@
           <%= p.time_select :time, {prompt: false, ignore_date: true, include_seconds: true, minute_step: 1}  %>に送信する
         <% end %>
         <p><%= m.text_area :message, size: "60x12" %></p>
+        画像を添付する
+        <p><%= m.label :image, "ここをクリックして画像を選択" %>
+          <%= m.file_field :image, accept: 'image/*' %></p>
         <%= m.submit "postする" %>
       <% end %>
     </div>

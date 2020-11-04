@@ -13,10 +13,12 @@ class MessagesController < ApplicationController
     time_minute = params[:message][:push_timing_attributes]["time(5i)"]
     time_second = params[:message][:push_timing_attributes]["time(6i)"]
     time = "#{time_hour}:#{time_minute}:#{time_second}"
+    image = params[:message][:image]
 
     message = Message.new
     message.message = text if text.present?
     message.channel_id = params[:channel_id]
+    message.image = image if image.present?
     message.save!
 
     push_timing = PushTiming.new
@@ -46,7 +48,6 @@ class MessagesController < ApplicationController
 
     @message.update(message: text) if text.present?
     @message.update(image: image) if image.present?
-    @message.update(image: nil) if params["aaa"] == "1"
 
     @message_push_timing.update(in_x_days: in_x_days, time: time)
 
