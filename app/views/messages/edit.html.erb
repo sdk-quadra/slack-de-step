@@ -1,0 +1,46 @@
+<div class="header">
+  <div class="back">
+    <%= link_to "<", channel_path(1), class: "back"%>
+  </div>
+  <div class="channel_name text-center">
+    <h3># general</h3>
+  </div>
+</div>
+
+<div class="message_body">
+  <div class="message_timing">
+    <div class="timing_title">送信タイミング</div>
+
+    <div class="timing_desc">チャンネル登録して
+      <%= form_with(model: @message, url: channel_message_path) do |m| %>
+        <%= m.fields_for :push_timing do |p| %>
+        <p><%= p.select :in_x_days, x_days_after %>日後の
+          <%= p.time_select :time, {prompt: false, ignore_date: true, include_seconds: true, minute_step: 1}  %>に送信する</p>
+        <% end %>
+        <p><%= m.text_area :message, size: "60x12" %></p>
+        <%= m.submit "postする" %>
+      <% end %>
+    </div>
+    <div class="tabs">
+      <input id="all" type="radio" name="tab_item" checked>
+      <label class="tab_item" for="all">テキスト</label>
+      <input id="programming" type="radio" name="tab_item">
+      <label class="tab_item" for="programming">画像</label>
+      <div>
+        <div class="tab_content" id="all_content">
+          最近どうですか？<br />
+          詰まったら質問してみよう<br />
+          質問の仕方<br />
+          https://scienceshift.jp/method-of-thinking-practical-first/
+        </div>
+        <div class="tab_content" id="programming_content">
+          プログラミングの内容がここに入ります
+        </div>
+      </div>
+    </div>
+    <div class="message_button">
+      <input type="submit" value="テスト送信">
+      <input type="submit" value="登録">
+    </div>
+  </div>
+</div>
