@@ -5,4 +5,8 @@ class ChannelsController < ApplicationController
   def new
 
   end
+
+  def show
+
+  end
 end
