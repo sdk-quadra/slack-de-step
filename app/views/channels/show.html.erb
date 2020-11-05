@@ -22,56 +22,39 @@
         <%= link_to "+ メッセージを追加", new_channel_message_path(1), class: "add_message_link" %>
       </div>
 
-      <div class="messages">
-        <div class="post_datetime text-divider">
-          <p class="post_datetime_label">3日後の10:00</p>
-        </div>
-        <div class="post_menu">
-          <a href="#">編集</a><br />
-          <a href="#">削除</a><br />
-        </div>
-
-        <div class="post_contents">
-          <div class="icon">
-            <%= image_tag(@user_info_profile_image, class: "post_icon") %>
+      <% @messages_sorted.each do |message| %>
+        <div class="messages">
+          <div class="post_datetime text-divider">
+            <p class="post_datetime_label"><%= message.push_timing.in_x_days %>日後の<%= message.push_timing.time.strftime('%H:%M:%S') %></p>
           </div>
-          <div class="post_data">
-            <div class="post_name">
-              <p><%= @user_info_realname %></p>
-            </div>
-            <div class="post_content">
-              <p>何か質問してみましょう</p>
-              <p><a href="https://business-textbooks.com/qanda-faq-difference/">https://business-textbooks.com/qanda-faq-difference/</a></p>
-            </div>
+          <div class="post_menu">
+            <%= link_to "編集", edit_channel_message_path(message.channel_id, message.id) %><br />
+            <%= link_to "削除", channel_message_path(message.channel_id, message.id), method: :delete %>
           </div>
-        </div>
 
-      </div>
-
-      <div class="messages">
-        <div class="post_datetime text-divider">
-          <p class="post_datetime_label">5日後の10:00</p>
-        </div>
-        <div class="post_menu">
-          <a href="#">編集</a><br />
-          <a href="#">削除</a><br />
-        </div>
-
-        <div class="post_contents">
-          <div class="icon">
-            <img src="https://ca.slack-edge.com/T010E4HB6R4-U010BU9GGBX-d79dd0119a68-512" class="post_icon">
-          </div>
-          <div class="post_data">
-            <div class="post_name">
-              <p>sdk-quadra</p>
+          <div class="post_contents">
+            <div class="icon">
+              <%= image_tag(@user_info_profile_image, class: "post_icon") %>
             </div>
-            <div class="post_content">
-              <p>何か困っている事ありますか？</p>
-              <img src="https://slack-imgs.com/?c=1&o1=ro&url=https%3A%2F%2Fmaisuma.jp%2Ftoppage%2Fimg%2Fcolumn%2F53%2F1.jpg" class="post_img">
+            <div class="post_data">
+              <div class="post_name">
+                <p><%= @user_info_realname %></p>
+              </div>
+
+              <div class="post_content">
+                <% if message.message %>
+                  <%= simple_format(message.message) %>
+                <% end %>
+                <% if message.image_url %>
+                  <%= image_tag(message.image_url, {class: "post_img"}) %>
+                <% end %>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      <% end %>
+
+
     </div>
   </div>
 </div>

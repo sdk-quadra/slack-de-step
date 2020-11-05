@@ -34,5 +34,11 @@ class ChannelsController < ApplicationController
     @user_info_realname = JSON.parse(user_info[0])["user"]["real_name"]
     @user_info_profile_image = JSON.parse(user_info[0])["user"]["profile"]["image_192"]
 
+
+    @messages_sorted = Message.where(channel_id: params[:id]).sort_by do |message|
+      [message.push_timing.in_x_days, message.push_timing.time.to_i]
+    end
+
   end
+
 end

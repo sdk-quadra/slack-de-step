@@ -111,4 +111,9 @@ class MessagesController < ApplicationController
       end
     end
   end
+
+  def destroy
+    message = params[:id]
+    Message.destroy(message)
+  end
 end
