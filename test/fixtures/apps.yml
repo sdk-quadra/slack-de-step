@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  workspace_id: 1
+  oauth_bot_token: MyString
+  bot_user_id: MyString
+  is_deleted: false
+
+two:
+  workspace_id: 1
+  oauth_bot_token: MyString
+  bot_user_id: MyString
+  is_deleted: false
