@@ -1,3 +1,6 @@
 Rails.application.routes.draw do
-  resources :channels
+  get 'messages/new'
+  resources :channels do
+    resources :messages
+  end
 end
