@@ -19,7 +19,7 @@
       </div>
 
       <div class="add_message">
-        <%= link_to "+ メッセージを追加", new_channel_message_path(1), class: "add_message_link" %>
+        <%= link_to "+ メッセージを追加", new_workspace_channel_message_path(channel_id: 1), class: "add_message_link" %>
       </div>
 
       <% @messages_sorted.each do |message| %>
@@ -28,8 +28,8 @@
             <p class="post_datetime_label"><%= message.push_timing.in_x_days %>日後の<%= message.push_timing.time.strftime('%H:%M:%S') %></p>
           </div>
           <div class="post_menu">
-            <%= link_to "編集", edit_channel_message_path(message.channel_id, message.id) %><br />
-            <%= link_to "削除", channel_message_path(message.channel_id, message.id), method: :delete %>
+            <%= link_to "編集", edit_workspace_channel_message_path(1, message.channel_id, message.id) %><br />
+            <%= link_to "削除", workspace_channel_message_path(1, message.channel_id, message.id), method: :delete %>
           </div>
 
           <div class="post_contents">

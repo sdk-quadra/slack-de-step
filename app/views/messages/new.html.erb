@@ -1,6 +1,6 @@
 <div class="header">
   <div class="back">
-    <%= link_to "<", channel_path(1), class: "back"%>
+    <%= link_to "<", workspace_channel_path(1, 1), class: "back"%>
   </div>
   <div class="channel_name text-center">
     <h3># general</h3>
@@ -12,7 +12,7 @@
     <div class="timing_title">送信タイミング</div>
 
     <div class="timing_desc">チャンネル登録して
-      <%= form_with(model: @message, url: channel_messages_path) do |m| %>
+      <%= form_with(model: @message, url: workspace_channel_messages_path) do |m| %>
         <%= m.fields_for :push_timing do |p| %>
           <%= p.select :in_x_days, x_days_after %>日後の
           <%= p.time_select :time, {prompt: false, ignore_date: true, include_seconds: true, minute_step: 1}  %>に送信する

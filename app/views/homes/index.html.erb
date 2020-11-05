@@ -1,0 +1,12 @@
+<h1>slackログイン</h1>
+<% flash.each do |name, msg| -%>
+  <%= content_tag :div, msg, class: name %>
+<% end -%>
+
+<% if session[:user] %>
+  <%= session[:user].to_json %>
+  <%= link_to 'ログアウト', '/auth/signout' %>
+<% else %>
+  <%= link_to 'slackでログイン', '/auth/slack' %>
+<% end %>
+
