@@ -2,7 +2,7 @@
 
 class Channel < ApplicationRecord
   belongs_to :app
-  has_many :participations
+  has_many :participations, dependent: :destroy
   has_many :companions, through: :participations
-  has_many :messages
+  has_many :messages, dependent: :destroy
 end

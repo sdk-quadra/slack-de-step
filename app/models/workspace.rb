@@ -2,5 +2,5 @@
 
 class Workspace < ApplicationRecord
   belongs_to :user
-  has_one :app
+  has_one :app, dependent: :destroy
 end
