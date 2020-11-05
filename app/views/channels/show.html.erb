@@ -19,7 +19,7 @@
       </div>
 
       <div class="add_message">
-        <%= link_to "+ メッセージを追加", new_workspace_channel_message_path(channel_id: 1), class: "add_message_link" %>
+        <%= link_to "+ メッセージを追加", new_workspace_channel_message_path(channel_id: @channel), class: "add_message_link" %>
       </div>
 
       <% @messages_sorted.each do |message| %>
