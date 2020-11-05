@@ -1,11 +1,15 @@
 <div class="flex-container">
   <div class="flex-item">
     <img src="https://avatars.slack-edge.com/2020-10-12/1418393192325_a55bbafd0056bbddcb32_88.png" class="ws_icon">
-    <p>general<br />
-      10人 <a href="#">削除</a></p>
-    <p class="add_channel">+ チャンネルを追加</p>
-  </div>
 
+    <% @channels.each do |channel| %>
+      <p><%= link_to channel.name, channel.id.to_s %><br />
+        10人
+      </p>
+    <% end %>
+    <p class="add_channel">+ チャンネルを追加</p>
+
+  </div>
   <div class="row-item">
     <h3 class="text-center channel_title"># general</h3>
 
@@ -53,8 +57,6 @@
           </div>
         </div>
       <% end %>
-
-
     </div>
   </div>
 </div>
