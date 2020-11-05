@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Message < ApplicationRecord
   has_one :push_timing
   belongs_to :channel

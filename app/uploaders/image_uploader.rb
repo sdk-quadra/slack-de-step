@@ -1,5 +1,6 @@
-class ImageUploader < CarrierWave::Uploader::Base
+# frozen_string_literal: true
 
+class ImageUploader < CarrierWave::Uploader::Base
   storage :fog
 
   def store_dir
@@ -7,10 +8,10 @@ class ImageUploader < CarrierWave::Uploader::Base
   end
 
   def extension_whitelist
-    %w(jpg jpeg gif png)
+    %w[jpg jpeg gif png]
   end
 
   def filename
-    original_filename if original_filename
+    original_filename
   end
 end

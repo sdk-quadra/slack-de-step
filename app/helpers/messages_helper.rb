@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module MessagesHelper
   def x_days_after
     x_days_after = []

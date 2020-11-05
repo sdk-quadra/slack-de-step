@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CurlBuilder
   def build(base_url:, method: "GET", params: {}, headers: {}, body_filename: nil, verbose: true, silent: true, options: "")
     url = base_url
@@ -17,28 +19,22 @@ class CurlBuilder
   end
 end
 
-
 class ChannelsController < ApplicationController
-  def index
-  end
+  def index; end
 
-  def new
-  end
+  def new; end
 
   def show
     curl = CurlBuilder.new
-    bot_token = ENV['OAUTH_BOT_TOKEN']
-    bot_user_id = ENV['BOT_USER_ID']
+    bot_token = ENV["OAUTH_BOT_TOKEN"]
+    bot_user_id = ENV["BOT_USER_ID"]
 
     user_info = curl.exec(base_url: "https://slack.com/api/users.info?user=#{bot_user_id}", headers: { "Authorization": "Bearer " + bot_token })
     @user_info_realname = JSON.parse(user_info[0])["user"]["real_name"]
     @user_info_profile_image = JSON.parse(user_info[0])["user"]["profile"]["image_192"]
 
-
     @messages_sorted = Message.where(channel_id: params[:id]).sort_by do |message|
       [message.push_timing.in_x_days, message.push_timing.time.to_i]
     end
-
   end
-
 end
