@@ -6,10 +6,13 @@
     "@rails/activestorage": "^6.0.0",
     "@rails/ujs": "^6.0.0",
     "@rails/webpacker": "4.3.0",
-    "turbolinks": "^5.2.0"
+    "eslint": "^7.11.0",
+    "extends": "eslint:recommended"
   },
   "version": "0.1.0",
   "devDependencies": {
+    "eslint-plugin-eslint-comments": "^3.2.0",
+    "eslint-plugin-react": "^7.21.5",
     "webpack-dev-server": "^3.11.0"
   }
 }

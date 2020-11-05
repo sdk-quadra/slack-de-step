@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreatePushTimings < ActiveRecord::Migration[6.0]
   def change
     create_table :push_timings do |t|
