@@ -20,7 +20,14 @@
         <p><%= m.text_area :message, size: "60x12" %></p>
         画像を添付する
         <p><%= m.label :image, "ここをクリックして画像を選択" %>
-          <%= m.file_field :image, accept: 'image/*' %></p>
+          <%= m.file_field :image, onchange: 'previewFileWithId()', accept: 'image/*', class: "hidden" %></p>
+        <% if @message.image_url.present? %>
+          <p><%= image_tag(@message.image_url, {id: 'preview', class: "post_img"}) %></p>
+        <% else %>
+          <p><img id="preview" class="post_img"></p>
+        <% end %>
+        <p><%= button_tag "画像を削除する", id: "deleteImg" %></p>
+        <p><%= check_box_tag "aaa", 1, false, id: "delete_check", class: "hidden" %></p>
         <%= m.submit "postする" %>
       <% end %>
     </div>
@@ -47,3 +54,48 @@
     </div>
   </div>
 </div>
+
+
+<script>
+    //初期値
+    var preview = document.getElementById("preview");
+    if (preview.src === "" || preview.src === null) {
+        document.getElementById("deleteImg").style.display = "none";
+    }
+
+    function previewFileWithId() {
+        const target = this.event.target;
+        const file = target.files[0];
+        const reader  = new FileReader();
+        console.log(target.files.length);
+        reader.onloadend = function () {
+            // preview.src = reader.result;
+            document.getElementById("preview").src = reader.result;
+            document.getElementById("deleteImg").style.display = "block";
+            // localImageWidth(reader.result);
+
+        }
+        if (file) {
+            reader.readAsDataURL(file);
+        } else {
+            document.getElementById("preview").src = '';
+            document.getElementById("deleteImg").style.display = "none";
+        }
+    }
+
+    function deleteImg() {
+        document.getElementById("preview").src = '';
+    }
+
+    var deleteBtn = document.getElementById("deleteImg");
+    deleteBtn.addEventListener("click", function() {
+        var result = window.confirm("本当に削除しますか？");
+
+        if (result) {
+            document.getElementById("preview").src = '';
+            document.getElementById("delete_check").checked = true;
+            document.getElementById("deleteImg").style.display = "none";
+        } else {
+        }
+    })
+</script>
