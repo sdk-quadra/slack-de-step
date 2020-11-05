@@ -46,6 +46,8 @@ class MessagesController < ApplicationController
     push_timing.time = Time.parse(time)
     push_timing.save!
 
+    message_url = Message.find(message.id).image_url
+
     curl = CurlBuilder.new
     bot_token = ENV['OAUTH_BOT_TOKEN']
 
@@ -62,7 +64,7 @@ class MessagesController < ApplicationController
 
       if push_datetime > current_datetime
         curl.exec(base_url: "https://slack.com/api/chat.scheduleMessage",
-                  params: { "channel": member, "token": bot_token, "post_at": push_datetime.to_i, "text": text})
+                  params: { "channel": member, "token": bot_token, "post_at": push_datetime.to_i, "blocks": "[{\"type\": \"section\",\"text\": {\"type\": \"plain_text\", \"text\": \"#{text}\"}, \"block_id\": \"text1\"}, {\"type\": \"image\", \"title\": {\"type\": \"plain_text\",\"text\": \"pitcure\"}, \"image_url\": \"#{message_url}\", \"block_id\": \"image4\",\"alt_text\": \"pitcure here\"}]"})
       end
     end
   end
@@ -105,7 +107,7 @@ class MessagesController < ApplicationController
 
       if push_datetime > current_datetime
         curl.exec(base_url: "https://slack.com/api/chat.scheduleMessage",
-                  params: { "token": bot_token, "channel": member, "post_at": push_datetime.to_i, "text": text})
+                  params: { "token": bot_token, "channel": member, "post_at": push_datetime.to_i,"blocks": "[{\"type\": \"section\",\"text\": {\"type\": \"plain_text\", \"text\": \"#{text}\"}, \"block_id\": \"text1\"}, {\"type\": \"image\", \"title\": {\"type\": \"plain_text\",\"text\": \"pitcure\"}, \"image_url\": \"#{@message.image_url}\", \"block_id\": \"image4\",\"alt_text\": \"pitcure here\"}]"})
       end
     end
   end
