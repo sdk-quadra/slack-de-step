@@ -25,6 +25,7 @@ class ChannelsController < ApplicationController
   def new; end
 
   def show
+    @channel = params[:id]
     curl = CurlBuilder.new
     bot_token = ENV["OAUTH_BOT_TOKEN"]
     bot_user_id = ENV["BOT_USER_ID"]
