@@ -89,6 +89,7 @@ class MessagesController < ApplicationController
 
     @message.update(message: text) if text.present?
     @message.update(image: image) if image.present?
+    @message.update(image: nil) if params["aaa"] == "1"
 
     @message_push_timing.update(in_x_days: in_x_days, time: time)
 
