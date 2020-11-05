@@ -22,7 +22,7 @@ class ChannelsController < ApplicationController
   def index
   end
 
-  def new;
+  def new
   end
 
   def show
@@ -32,6 +32,7 @@ class ChannelsController < ApplicationController
 
     user_info = curl.exec(base_url: "https://slack.com/api/users.info?user=#{bot_user_id}", headers: { "Authorization": "Bearer " + bot_token })
     @user_info_realname = JSON.parse(user_info[0])["user"]["real_name"]
+    @user_info_profile_image = JSON.parse(user_info[0])["user"]["profile"]["image_192"]
 
   end
 end
