@@ -2,6 +2,6 @@
 
 class App < ApplicationRecord
   belongs_to :workspace
-  has_many :channels
-  has_many :companions
+  has_many :channels, dependent: :destroy
+  has_many :companions, dependent: :destroy
 end

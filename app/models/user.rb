@@ -20,7 +20,7 @@ class CurlBuilder
 end
 
 class User < ApplicationRecord
-  has_one :workspace
+  has_one :workspace, dependent: :destroy
 
   def self.find_or_create_form_auth(auth)
     provider = auth[:provider]
