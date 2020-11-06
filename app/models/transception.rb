@@ -1,0 +1,2 @@
+class Transception < ApplicationRecord
+end

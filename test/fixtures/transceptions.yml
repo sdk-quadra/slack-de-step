@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  conversation_id: MyString
+  is_read: false
+  is_deleted: false
+
+two:
+  conversation_id: MyString
+  is_read: false
+  is_deleted: false
