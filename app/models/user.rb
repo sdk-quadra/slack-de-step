@@ -1,26 +1,8 @@
 # frozen_string_literal: true
 
-class CurlBuilder
-  def build(base_url:, method: "GET", params: {}, headers: {}, body_filename: nil, verbose: true, silent: true, options: "")
-    url = base_url
-    url += "?" + URI.encode_www_form(params) unless params.empty?
-    cmd = "curl '#{url}'"
-    cmd += " -d '@#{body_filename}'" if body_filename
-    cmd += " " + headers.map { |k, v| "-H '#{k}: #{v}'" }.join(" ") + " " unless headers.empty?
-    # cmd += " -v " if verbose
-    cmd += " -s " if silent
-    # cmd += options
-    cmd
-  end
-
-  def exec(*args, **kwargs)
-    cmd = build(*args, **kwargs)
-    o, e, s = Open3.capture3(cmd)
-  end
-end
-
 class User < ApplicationRecord
   has_one :workspace, dependent: :destroy
+  extend CurlBuilder
 
   def self.find_or_create_form_auth(auth)
     provider = auth[:provider]
@@ -52,8 +34,8 @@ class User < ApplicationRecord
     ################
     # 新規ログインと同時にchannelとcompanionはその時点のデータを全登録
     ################
-    curl = CurlBuilder.new
-    conversation_lists = curl.exec(base_url: "https://slack.com/api/conversations.list", headers: { "Authorization": "Bearer " + oauth_bot_token })
+
+    conversation_lists = curl_exec(base_url: "https://slack.com/api/conversations.list", headers: { "Authorization": "Bearer " + oauth_bot_token })
     conversation_lists = JSON.parse(conversation_lists[0])["channels"]
 
     conversation_lists.each do |conversation|
@@ -65,7 +47,7 @@ class User < ApplicationRecord
       end
     end
 
-    user_lists = curl.exec(base_url: "https://slack.com/api/users.list", headers: { "Authorization": "Bearer " + oauth_bot_token })
+    user_lists = curl_exec(base_url: "https://slack.com/api/users.list", headers: { "Authorization": "Bearer " + oauth_bot_token })
     user_lists = JSON.parse(user_lists[0])["members"]
 
     user_lists.each do |user|
