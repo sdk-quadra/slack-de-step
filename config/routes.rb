@@ -16,6 +16,6 @@ Rails.application.routes.draw do
     end
   end
 
-  get "server" => "channels#server"
-  post "server" => "channels#server"
+  get "server" => "homes#server"
+  post "server" => "homes#server"
 end
