@@ -65,20 +65,12 @@ class ChannelsController < ApplicationController
       else
         ### 新規user登録の場合。user登録+channel登録。team_joinイベントはchannel参加のjson取れないのでmember_joinで行う
         app_id = Workspace.find_by(slack_ws_id: params[:team_id]).app.id if Workspace.find_by(slack_ws_id: params[:team_id]).present?
-
-        # app_id = App.find_by(api_app_id: params[:api_app_id]).id if params[:api_app_id].present?
-        p "--------app_id-----"
-        p app_id
-
         slack_user_id = params[:event][:user] if params[:event][:user].present?
-        p "--------app_id-----"
-        p slack_user_id
 
         companion = Companion.find_or_create_by!(app_id: app_id, slack_user_id: slack_user_id) do |companion|
           companion.app_id = app_id
           companion.slack_user_id = slack_user_id
         end
-
 
         ### default設定のchannelの1つ目を登録する。2つ目以降のchannelはuser登録ありの上記で登録する
         channel = Channel.find_by(slack_channel_id: params[:event][:channel]) if Channel.find_by(slack_channel_id: params[:event][:channel]).present?
@@ -89,12 +81,19 @@ class ChannelsController < ApplicationController
         end
       end
 
+      render status: 200, json: { status: 200 }
+
+    elsif params[:event].present? && params[:event][:type] == "member_left_channel"
+      companion = Companion.find_by(slack_user_id: params[:event][:user])
+      channel = Channel.find_by(slack_channel_id: params[:event][:channel])
+
+      participation = Participation.find_by(companion_id: companion.id, channel_id: channel.id)
+      participation.destroy
+
       render status: 200, json: {status: 200}
     else
 
       render body: params[:challenge]
     end
-
-
   end
 end
