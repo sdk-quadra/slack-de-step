@@ -31,6 +31,9 @@ class ChannelsController < ApplicationController
     @channel = params[:id]
     @channels = Channel.where(app_id: session[:app_id])
 
+    @pushed_count = Transception.count
+    @is_read = Transception.where(is_read: true).count
+
     curl = CurlBuilder.new
     bot_token = ENV["OAUTH_BOT_TOKEN"]
     bot_user_id = ENV["BOT_USER_ID"]
@@ -104,6 +107,20 @@ class ChannelsController < ApplicationController
 
       participation = Participation.find_by(companion_id: companion.id, channel_id: channel.id)
       participation.destroy
+
+      render status: 200, json: {status: 200}
+    elsif params[:event].present? && params[:event][:type] == "message" && App.exists?(bot_user_id: params[:event][:user])
+
+      transception = Transception.new
+      transception.conversation_id = params[:event][:channel]
+      transception.save!
+
+      render status: 200, json: {status: 200}
+
+    elsif params[:event].present? && params[:event][:type] == "app_home_opened" && Transception.exists?(conversation_id: params[:event][:channel])
+
+      transception = Transception.where(conversation_id: params[:event][:channel])
+      transception.update(is_read: true)
 
       render status: 200, json: {status: 200}
     else
