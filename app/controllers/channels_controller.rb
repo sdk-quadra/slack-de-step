@@ -1,27 +1,9 @@
 # frozen_string_literal: true
 
-class CurlBuilder
-  def build(base_url:, method: "GET", params: {}, headers: {}, body_filename: nil, verbose: true, silent: true, options: "")
-    url = base_url
-    url += "?" + URI.encode_www_form(params) unless params.empty?
-    cmd = "curl '#{url}'"
-    cmd += " -d '@#{body_filename}'" if body_filename
-    cmd += " " + headers.map { |k, v| "-H '#{k}: #{v}'" }.join(" ") + " " unless headers.empty?
-    # cmd += " -v " if verbose
-    cmd += " -s " if silent
-    # cmd += options
-    cmd
-  end
-
-  def exec(*args, **kwargs)
-    cmd = build(*args, **kwargs)
-    o, e, s = Open3.capture3(cmd)
-  end
-end
-
 class ChannelsController < ApplicationController
   ## TODO: cross origin対策
   protect_from_forgery except: :server
+  include CurlBuilder
 
   def index; end
 
@@ -34,11 +16,10 @@ class ChannelsController < ApplicationController
     @pushed_count = Transception.count
     @is_read = Transception.where(is_read: true).count
 
-    curl = CurlBuilder.new
     bot_token = ENV["OAUTH_BOT_TOKEN"]
     bot_user_id = ENV["BOT_USER_ID"]
 
-    user_info = curl.exec(base_url: "https://slack.com/api/users.info?user=#{bot_user_id}", headers: { "Authorization": "Bearer " + bot_token })
+    user_info = curl_exec(base_url: "https://slack.com/api/users.info?user=#{bot_user_id}", headers: { "Authorization": "Bearer " + bot_token })
     @user_info_realname = JSON.parse(user_info[0])["user"]["real_name"]
     @user_info_profile_image = JSON.parse(user_info[0])["user"]["profile"]["image_192"]
 
