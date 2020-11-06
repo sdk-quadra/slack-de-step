@@ -23,10 +23,10 @@
       </div>
 
       <div class="add_message">
-        <%= link_to "+ メッセージを追加", new_workspace_channel_message_path(channel_id: @channel), class: "add_message_link" %>
+        <%= link_to "+ メッセージを追加", new_workspace_channel_message_path(channel_id: @channel_id), class: "add_message_link" %>
       </div>
 
-      <% @messages_sorted.each do |message| %>
+      <% @messages.each do |message| %>
         <div class="messages">
           <div class="post_datetime text-divider">
             <p class="post_datetime_label"><%= message.push_timing.in_x_days %>日後の<%= message.push_timing.time.strftime('%H:%M:%S') %></p>
