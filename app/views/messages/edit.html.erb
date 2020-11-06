@@ -27,7 +27,7 @@
           <p><img id="preview" class="post_img"></p>
         <% end %>
         <p><%= button_tag "画像を削除する", id: "deleteImg" %></p>
-        <p><%= check_box_tag "aaa", 1, false, id: "delete_check", class: "hidden" %></p>
+        <p><%= check_box_tag "delete_image", true, false, id: "delete_check", class: "hidden" %></p>
         <%= m.submit "postする" %>
       <% end %>
     </div>
