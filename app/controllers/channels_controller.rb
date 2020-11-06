@@ -50,7 +50,22 @@ class ChannelsController < ApplicationController
     p params
     p "------paramsccc----"
 
-    if params[:event].present? && params[:event][:type] == "member_joined_channel"
+    if params[:event].present? && params[:event][:type] == "channel_created"
+      channel_id = params[:event][:channel][:id]
+      channel_name = params[:event][:channel][:name]
+
+      app_id = Workspace.find_by(slack_ws_id: params[:team_id]).app.id
+      Channel.new(app_id: app_id, slack_channel_id: channel_id, name: channel_name).save!
+
+      render status: 200, json: {status: 200}
+
+    elsif params[:event].present? && params[:event][:type] == "channel_deleted"
+      channel_id = params[:event][:channel]
+      Channel.find_by(slack_channel_id: channel_id).destroy
+
+      render status: 200, json: {status: 200}
+
+    elsif params[:event].present? && params[:event][:type] == "member_joined_channel"
 
       ### 既存userのchannel登録
       companion = Companion.find_by(slack_user_id: params[:event][:user]) if Companion.find_by(slack_user_id: params[:event][:user]).present?
