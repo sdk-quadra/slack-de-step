@@ -20,6 +20,9 @@ class CurlBuilder
 end
 
 class ChannelsController < ApplicationController
+  ## TODO: cross origin対策
+  protect_from_forgery except: :server
+
   def index; end
 
   def new; end
@@ -39,5 +42,59 @@ class ChannelsController < ApplicationController
     @messages_sorted = Message.where(channel_id: params[:id]).sort_by do |message|
       [message.push_timing.in_x_days, message.push_timing.time.to_i]
     end
+  end
+
+  def server
+    ### リクエストURL確認用
+    p "------paramsccc----"
+    p params
+    p "------paramsccc----"
+
+    if params[:event].present? && params[:event][:type] == "member_joined_channel"
+
+      ### 既存userのchannel登録
+      companion = Companion.find_by(slack_user_id: params[:event][:user]) if Companion.find_by(slack_user_id: params[:event][:user]).present?
+      channel = Channel.find_by(slack_channel_id: params[:event][:channel]) if Channel.find_by(slack_channel_id: params[:event][:channel]).present?
+
+      if companion && channel
+        Participation.find_or_create_by!(companion_id: companion.id, channel_id: channel.id) do |participation|
+          participation.companion_id = companion.id
+          participation.channel_id = channel.id
+        end
+
+      else
+        ### 新規user登録の場合。user登録+channel登録。team_joinイベントはchannel参加のjson取れないのでmember_joinで行う
+        app_id = Workspace.find_by(slack_ws_id: params[:team_id]).app.id if Workspace.find_by(slack_ws_id: params[:team_id]).present?
+
+        # app_id = App.find_by(api_app_id: params[:api_app_id]).id if params[:api_app_id].present?
+        p "--------app_id-----"
+        p app_id
+
+        slack_user_id = params[:event][:user] if params[:event][:user].present?
+        p "--------app_id-----"
+        p slack_user_id
+
+        companion = Companion.find_or_create_by!(app_id: app_id, slack_user_id: slack_user_id) do |companion|
+          companion.app_id = app_id
+          companion.slack_user_id = slack_user_id
+        end
+
+
+        ### default設定のchannelの1つ目を登録する。2つ目以降のchannelはuser登録ありの上記で登録する
+        channel = Channel.find_by(slack_channel_id: params[:event][:channel]) if Channel.find_by(slack_channel_id: params[:event][:channel]).present?
+
+        Participation.find_or_create_by!(companion_id: companion.id, channel_id: channel.id) do |participation|
+          participation.companion_id = companion.id
+          participation.channel_id = channel.id
+        end
+      end
+
+      render status: 200, json: {status: 200}
+    else
+
+      render body: params[:challenge]
+    end
+
+
   end
 end
