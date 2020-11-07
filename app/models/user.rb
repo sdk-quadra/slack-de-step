@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 class User < ApplicationRecord
-  has_one :workspace, dependent: :destroy
+  has_many :possessions, dependent: :destroy
+  has_many :workspaces, through: :possessions
   extend CurlBuilder
 
   def self.find_or_create_form_auth(auth)
@@ -10,47 +11,71 @@ class User < ApplicationRecord
     name = auth[:info][:name]
     email = auth[:info][:email]
 
+    if self.exists?(uid: uid, provider: provider)
+      user = self.find_by(uid: uid, provider: provider)
+    else
+      user = self.create!(name: name, email: email, uid: uid, provider: provider)
+      first_login(auth, user)
+    end
+    user
+  end
+
+  # private
+
+  def self.first_login(auth, user)
+    workspace = create_workspace(auth)
+    app = create_app(auth, workspace)
+    create_possession(user, workspace)
+    create_channels(auth, app)
+    create_companions(auth, app)
+  end
+
+  def self.create_workspace(auth)
     slack_ws_id = auth[:extra][:raw_info][:team_id]
+    workspace = Workspace.find_or_create_by!(slack_ws_id: slack_ws_id) do |w|
+      w.slack_ws_id = slack_ws_id
+    end
+    workspace
+  end
+
+  def self.create_app(auth, workspace)
     oauth_bot_token = auth[:extra][:bot_info][:bot_access_token]
     bot_user_id = auth[:extra][:bot_info][:bot_user_id]
 
-    user = self.find_or_create_by!(provider: provider, uid: uid) do |user|
-      user.name = name
-      user.email = email
+    app = App.find_or_create_by!(workspace_id: workspace.id) do |a|
+      a.workspace_id = workspace.id
+      a.oauth_bot_token = oauth_bot_token
+      a.bot_user_id = bot_user_id
     end
+    app
+  end
 
-    workspace = Workspace.find_or_create_by!(user_id: user.id, slack_ws_id: slack_ws_id) do |workspace|
-      workspace.user_id = user.id
-      workspace.slack_ws_id = slack_ws_id if slack_ws_id.present?
-    end
+  def self.create_possession(user, workspace)
+    possession = Possession.create!(user_id: user.id, workspace_id: workspace.id)
+    possession
+  end
 
-    # workspace_idがすでにあれば、更新する
-    app = App.find_or_initialize_by(workspace_id: workspace.id)
-    app.update_attributes(
-      oauth_bot_token: oauth_bot_token,
-      bot_user_id: bot_user_id
-    )
+  def self.create_channels(auth, app)
+    oauth_bot_token = auth[:extra][:bot_info][:bot_access_token]
+    conversations = curl_exec(base_url: "https://slack.com/api/conversations.list", headers: { "Authorization": "Bearer " + oauth_bot_token })
+    conversations = JSON.parse(conversations[0])["channels"]
 
-    ################
-    # 新規ログインと同時にchannelとcompanionはその時点のデータを全登録
-    ################
-
-    conversation_lists = curl_exec(base_url: "https://slack.com/api/conversations.list", headers: { "Authorization": "Bearer " + oauth_bot_token })
-    conversation_lists = JSON.parse(conversation_lists[0])["channels"]
-
-    conversation_lists.each do |conversation|
+    conversations.each do |conversation|
       Channel.find_or_create_by!(app_id: app.id, slack_channel_id: conversation["id"]) do |channel|
+        channel.app_id = app.id
         channel.slack_channel_id = conversation["id"]
         channel.name = conversation["name"]
-        channel.app_id = app.id
         channel.name == "general" ? channel.display = true : channel.display = false
       end
     end
+  end
 
-    user_lists = curl_exec(base_url: "https://slack.com/api/users.list", headers: { "Authorization": "Bearer " + oauth_bot_token })
-    user_lists = JSON.parse(user_lists[0])["members"]
+  def self.create_companions(auth, app)
+    oauth_bot_token = auth[:extra][:bot_info][:bot_access_token]
+    users = curl_exec(base_url: "https://slack.com/api/users.list", headers: { "Authorization": "Bearer " + oauth_bot_token })
+    users = JSON.parse(users[0])["members"]
 
-    user_lists.each do |user|
+    users.each do |user|
       unless user["name"] == "slackbot" || user["is_bot"] == true
         Companion.find_or_create_by!(app_id: app.id, slack_user_id: user["id"]) do |companion|
           companion.app_id = app.id
@@ -58,6 +83,5 @@ class User < ApplicationRecord
         end
       end
     end
-    user
   end
 end
