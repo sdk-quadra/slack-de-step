@@ -9,84 +9,52 @@ class HomesController < ApplicationController
   end
 
   def server
-    ### リクエストURL確認用
-    p "------paramsccc----"
-    p params
-    p "------paramsccc----"
+    event = params[:event][:type]
+    channel = params[:event][:channel]
+    user = params[:event][:user]
+    team = params[:team_id]
+    challenge = params[:challenge]
 
-    if params[:event].present? && params[:event][:type] == "channel_created"
-      channel_id = params[:event][:channel][:id]
-      channel_name = params[:event][:channel][:name]
+    case event
+    when "channel_created"
+      app_id = Workspace.find_by(slack_ws_id: team).app.id
+      Channel.new(app_id: app_id, slack_channel_id: channel[:id], name: channel[:name]).save
 
-      app_id = Workspace.find_by(slack_ws_id: params[:team_id]).app.id
-      Channel.new(app_id: app_id, slack_channel_id: channel_id, name: channel_name).save!
+    when "channel_deleted"
+      Channel.find_by(slack_channel_id: channel).destroy
 
-      render status: 200, json: {status: 200}
+    when "member_joined_channel"
+      companion ||= Companion.find_by(slack_user_id: user)
+      channel = Channel.find_by(slack_channel_id: channel)
 
-    elsif params[:event].present? && params[:event][:type] == "channel_deleted"
-      channel_id = params[:event][:channel]
-      Channel.find_by(slack_channel_id: channel_id).destroy
-
-      render status: 200, json: {status: 200}
-
-    elsif params[:event].present? && params[:event][:type] == "member_joined_channel"
-
-      ### 既存userのchannel登録
-      companion = Companion.find_by(slack_user_id: params[:event][:user]) if Companion.find_by(slack_user_id: params[:event][:user]).present?
-      channel = Channel.find_by(slack_channel_id: params[:event][:channel]) if Channel.find_by(slack_channel_id: params[:event][:channel]).present?
-
-      if companion && channel
-        Participation.find_or_create_by!(companion_id: companion.id, channel_id: channel.id) do |participation|
-          participation.companion_id = companion.id
-          participation.channel_id = channel.id
-        end
-
+      ### 既存userの場合
+      if companion
+        Participation.new(companion_id: companion.id, channel_id: channel.id).save!
       else
-        ### 新規user登録の場合。user登録+channel登録。team_joinイベントはchannel参加のjson取れないのでmember_joinで行う
-        app_id = Workspace.find_by(slack_ws_id: params[:team_id]).app.id if Workspace.find_by(slack_ws_id: params[:team_id]).present?
-        slack_user_id = params[:event][:user] if params[:event][:user].present?
-
-        companion = Companion.find_or_create_by!(app_id: app_id, slack_user_id: slack_user_id) do |companion|
-          companion.app_id = app_id
-          companion.slack_user_id = slack_user_id
-        end
+        ### 新規user登録の場合。user登録+channel登録。team_joinイベントはchannel参加のjson取れないのでmember_joined_channelで行う
+        app_id = Workspace.find_by(slack_ws_id: team).app.id
+        companion = Companion.new(app_id: app_id, slack_user_id: user).save!
 
         ### default設定のchannelの1つ目を登録する。2つ目以降のchannelはuser登録ありの上記で登録する
-        channel = Channel.find_by(slack_channel_id: params[:event][:channel]) if Channel.find_by(slack_channel_id: params[:event][:channel]).present?
-
-        Participation.find_or_create_by!(companion_id: companion.id, channel_id: channel.id) do |participation|
-          participation.companion_id = companion.id
-          participation.channel_id = channel.id
-        end
+        channel = Channel.find_by(slack_channel_id: channel)
+        Participation.new(companion_id: companion.id, channel_id: channel.id).save!
       end
-
-      render status: 200, json: { status: 200 }
-
-    elsif params[:event].present? && params[:event][:type] == "member_left_channel"
-      companion = Companion.find_by(slack_user_id: params[:event][:user])
-      channel = Channel.find_by(slack_channel_id: params[:event][:channel])
-
+    when "member_left_channel"
+      companion = Companion.find_by(slack_user_id: user)
+      channel = Channel.find_by(slack_channel_id: channel)
       participation = Participation.find_by(companion_id: companion.id, channel_id: channel.id)
       participation.destroy
-
-      render status: 200, json: {status: 200}
-    elsif params[:event].present? && params[:event][:type] == "message" && App.exists?(bot_user_id: params[:event][:user])
-
-      transception = Transception.new
-      transception.conversation_id = params[:event][:channel]
-      transception.save!
-
-      render status: 200, json: {status: 200}
-
-    elsif params[:event].present? && params[:event][:type] == "app_home_opened" && Transception.exists?(conversation_id: params[:event][:channel])
-
-      transception = Transception.where(conversation_id: params[:event][:channel])
+    when "message"
+      # messageで受けるイベントは複数ある為,bot_user_idで選別
+      if App.exists?(bot_user_id: user)
+        Transception.new(conversation_id: channel).save!
+      end
+    when "app_home_opened"
+      transception = Transception.where(conversation_id: channel)
       transception.update(is_read: true)
-
-      render status: 200, json: {status: 200}
     else
-
-      render body: params[:challenge]
+      render body: challenge
     end
+    render status: 200, json: { status: 200 }
   end
 end
