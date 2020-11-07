@@ -6,6 +6,8 @@ class MessagesController < ApplicationController
     @channel = params[:channel_id]
     @message = Message.new
     @message.build_push_timing
+    p "-------"
+    p ENV["OAUTH_BOT_TOKEN"]
   end
 
   def create
