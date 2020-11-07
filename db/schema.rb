@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_06_032959) do
+ActiveRecord::Schema.define(version: 2020_11_07_083621) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -59,6 +59,14 @@ ActiveRecord::Schema.define(version: 2020_11_06_032959) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "possessions", force: :cascade do |t|
+    t.integer "user_id", default: 0
+    t.integer "workspace_id", default: 0
+    t.boolean "is_deleted", default: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "push_timings", force: :cascade do |t|
     t.integer "message_id", null: false
     t.time "time", null: false
@@ -87,7 +95,6 @@ ActiveRecord::Schema.define(version: 2020_11_06_032959) do
   end
 
   create_table "workspaces", force: :cascade do |t|
-    t.integer "user_id", null: false
     t.string "slack_ws_id", null: false
     t.boolean "is_deleted", default: false
     t.datetime "created_at", precision: 6, null: false
