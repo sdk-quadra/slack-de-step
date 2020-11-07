@@ -9,11 +9,18 @@ class HomesController < ApplicationController
   end
 
   def server
+    if params[:challenge]
+      render body: params[:challenge]
+    else
+      event(params)
+    end
+  end
+
+  def event(params)
     event = params[:event][:type]
     channel = params[:event][:channel]
     user = params[:event][:user]
     team = params[:team_id]
-    challenge = params[:challenge]
 
     case event
     when "channel_created"
@@ -52,8 +59,6 @@ class HomesController < ApplicationController
     when "app_home_opened"
       transception = Transception.where(conversation_id: channel)
       transception.update(is_read: true)
-    else
-      render body: challenge
     end
     render status: 200, json: { status: 200 }
   end
