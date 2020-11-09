@@ -2,7 +2,8 @@
 
 class WorkspacesController < ApplicationController
   def index
-    app_id = session[:app_id]
-    @general_channel = Channel.where(name: "general").find_by(app_id: app_id)
+    user_id = session[:user_id]
+    possessions = Possession.where(user_id: user_id).map { |w| w.workspace_id }
+    @workspaces = Workspace.where(id: possessions)
   end
 end

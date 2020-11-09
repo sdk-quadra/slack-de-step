@@ -1,2 +1,6 @@
 <h1>ワークスペース</h1>
-<%= link_to "general", workspace_channel_path(session[:workspace_id], @general_channel.id) %><br />
+
+<% @workspaces.each do |workspace| %>
+  <%= image_tag workspace.icon_url %>
+  <%= link_to workspace.name, workspace_channel_path(workspace.app.id, general_channel(workspace.app.id)) %><br />
+<% end %>

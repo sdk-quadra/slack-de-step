@@ -11,18 +11,19 @@ class User < ApplicationRecord
     name = auth[:info][:name]
     email = auth[:info][:email]
 
-    if self.exists?(uid: uid, provider: provider)
-      user = self.find_by(uid: uid, provider: provider)
-    else
-      user = self.create!(name: name, email: email, uid: uid, provider: provider)
-      first_login(auth, user)
+    user = User.find_or_create_by!(email: email, provider: provider) do |u|
+      u.name = name
+      u.email = email
+      u.uid = uid
+      u.provider = provider
     end
+
+    first_regist(auth, user)
+
     user
   end
 
-  # private
-
-  def self.first_login(auth, user)
+  def self.first_regist(auth, user)
     workspace = create_workspace(auth)
     app = create_app(auth, workspace)
     create_possession(user, workspace)
@@ -31,9 +32,13 @@ class User < ApplicationRecord
   end
 
   def self.create_workspace(auth)
-    slack_ws_id = auth[:extra][:raw_info][:team_id]
+    slack_ws_id = auth[:info][:team_id]
+    name = auth[:info][:name]
+    icon_url = auth[:info][:image]
     workspace = Workspace.find_or_create_by!(slack_ws_id: slack_ws_id) do |w|
       w.slack_ws_id = slack_ws_id
+      w.name = name
+      w.icon_url = icon_url
     end
     workspace
   end
@@ -51,8 +56,10 @@ class User < ApplicationRecord
   end
 
   def self.create_possession(user, workspace)
-    possession = Possession.create!(user_id: user.id, workspace_id: workspace.id)
-    possession
+    Possession.find_or_create_by!(user_id: user.id, workspace_id: workspace.id) do |p|
+      p.user_id = user.id
+      p.workspace_id = workspace.id
+    end
   end
 
   def self.create_channels(auth, app)
