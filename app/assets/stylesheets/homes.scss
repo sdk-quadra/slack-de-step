@@ -1,3 +1,25 @@
 // Place all the styles related to the homes controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: https://sass-lang.com/
+
+.landing-page {
+  width: 30rem;
+  margin: 0 auto;
+  padding: 1rem 0;
+  min-height: 40rem;
+}
+
+.landing-page-title {
+  font-size: 1.2rem;
+  font-weight: normal;
+
+  &__app-name {
+    font-size: 2rem;
+    font-weight: bold;
+  }
+}
+
+.landing-page-cta {
+  text-align: center;
+  margin: 2rem 0;
+}

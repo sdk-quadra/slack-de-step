@@ -1,12 +1,13 @@
-<h1>slackログイン</h1>
-<% flash.each do |name, msg| -%>
-  <%= content_tag :div, msg, class: name %>
-<% end -%>
+<div class="landing-page">
+  <h1 class="landing-page-title">相対日時でslackメッセージを送る<br />
+    <span class="landing-page-title__app-name">Slack De Step</span></h1>
 
-<% if session[:user] %>
-  <%= session[:user].to_json %>
-  <%= link_to 'ログアウト', '/auth/signout' %>
-<% else %>
-  <%= link_to 'slackでログイン', '/auth/slack' %>
-<% end %>
+  <div class="landing-page-desc">
+    <p>slack de step 説明文.slack de step 説明文.slack de step 説明文.slack de step 説明文.slack de step 説明文.slack de step 説明文.slack de step 説明文.slack de step 説明文.slack de step 説明文.slack de step 説明文.slack de step 説明文.slack de step 説明文.slack de step 説明文.</p>
+  </div>
 
+  <div class="landing-page-cta">
+    <p>今すぐ使ってみる</p>
+    <%= link_to image_tag("https://platform.slack-edge.com/img/sign_in_with_slack.png"), '/auth/slack' %>
+  </div>
+</div>
