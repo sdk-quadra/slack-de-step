@@ -1,62 +1,69 @@
-<div class="flex-container">
-  <div class="flex-item">
-    <img src="https://avatars.slack-edge.com/2020-10-12/1418393192325_a55bbafd0056bbddcb32_88.png" class="ws_icon">
-
+<div class="wrapper">
+  <div class="channels">
+    <img src="https://avatars.slack-edge.com/2020-10-12/1418393192325_a55bbafd0056bbddcb32_88.png" class="channels__ws-icon">
     <% @channels.each do |channel| %>
-      <p><%= link_to channel.name, channel.id.to_s %><br />
-        10人
-      </p>
+      <div class="channel">
+        <div class="channel__name">
+          <%= link_to channel.name, channel.id.to_s %>
+        </div>
+        <div class="channel__number-of-people">
+          15人
+        </div>
+      </div>
     <% end %>
-    <p class="add_channel">+ チャンネルを追加</p>
-
+    <div class="channels__add-channel">
+      + チャンネルを追加
+    </div>
   </div>
-  <div class="row-item">
-    <h3 class="text-center channel_title"># general</h3>
 
-    <div class="contents">
-      <div>
-        <p class="text-center">○月○日以降、このチャンネルに参加してから○日後のユーザーにボットから「DM」します</p>
-      </div>
+  <div class="channel-messages">
+    <div class="channel-messages__channel-title">
+      <h3 class="channel-messages__channel-name"># general</h3>
+    </div>
 
-      <div class="stat">
-        <p>送信済合計 <%= @pushed_count %> / 既読数合計 <%= @is_read %></p>
-      </div>
+    <p class="channel-messages__desc">○月○日以降、このチャンネルに参加してから○日後のユーザーにボットから「DM」します</p>
+    <div class="channel-messages__stat">
+      <p>送信済合計 <%= @pushed_count %> / 既読数合計 <%= @is_read %></p>
+    </div>
 
-      <div class="add_message">
-        <%= link_to "+ メッセージを追加", new_workspace_channel_message_path(channel_id: @channel_id), class: "add_message_link" %>
-      </div>
+    <div class="channel-messages__add-message">
+      <%= link_to "+ メッセージを追加", new_workspace_channel_message_path(channel_id: @channel_id), class: "channel-messages__add-message-link" %>
+    </div>
 
-      <% @messages.each do |message| %>
-        <div class="messages">
-          <div class="post_datetime text-divider">
-            <p class="post_datetime_label"><%= message.push_timing.in_x_days %>日後の<%= message.push_timing.time.strftime('%H:%M:%S') %></p>
-          </div>
-          <div class="post_menu">
-            <%= link_to "編集", edit_workspace_channel_message_path(1, message.channel_id, message.id) %><br />
-            <%= link_to "削除", workspace_channel_message_path(1, message.channel_id, message.id), method: :delete %>
-          </div>
 
-          <div class="post_contents">
-            <div class="icon">
-              <%= image_tag(@user_info_profile_image, class: "post_icon") %>
+    <% @messages.each do |message| %>
+
+      <div class="channel-message-list">
+        <div class="channel-message__post-datetime-label channel-message-divider">
+          <p class="channel-message__post-datetime"><%= message.push_timing.in_x_days %>日後の<%= message.push_timing.time.strftime('%H:%M:%S') %></p>
+        </div>
+
+        <div class="channel-message-menu">
+          <%= link_to "編集", edit_workspace_channel_message_path(1, message.channel_id, message.id) %><br />
+          <%= link_to "削除", workspace_channel_message_path(1, message.channel_id, message.id), method: :delete %>
+        </div>
+
+        <div class="channel-message">
+          <%= image_tag(@user_info_profile_image, class: "channel-message__sender-icon") %>
+          <div class="channel-message-data">
+            <div class="channel-message-data__sender-name">
+              <%= @user_info_realname %>
             </div>
-            <div class="post_data">
-              <div class="post_name">
-                <p><%= @user_info_realname %></p>
-              </div>
 
-              <div class="post_content">
-                <% if message.message %>
-                  <%= simple_format(message.message) %>
-                <% end %>
-                <% if message.image_url %>
-                  <%= image_tag(message.image_url, {class: "post_img"}) %>
-                <% end %>
-              </div>
+            <div class="channel-message-data__content">
+              <% if message.message %>
+                <%= simple_format(message.message) %>
+              <% end %>
+              <% if message.image_url %>
+                <%= image_tag(message.image_url, {class: "channel-message-data__img"}) %>
+              <% end %>
             </div>
           </div>
         </div>
-      <% end %>
-    </div>
+
+      </div>
+
+    <% end %>
+
   </div>
 </div>

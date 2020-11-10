@@ -2,135 +2,123 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: https://sass-lang.com/
 
-body {
-  margin: 0;
-}
-
-.flex-container {
+.wrapper {
   display: flex;
   flex-direction: row;
 }
-.flex-item {
+
+.channels {
   width: 12rem;
   background-color: #e7e9ed;
   padding:1rem;
+  min-height: 40rem;
+
+  &__ws-icon {
+    border-radius: 2px;
+    width: 50px;
+  }
+
+  &__add-channel {
+    color: #666;
+  }
 }
 
-.contents {
-  padding: 0rem 1rem 1rem;
-}
-
-.row-item {
+.channel-messages {
   width: 100%;
+
+  &__channel-title {
+    background-color: #34163b;
+    color: white;
+  }
+
+  &__channel-name {
+    margin-top: 0;
+    padding: 1rem;
+    text-align: center;
+  }
+
+  &__desc {
+    text-align: center;
+  }
+
+  &__stat {
+    color: #666;
+    font-size: 0.9rem;
+    text-align: center;
+  }
+
+  &__add-message {
+    font-size: 1.1rem;
+    margin: 1rem 7rem 2rem;
+    text-align: center;
+    border: 1px solid #666;
+    padding: 2rem 0;
+  }
+
+  &__add-message-link {
+    text-decoration: none;
+    color: black;
+  }
 }
 
-.text-center {
-  text-align: center;
-}
-
-.ws_icon {
-  width: 50px;
-  height: 50px;
-}
-
-.add_channel {
-  color: #666;
-  text-decoration: none;
-}
-.channel_title {
-  margin-top: 0;
-  background-color: #34163b;
-  color: white;
+.channel-message {
+  display: flex;
+  flex-direction: row;
   padding: 1rem;
-}
-.stat {
-  color: #666;
-  font-size: 0.9rem;
-  text-align: center;
+
+  &__sender-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 5px;
+  }
+
+  &__post-datetime-label {
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+
+  &__post-datetime {
+    border: 1px solid #ccc;
+    width: 10rem;
+    margin: 0 auto;
+    border-radius: 5px;
+  }
 }
 
-.messages {
-
-}
-
-.post_menu {
+.channel-message-menu {
   text-align: right;
   font-size: 0.8rem;
   color: #666;
+  margin: 1rem;
+}
+.channel-message-data {
+  font-size: 0.9rem;
+  padding: 0 1rem 1rem;
+
+  &__sender-name {
+    font-weight: bold;
+  }
+
+  &__sender-name > p {
+    margin-top: 0;
+  }
+
+  &__img {
+    max-width: 200px;
+    max-height: 200px;
+    border-radius: 2px;
+  }
 }
 
-.post_datetime {
-  text-align: center;
-  margin-bottom: 1rem;
-}
-
-.post_datetime_label {
-  border: 1px solid #ccc;
-  width: 10rem;
-  margin: 0 auto;
-  border-radius: 5px;
-}
-
-.text-divider {
+.channel-message-divider {
   display: flex;
   align-items: center;
 }
 
-.text-divider::before,
-.text-divider::after {
+.channel-message-divider::before,
+.channel-message-divider::after {
   content: '';
   height: 1px;
   background-color: #ccc;
   flex-grow: 1;
-}
-
-.add_message {
-  font-size: 1.1rem;
-  margin: 1rem 7rem 2rem;
-  text-align: center;
-  border: 1px solid #666;
-  padding: 2rem 0;
-}
-
-.add_message_link {
-  text-decoration: none;
-  color: black;
-}
-
-.post_data {
-  font-size: 0.9rem;
-  padding: 0 1rem 1rem;
-}
-
-.post_name {
-  font-weight: bold;
-}
-
-.post_name > p {
-  margin-top: 0;
-}
-.post_icon {
-  width: 50px;
-  height: 50px;
-  border-radius: 5px;
-}
-
-.post_img {
-  border-radius: 5px;
-  max-width: 200px;
-  max-height: 200px;
-}
-
-.post_contents {
-  display: flex;
-  flex-direction: row;
-}
-
-.posted_stat {
-  color: #666;
-  font-size: 0.8rem;
-}
-
-.pg {
-  color: red;
 }

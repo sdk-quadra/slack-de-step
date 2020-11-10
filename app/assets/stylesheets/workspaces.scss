@@ -1,3 +1,54 @@
 // Place all the styles related to the workspaces controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: https://sass-lang.com/
+
+.workspaces {
+  width: 30rem;
+  margin: 0 auto;
+  padding: 1rem 0;
+  min-height: 40rem;
+
+  &__title {
+    text-align: center;
+  }
+
+  &__desc {
+    text-align: center;
+  }
+
+  &__desc-title {
+    border: 1px solid #666;
+    border-radius: 10px;
+    padding: 0.5rem 1rem;
+    font-size: 1.1rem;
+  }
+
+  &__desc-note {
+    font-size: 0.9rem;
+  }
+}
+
+.workspace-list {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.workspace {
+  width: 7.5rem;
+  text-align: center;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+
+  &__icon {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 3px;
+  }
+
+  &__name {
+    margin-top: 0;
+    font-size: 0.9rem;
+  }
+}

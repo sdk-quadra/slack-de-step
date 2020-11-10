@@ -1,6 +1,26 @@
-<h1>ワークスペース</h1>
+<div class="workspaces">
 
-<% @workspaces.each do |workspace| %>
-  <%= image_tag workspace.icon_url %>
-  <%= link_to workspace.name, workspace_channel_path(workspace.app.id, general_channel(workspace.app.id)) %><br />
-<% end %>
+  <h1 class="workspaces__title">Slack De Step</h1>
+
+  <div class="workspaces__desc">
+    <p class="workspaces__desc-title">ワークスペースを選択</p>
+    <p class="workspaces__desc-note">これまで連携したワークスペース</p>
+  </div>
+
+  <div class="workspace-list">
+
+    <% @workspaces.each do |workspace| %>
+      <div class="workspace">
+        <%= link_to image_tag(workspace.icon_url, class: "workspace__icon"), workspace_channel_path(workspace.app.id, general_channel(workspace.app.id)), class: "workspace__name" %>
+        <p class="workspace__name"><%= link_to workspace.name, workspace_channel_path(workspace.app.id, general_channel(workspace.app.id)) %></p>
+      </div>
+    <% end %>
+
+    <div class="workspace workspace-add">
+      <%#= image_tag("add.png", class: "workspace__icon") %>
+      <%= link_to image_tag("add.png", class: "workspace__icon"), "/", class: "workspace__name" %>
+      <p class="workspace__name"><%= link_to "新規追加", "/" %></p>
+    </div>
+
+  </div>
+</div>
