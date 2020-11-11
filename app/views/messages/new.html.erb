@@ -1,49 +1,79 @@
-<div class="header">
-  <div class="back">
-    <%= link_to "<", workspace_channel_path(1, @channel), class: "back"%>
+<div class="message">
+  <div class="message__channel-title">
+    <%= link_to "<", workspace_channel_path(1, @channel), class: "back" %>
+    <h3 class="message__channel-name">
+      # general
+    </h3>
   </div>
-  <div class="channel_name text-center">
-    <h3># general</h3>
-  </div>
-</div>
 
-<div class="message_body">
-  <div class="message_timing">
-    <div class="timing_title">送信タイミング</div>
+  <div class="message-body">
+    <%= form_with(model: @message, url: workspace_channel_messages_path, class: "message-form") do |m| %>
 
-    <div class="timing_desc">チャンネル登録して
-      <%= form_with(model: @message, url: workspace_channel_messages_path) do |m| %>
-        <%= m.fields_for :push_timing do |p| %>
-          <%= p.select :in_x_days, x_days_after %>日後の
-          <%= p.time_select :time, {prompt: false, ignore_date: true, include_seconds: true, minute_step: 1}  %>に送信する
-        <% end %>
-        <p><%= m.text_area :message, size: "60x12" %></p>
-        画像を添付する
-        <p><%= m.label :image, "ここをクリックして画像を選択" %>
-          <%= m.file_field :image, accept: 'image/*' %></p>
-        <%= m.submit "postする" %>
+      <h4 class="message-form__title-timing">送信タイミング *</h4>
+      チャンネル登録して
+
+      <%= m.fields_for :push_timing do |p| %>
+        <%= p.select :in_x_days, x_days_after %>日後の
+        <%= p.time_select :time, {prompt: false, ignore_date: true, include_seconds: true, minute_step: 1} %>に送信する
       <% end %>
-    </div>
-    <div class="tabs">
-      <input id="all" type="radio" name="tab_item" checked>
-      <label class="tab_item" for="all">テキスト</label>
-      <input id="programming" type="radio" name="tab_item">
-      <label class="tab_item" for="programming">画像</label>
-      <div>
-        <div class="tab_content" id="all_content">
-          最近どうですか？<br />
-          詰まったら質問してみよう<br />
-          質問の仕方<br />
-          https://scienceshift.jp/method-of-thinking-practical-first/
-        </div>
-        <div class="tab_content" id="programming_content">
-          タブの内容がここに入ります
-        </div>
+
+      <h4 class="message-form__title-message">メッセージ *</h4>
+      <p><%= m.text_area :message, size: "60x12", class: "message-form__textarea" %></p>
+      <p><%= m.label :image, "ここをクリックして画像を選択" %>
+        <%= m.file_field :image, onchange: 'previewFileWithId()', accept: 'image/*', class: "hidden" %></p>
+      <p><img id="preview" class="message-form__preview-img"></p>
+      <p><%= button_tag "画像を削除する", id: "deleteImg", class: "message-form__button-delete-img" %></p>
+      <p><%= check_box_tag "delete_image", true, false, id: "delete_check", class: "hidden" %></p>
+
+      <div class="message-form__button-submit">
+        <input type="submit" value="テスト送信" class="message-form__button-test-submit">
+        <input type="submit" name="commit" value="postする" data-disable-with="postする" class="message-form__button-commit">
       </div>
-    </div>
-    <div class="message_button">
-      <input type="submit" value="テスト送信">
-      <input type="submit" value="登録">
-    </div>
+
+    <% end %>
   </div>
 </div>
+
+<script>
+    //初期値
+    var preview = document.getElementById("preview");
+    if (preview.src === "" || preview.src === null) {
+        document.getElementById("deleteImg").style.display = "none";
+    }
+
+    function previewFileWithId() {
+        const target = this.event.target;
+        const file = target.files[0];
+        const reader  = new FileReader();
+        console.log(target.files.length);
+        reader.onloadend = function () {
+            // preview.src = reader.result;
+            document.getElementById("preview").src = reader.result;
+            document.getElementById("deleteImg").style.display = "block";
+            // localImageWidth(reader.result);
+
+        }
+        if (file) {
+            reader.readAsDataURL(file);
+        } else {
+            document.getElementById("preview").src = '';
+            document.getElementById("deleteImg").style.display = "none";
+        }
+    }
+
+    function deleteImg() {
+        document.getElementById("preview").src = '';
+    }
+
+    var deleteBtn = document.getElementById("deleteImg");
+    deleteBtn.addEventListener("click", function() {
+        var result = window.confirm("本当に削除しますか？");
+
+        if (result) {
+            document.getElementById("preview").src = '';
+            document.getElementById("delete_check").checked = true;
+            document.getElementById("deleteImg").style.display = "none";
+        } else {
+        }
+    })
+</script>
