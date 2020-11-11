@@ -4,6 +4,7 @@ class HomesController < ApplicationController
   ## TODO: cross origin対策
   protect_from_forgery except: :server
   skip_before_action :check_logined
+  include CurlBuilder
 
   def index
   end
@@ -30,27 +31,30 @@ class HomesController < ApplicationController
     when "channel_deleted"
       Channel.find_by(slack_channel_id: channel).destroy
 
+    when "channel_rename"
+      Channel.find_by(slack_channel_id: channel[:id]).update(name: channel[:name])
+
     when "member_joined_channel"
       companion ||= Companion.find_by(slack_user_id: user)
-      channel = Channel.find_by(slack_channel_id: channel)
+      channel_to_join = Channel.find_by(slack_channel_id: channel)
 
-      ### 既存userの場合
-      if companion
-        Participation.new(companion_id: companion.id, channel_id: channel.id).save!
-      else
-        ### 新規user登録の場合。user登録+channel登録。team_joinイベントはchannel参加のjson取れないのでmember_joined_channelで行う
+      ### 新規userの場合もmember_joined_channelが発生する。まずuserを作成
+      companion = Companion.find_or_create_by!(slack_user_id: user) do |c|
         app_id = Workspace.find_by(slack_ws_id: team).app.id
-        companion = Companion.new(app_id: app_id, slack_user_id: user).save!
-
-        ### default設定のchannelの1つ目を登録する。2つ目以降のchannelはuser登録ありの上記で登録する
-        channel = Channel.find_by(slack_channel_id: channel)
-        Participation.new(companion_id: companion.id, channel_id: channel.id).save!
+        c.app_id = app_id
+        c.slack_user_id = user
       end
+
+      Participation.new(companion_id: companion.id, channel_id: channel_to_join.id).save!
+      member_count(channel)
+
     when "member_left_channel"
       companion = Companion.find_by(slack_user_id: user)
-      channel = Channel.find_by(slack_channel_id: channel)
-      participation = Participation.find_by(companion_id: companion.id, channel_id: channel.id)
+      channel_to_leave = Channel.find_by(slack_channel_id: channel)
+      participation = Participation.find_by(companion_id: companion.id, channel_id: channel_to_leave.id)
       participation.destroy
+      member_count(channel)
+
     when "message"
       # messageで受けるイベントは複数ある為,bot_user_idで選別
       if App.exists?(bot_user_id: user)
@@ -61,5 +65,14 @@ class HomesController < ApplicationController
       transception.update(is_read: true)
     end
     render status: 200, json: { status: 200 }
+  end
+
+  def member_count(channel)
+    bot_token = ENV["OAUTH_BOT_TOKEN"]
+    conversation_info = curl_exec(base_url: "https://slack.com/api/conversations.info",
+                                  params: { "token": bot_token, "channel": channel, "include_num_members": true})
+    member_count = JSON.parse(conversation_info[0])["channel"]["num_members"]
+
+    Channel.find_by(slack_channel_id: channel).update(member_count: member_count)
   end
 end

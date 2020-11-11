@@ -5,7 +5,7 @@ class ChannelsController < ApplicationController
 
   def show
     @channels = Channel.where(app_id: session[:app_id])
-    @channel_id = params[:id]
+    @channel = Channel.find(params[:id])
 
     @pushed_count = Transception.count
     @is_read = Transception.where(is_read: true).count
