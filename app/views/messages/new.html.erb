@@ -22,7 +22,7 @@
       <p><%= m.label :image, "ここをクリックして画像を選択" %>
         <%= m.file_field :image, onchange: 'previewFileWithId()', accept: 'image/*', class: "hidden" %></p>
       <p><img id="preview" class="message-form__preview-img"></p>
-      <p><%= button_tag "画像を削除する", id: "deleteImg", class: "message-form__button-delete-img" %></p>
+      <p><%= button_tag "画像を削除する",type: "button", id: "deleteImg", class: "message-form__button-delete-img" %></p>
       <p><%= check_box_tag "delete_image", true, false, id: "delete_check", class: "hidden" %></p>
 
       <div class="message-form__button-submit">
