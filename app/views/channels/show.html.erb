@@ -7,7 +7,7 @@
           <%= link_to channel.name, channel.id.to_s %>
         </div>
         <div class="channel__number-of-people">
-          15人
+          <%= channel.member_count %>人
         </div>
       </div>
     <% end %>
@@ -18,7 +18,7 @@
 
   <div class="channel-messages">
     <div class="channel-messages__channel-title">
-      <h3 class="channel-messages__channel-name"># general</h3>
+      <h3 class="channel-messages__channel-name"># <%= @channel.name %></h3>
     </div>
 
     <p class="channel-messages__desc">○月○日以降、このチャンネルに参加してから○日後のユーザーにボットから「DM」します</p>
@@ -27,7 +27,7 @@
     </div>
 
     <div class="channel-messages__add-message">
-      <%= link_to "+ メッセージを追加", new_workspace_channel_message_path(channel_id: @channel_id), class: "channel-messages__add-message-link" %>
+      <%= link_to "+ メッセージを追加", new_workspace_channel_message_path(channel_id: @channel.id), class: "channel-messages__add-message-link" %>
     </div>
 
 
