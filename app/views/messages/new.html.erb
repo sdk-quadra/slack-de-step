@@ -7,8 +7,7 @@
   </div>
 
   <div class="message-body">
-    <%= form_with(model: @message, url: workspace_channel_messages_path, class: "message-form") do |m| %>
-
+    <%= form_with(model: @message, url: workspace_channel_messages_path, class: "message-form", local: true) do |m| %>
       <h4 class="message-form__title-timing">送信タイミング *</h4>
       チャンネル登録して
 
@@ -51,6 +50,7 @@
             document.getElementById("preview").src = reader.result;
             document.getElementById("deleteImg").style.display = "block";
             // localImageWidth(reader.result);
+            document.getElementById("delete_check").checked = false;
 
         }
         if (file) {

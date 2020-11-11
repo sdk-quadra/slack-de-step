@@ -16,7 +16,7 @@ class MessagesController < ApplicationController
 
     message = Message.new
     message.channel_id = params[:channel_id]
-    message.message = content[:text] if content[:text].present?
+    message.message = content[:text] unless content[:text].empty?
     message.image = content[:image] if content[:image].present?
     message.save!
 
@@ -38,6 +38,7 @@ class MessagesController < ApplicationController
         schedule_message(member, push_datetime, message)
       end
     end
+
   end
 
   def edit
@@ -52,7 +53,7 @@ class MessagesController < ApplicationController
     x_days_time = x_days_time(params)
     content = content(params)
 
-    message.update(message: content[:text]) if content[:text].present?
+    message.update(message: content[:text]) unless content[:text].empty?
     message.update(image: content[:image]) if content[:image].present?
     message.update(image: nil) if params["delete_image"] == "true"
 
@@ -117,8 +118,14 @@ class MessagesController < ApplicationController
 
     def schedule_message(member, push_datetime, message)
       bot_token = ENV["OAUTH_BOT_TOKEN"]
-      curl_exec(base_url: "https://slack.com/api/chat.scheduleMessage",
-                params: { "token": bot_token, "channel": member, "post_at": push_datetime.to_i, "blocks": "[{\"type\": \"section\",\"text\": {\"type\": \"plain_text\", \"text\": \"#{message.message}\"}, \"block_id\": \"text1\"}, {\"type\": \"image\", \"title\": {\"type\": \"plain_text\",\"text\": \"pitcure\"}, \"image_url\": \"#{message.image_url}\", \"block_id\": \"image4\",\"alt_text\": \"pitcure here\"}]" })
+      if message.image_url
+        curl_exec(base_url: "https://slack.com/api/chat.scheduleMessage",
+                  params: { "token": bot_token, "channel": member, "post_at": push_datetime.to_i, "blocks": "[{\"type\": \"section\",\"text\": {\"type\": \"plain_text\", \"text\": \"#{message.message}\"}, \"block_id\": \"text1\"}, {\"type\": \"image\", \"title\": {\"type\": \"plain_text\",\"text\": \"pitcure\"}, \"image_url\": \"#{message.image_url}\", \"block_id\": \"image4\",\"alt_text\": \"pitcure here\"}]" })
+      else
+        curl_exec(base_url: "https://slack.com/api/chat.scheduleMessage",
+                  params: { "token": bot_token, "channel": member, "post_at": push_datetime.to_i, "text": message.message })
+      end
+
     end
 
 end
