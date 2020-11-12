@@ -27,6 +27,14 @@
   }
 }
 
+.message-form {
+  &__errors {
+    padding-left: 1rem;
+    color: red;
+  }
+}
+
+
 .message-body {
   width:  30rem;
   margin: 0 auto;

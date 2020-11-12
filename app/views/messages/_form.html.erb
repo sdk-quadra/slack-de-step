@@ -1,0 +1,36 @@
+<div class="message-body">
+  <%= form_with(model: [workspace, channel, message], class: "message-form", local: true) do |m| %>
+    <% if message.errors.any? %>
+      <ul class="message-form__errors">
+        <% message.errors.full_messages.each do |error| %>
+          <li class="message-form__error"><%= error %></li>
+        <% end %>
+      </ul>
+    <% end %>
+
+    <h4 class="message-form__title-timing">送信タイミング *</h4>
+    チャンネル登録して
+    <%= m.fields_for :push_timing do |p| %>
+      <%= p.select :in_x_days, x_days_after %>日後の
+      <%= p.time_select :time, {prompt: false, ignore_date: true, include_seconds: true, minute_step: 1} %>に送信する
+    <% end %>
+
+    <h4 class="message-form__title-message">メッセージ *</h4>
+    <p><%= m.text_area :message, size: "60x12", class: "message-form__textarea" %></p>
+    <p><%= m.label :image, "ここをクリックして画像を選択" %>
+      <%= m.file_field :image, onchange: 'previewFileWithId()', accept: 'image/*', class: "hidden" %></p>
+      <% if @message.image_url.present? %>
+        <p><%= image_tag(@message.image_url, {id: 'preview', class: "message-form__preview-img"}) %></p>
+      <% else %>
+        <p><img id="preview" class="message-form__preview-img"></p>
+      <% end %>
+    <p><%= button_tag "画像を削除する", type: "button", id: "deleteImg", class: "message-form__button-delete-img" %></p>
+    <p><%= check_box_tag "delete_image", true, false, id: "delete_check", class: "hidden" %></p>
+
+    <div class="message-form__button-submit">
+      <%= m.submit "テスト送信", class: "message-form__button-test-submit" %>
+      <%= m.submit "postする", class: "message-form__button-commit" %>
+    </div>
+
+  <% end %>
+</div>
