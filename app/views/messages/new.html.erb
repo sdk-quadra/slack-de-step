@@ -6,31 +6,8 @@
     </h3>
   </div>
 
-  <div class="message-body">
-    <%= form_with(model: @message, url: workspace_channel_messages_path, class: "message-form", local: true) do |m| %>
-      <h4 class="message-form__title-timing">送信タイミング *</h4>
-      チャンネル登録して
+  <%= render 'form', workspace: @workspace, channel: @channel, message: @message %>
 
-      <%= m.fields_for :push_timing do |p| %>
-        <%= p.select :in_x_days, x_days_after %>日後の
-        <%= p.time_select :time, {prompt: false, ignore_date: true, include_seconds: true, minute_step: 1} %>に送信する
-      <% end %>
-
-      <h4 class="message-form__title-message">メッセージ *</h4>
-      <p><%= m.text_area :message, size: "60x12", class: "message-form__textarea" %></p>
-      <p><%= m.label :image, "ここをクリックして画像を選択" %>
-        <%= m.file_field :image, onchange: 'previewFileWithId()', accept: 'image/*', class: "hidden" %></p>
-      <p><img id="preview" class="message-form__preview-img"></p>
-      <p><%= button_tag "画像を削除する",type: "button", id: "deleteImg", class: "message-form__button-delete-img" %></p>
-      <p><%= check_box_tag "delete_image", true, false, id: "delete_check", class: "hidden" %></p>
-
-      <div class="message-form__button-submit">
-        <input type="submit" value="テスト送信" class="message-form__button-test-submit">
-        <input type="submit" name="commit" value="postする" data-disable-with="postする" class="message-form__button-commit">
-      </div>
-
-    <% end %>
-  </div>
 </div>
 
 <script>
@@ -46,10 +23,8 @@
         const reader  = new FileReader();
         console.log(target.files.length);
         reader.onloadend = function () {
-            // preview.src = reader.result;
             document.getElementById("preview").src = reader.result;
             document.getElementById("deleteImg").style.display = "block";
-            // localImageWidth(reader.result);
             document.getElementById("delete_check").checked = false;
 
         }
@@ -59,10 +34,6 @@
             document.getElementById("preview").src = '';
             document.getElementById("deleteImg").style.display = "none";
         }
-    }
-
-    function deleteImg() {
-        document.getElementById("preview").src = '';
     }
 
     var deleteBtn = document.getElementById("deleteImg");

@@ -19,5 +19,9 @@ module SlackDeStep
     # the framework and any gems in your application.
     config.time_zone = "Tokyo"
     config.active_record.default_timezone = :local
+
+    # i18n
+    config.i18n.load_path += Dir[Rails.root.join('config', 'locales', '*', '*.yml').to_s]
+    config.i18n.default_locale = :ja
   end
 end
