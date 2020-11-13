@@ -5,46 +5,5 @@
       # general
     </h3>
   </div>
-
   <%= render 'form', workspace: @workspace, channel: @channel, message: @message %>
-
 </div>
-
-<script>
-    //初期値
-    var preview = document.getElementById("preview");
-    if (preview.src === "" || preview.src === null) {
-        document.getElementById("deleteImg").style.display = "none";
-    }
-
-    function previewFileWithId() {
-        const target = this.event.target;
-        const file = target.files[0];
-        const reader  = new FileReader();
-        console.log(target.files.length);
-        reader.onloadend = function () {
-            document.getElementById("preview").src = reader.result;
-            document.getElementById("deleteImg").style.display = "block";
-            document.getElementById("delete_check").checked = false;
-
-        }
-        if (file) {
-            reader.readAsDataURL(file);
-        } else {
-            document.getElementById("preview").src = '';
-            document.getElementById("deleteImg").style.display = "none";
-        }
-    }
-
-    var deleteBtn = document.getElementById("deleteImg");
-    deleteBtn.addEventListener("click", function() {
-        var result = window.confirm("本当に削除しますか？");
-
-        if (result) {
-            document.getElementById("preview").src = '';
-            document.getElementById("delete_check").checked = true;
-            document.getElementById("deleteImg").style.display = "none";
-        } else {
-        }
-    })
-</script>
