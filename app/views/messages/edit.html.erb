@@ -2,7 +2,7 @@
   <div class="message__channel-title">
     <%= link_to "<", workspace_channel_path(1, @channel), class: "back" %>
     <h3 class="message__channel-name">
-      # general
+      # <%= @channel.name %>
     </h3>
   </div>
   <%= render 'form', workspace: @workspace, channel: @channel, message: @message %>
