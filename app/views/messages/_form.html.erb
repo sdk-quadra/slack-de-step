@@ -18,7 +18,7 @@
     <h4 class="message-form__title-message">メッセージ *</h4>
     <p><%= m.text_area :message, size: "60x12", class: "message-form__textarea" %></p>
     <p><%= m.label :image, "ここをクリックして画像を選択" %>
-      <%= m.file_field :image, onchange: 'previewFileWithId()', accept: 'image/*', class: "hidden" %></p>
+      <%= m.file_field :image, accept: 'image/*', class: "hidden message-form__file" %></p>
       <% if @message.image_url.present? %>
         <p><%= image_tag(@message.image_url, {id: 'preview', class: "message-form__preview-img"}) %></p>
       <% else %>
