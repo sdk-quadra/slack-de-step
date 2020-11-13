@@ -1,11 +1,12 @@
 # frozen_string_literal: true
 
 class ChannelsController < ApplicationController
+  before_action :set_workspace, only: [:show]
+  before_action :set_channel, only: [:show]
   include CurlBuilder
 
   def show
-    @channels = Channel.where(app_id: session[:app_id])
-    @channel = Channel.find(params[:id])
+    @channels = App.find_by(workspace_id: @workspace.id).channels
 
     @pushed_count = Transception.count
     @is_read = Transception.where(is_read: true).count
@@ -21,4 +22,14 @@ class ChannelsController < ApplicationController
       [message.push_timing.in_x_days, message.push_timing.time.to_i]
     end
   end
+
+  private
+
+    def set_workspace
+      @workspace = Workspace.find(params[:workspace_id])
+    end
+
+    def set_channel
+      @channel = Channel.find(params[:id])
+    end
 end

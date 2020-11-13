@@ -9,8 +9,6 @@ class SessionsController < ApplicationController
       user = User.find_or_create_form_auth(request.env["omniauth.auth"])
       session[:user] = user
       session[:user_id] = user.id
-      session[:workspace_id] = workspace_id = Possession.find_by(user_id: user.id).workspace_id
-      session[:app_id] = App.find_by(workspace_id: workspace_id).id
       flash[:success] = "ユーザー認証が完了しました。"
       redirect_to workspaces_path
     else
