@@ -2,11 +2,14 @@
 
 class SessionsController < ApplicationController
   skip_before_action :check_logined
+  include CurlBuilder
 
   def create
-    auth = request.env["omniauth.auth"]
-    if auth.present?
-      user = User.find_or_create_form_auth(request.env["omniauth.auth"])
+    code = params[:code]
+    oauth_v2_access = curl_exec(base_url: "https://slack.com/api/oauth.v2.access", params: { "code": code, "client_id": ENV["SLACK_CLIENT_ID"], "client_secret": ENV["SLACK_CLIENT_SECRET"] })
+
+    if oauth_v2_access.present?
+      user = User.find_or_create_form_auth(oauth_v2_access)
       session[:user] = user
       session[:user_id] = user.id
       flash[:success] = "ユーザー認証が完了しました。"

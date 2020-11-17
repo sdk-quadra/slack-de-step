@@ -34,8 +34,8 @@ gem "bootsnap", ">= 1.4.2", require: false
 gem "carrierwave"
 gem "fog-aws"
 
-gem "omniauth"
-gem "omniauth-slack"
+# gem "omniauth"
+# gem "omniauth-slack"
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

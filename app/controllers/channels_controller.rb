@@ -10,9 +10,8 @@ class ChannelsController < ApplicationController
 
     @pushed_count = Transception.count
     @is_read = Transception.where(is_read: true).count
-
-    bot_token = ENV["OAUTH_BOT_TOKEN"]
-    bot_user_id = ENV["BOT_USER_ID"]
+    bot_token = @workspace.app.oauth_bot_token
+    bot_user_id = @workspace.app.bot_user_id
 
     user_info = curl_exec(base_url: "https://slack.com/api/users.info?user=#{bot_user_id}", headers: { "Authorization": "Bearer " + bot_token })
     @user_info_realname = JSON.parse(user_info[0])["user"]["real_name"]

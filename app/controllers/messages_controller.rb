@@ -77,8 +77,8 @@ class MessagesController < ApplicationController
     end
 
     def schedule_message(member, push_datetime, message)
-      bot_token = ENV["OAUTH_BOT_TOKEN"]
-      if message.image_url
+      bot_token = @workspace.app.oauth_bot_token
+      if  message.image_url
         curl_exec(base_url: "https://slack.com/api/chat.scheduleMessage",
                   params: { "token": bot_token, "channel": member, "post_at": push_datetime.to_i, "blocks": "[{\"type\": \"section\",\"text\": {\"type\": \"plain_text\", \"text\": \"#{message.message}\"}, \"block_id\": \"text1\"}, {\"type\": \"image\", \"title\": {\"type\": \"plain_text\",\"text\": \"pitcure\"}, \"image_url\": \"#{message.image_url}\", \"block_id\": \"image4\",\"alt_text\": \"pitcure here\"}]" })
       else
