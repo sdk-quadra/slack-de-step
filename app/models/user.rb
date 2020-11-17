@@ -6,35 +6,35 @@ class User < ApplicationRecord
   extend CurlBuilder
 
   def self.find_or_create_form_auth(auth)
-    provider = auth[:provider]
-    uid = auth[:uid]
-    name = auth[:info][:name]
-    email = auth[:info][:email]
+    oauth_bot_token = JSON.parse(auth[0])["access_token"]
+    oauth_user_token = JSON.parse(auth[0])["authed_user"]["access_token"]
 
-    user = User.find_or_create_by!(email: email, provider: provider) do |u|
-      u.name = name
-      u.email = email
-      u.uid = uid
-      u.provider = provider
+    users_identity = curl_exec(base_url: "https://slack.com/api/users.identity", headers: { "Authorization": "Bearer " + oauth_user_token })
+    user_name = JSON.parse(users_identity[0])["user"]["name"]
+    user_email = JSON.parse(users_identity[0])["user"]["email"]
+
+    user = User.find_or_create_by!(email: user_email) do |u|
+      u.name = user_name
+      u.email = user_email
     end
 
-    first_regist(auth, user)
+    first_regist(JSON.parse(users_identity[0]), JSON.parse(auth[0]), user)
 
     user
   end
 
-  def self.first_regist(auth, user)
-    workspace = create_workspace(auth)
+  def self.first_regist(users_identity, auth, user)
+    workspace = create_workspace(users_identity)
     app = create_app(auth, workspace)
     create_possession(user, workspace)
     create_channels(auth, app)
     create_companions(auth, app)
   end
 
-  def self.create_workspace(auth)
-    slack_ws_id = auth[:info][:team_id]
-    name = auth[:info][:name]
-    icon_url = auth[:info][:image]
+  def self.create_workspace(users_identity)
+    slack_ws_id = users_identity["team"]["id"]
+    name = users_identity["team"]["name"]
+    icon_url = users_identity["team"]["image_132"]
     workspace = Workspace.find_or_create_by!(slack_ws_id: slack_ws_id) do |w|
       w.slack_ws_id = slack_ws_id
       w.name = name
@@ -44,14 +44,17 @@ class User < ApplicationRecord
   end
 
   def self.create_app(auth, workspace)
-    oauth_bot_token = auth[:extra][:bot_info][:bot_access_token]
-    bot_user_id = auth[:extra][:bot_info][:bot_user_id]
+    oauth_bot_token = auth["access_token"]
+    bot_user_id = auth["bot_user_id"]
+    api_app_id = auth["app_id"]
 
-    app = App.find_or_create_by!(workspace_id: workspace.id) do |a|
-      a.workspace_id = workspace.id
-      a.oauth_bot_token = oauth_bot_token
-      a.bot_user_id = bot_user_id
-    end
+    # workspace_idがすでにあれば、更新する
+    app = App.find_or_initialize_by(workspace_id: workspace.id)
+    app.update_attributes(
+      oauth_bot_token: oauth_bot_token,
+      bot_user_id: bot_user_id,
+      api_app_id: api_app_id
+    )
     app
   end
 
@@ -63,7 +66,7 @@ class User < ApplicationRecord
   end
 
   def self.create_channels(auth, app)
-    oauth_bot_token = auth[:extra][:bot_info][:bot_access_token]
+    oauth_bot_token = auth["access_token"]
     conversations = curl_exec(base_url: "https://slack.com/api/conversations.list", headers: { "Authorization": "Bearer " + oauth_bot_token })
     conversations = JSON.parse(conversations[0])["channels"]
 
@@ -72,13 +75,17 @@ class User < ApplicationRecord
         channel.app_id = app.id
         channel.slack_channel_id = conversation["id"]
         channel.name = conversation["name"]
+        channel.member_count = 0
         channel.name == "general" ? channel.display = true : channel.display = false
       end
+      # botをpublic channelに参加させる
+      curl_exec(base_url: "https://slack.com/api/conversations.join", headers: { "Authorization": "Bearer " + oauth_bot_token },
+                params: { "channel": conversation["id"] })
     end
   end
 
   def self.create_companions(auth, app)
-    oauth_bot_token = auth[:extra][:bot_info][:bot_access_token]
+    oauth_bot_token = auth["access_token"]
     users = curl_exec(base_url: "https://slack.com/api/users.list", headers: { "Authorization": "Bearer " + oauth_bot_token })
     users = JSON.parse(users[0])["members"]
 
