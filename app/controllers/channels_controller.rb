@@ -8,8 +8,10 @@ class ChannelsController < ApplicationController
   def show
     @channels = App.find_by(workspace_id: @workspace.id).channels
 
-    @pushed_count = Transception.count
-    @is_read = Transception.where(is_read: true).count
+    post_messages = Transception.where(message_id: @channel.messages.map(&:id))
+    @pushed_count = post_messages.count
+    @is_read = post_messages.where(is_read: true).count
+
     bot_token = @workspace.app.oauth_bot_token
     bot_user_id = @workspace.app.bot_user_id
 
