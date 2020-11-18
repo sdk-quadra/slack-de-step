@@ -4,6 +4,7 @@ class HomesController < ApplicationController
   ## TODO: cross origin対策
   protect_from_forgery except: :server
   skip_before_action :check_logined
+  before_action :already_logined
   include CurlBuilder
 
   def index
@@ -130,5 +131,13 @@ class HomesController < ApplicationController
       Participation.create(companion_id: companion_id, channel_id: channel_id) unless App.exists?(bot_user_id: member)
     end
   end
+
+  private
+
+    def already_logined
+      if session[:user_id]
+        redirect_to workspaces_path
+      end
+    end
 
 end

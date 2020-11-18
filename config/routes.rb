@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-  get "workspaces/index"
+  # get "workspaces/index"
   get "sessions/create"
   get "sessions/destroy"
   get "homes/index"
