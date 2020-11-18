@@ -80,13 +80,13 @@ class MessagesController < ApplicationController
       bot_token = @workspace.app.oauth_bot_token
       if params[:post_now]
         curl_exec(base_url: "https://slack.com/api/chat.postMessage",
-                  params: { "token": bot_token, "channel": member, "text": message.message })
+                  params: { "token": bot_token, "channel": member, "blocks": "[{\"block_id\": \"#{message.id}\", \"type\": \"section\",\"text\": {\"type\": \"plain_text\", \"text\": \"#{message.message}\" }}]" })
       elsif  message.image_url
         curl_exec(base_url: "https://slack.com/api/chat.scheduleMessage",
-                  params: { "token": bot_token, "channel": member, "post_at": push_datetime.to_i, "blocks": "[{\"type\": \"section\",\"text\": {\"type\": \"plain_text\", \"text\": \"#{message.message}\"}, \"block_id\": \"text1\"}, {\"type\": \"image\", \"title\": {\"type\": \"plain_text\",\"text\": \"pitcure\"}, \"image_url\": \"#{message.image_url}\", \"block_id\": \"image4\",\"alt_text\": \"pitcure here\"}]" })
+                  params: { "token": bot_token, "channel": member, "post_at": push_datetime.to_i, "blocks": "[{\"block_id\": \"#{message.id}\", \"type\": \"section\",\"text\": {\"type\": \"plain_text\", \"text\": \"#{message.message}\"}}, {\"type\": \"image\", \"title\": {\"type\": \"plain_text\",\"text\": \"pitcure\"}, \"image_url\": \"#{message.image_url}\", \"block_id\": \"image4\",\"alt_text\": \"pitcure here\"}]" })
       else
         curl_exec(base_url: "https://slack.com/api/chat.scheduleMessage",
-                  params: { "token": bot_token, "channel": member, "post_at": push_datetime.to_i, "text": message.message })
+                  params: { "token": bot_token, "channel": member, "post_at": push_datetime.to_i, "blocks": "[{\"block_id\": \"#{message.id}\", \"type\": \"section\",\"text\": {\"type\": \"plain_text\", \"text\": \"#{message.message}\" }}]" })
       end
     end
 

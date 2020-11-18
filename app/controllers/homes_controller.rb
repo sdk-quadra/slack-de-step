@@ -64,7 +64,7 @@ class HomesController < ApplicationController
       companion = Companion.find_by(slack_user_id: user)
       channel_to_leave = Channel.find_by(slack_channel_id: channel)
       participation = Participation.find_by(companion_id: companion.id, channel_id: channel_to_leave.id)
-      participation.destroy
+      participation.destroy unless participation.nil?
       # member_count(channel)
 
     when "channel_left"
@@ -72,13 +72,14 @@ class HomesController < ApplicationController
       companion = Companion.find_by(slack_user_id: bot_user_id)
       channel_to_leave = Channel.find_by(slack_channel_id: channel)
       participation = Participation.find_by(companion_id: companion.id, channel_id: channel_to_leave.id)
-      participation.destroy
+      participation.destroy unless participation.nil?
       # member_count(channel)
 
     when "message"
       # messageで受けるイベントは複数ある為,bot_user_idで選別
       if App.exists?(bot_user_id: user) && params[:event][:subtype].nil?
-        Transception.new(conversation_id: channel).save!
+        message_id = params[:event][:blocks][0][:block_id].to_i
+        Transception.new(conversation_id: channel, message_id: message_id).save!
       end
 
     when "app_home_opened"
