@@ -58,14 +58,14 @@ class HomesController < ApplicationController
           p.channel_id = channel_to_join.id
         end
       end
-      # member_count(channel)
+      member_count(channel)
 
     when "member_left_channel"
       companion = Companion.find_by(slack_user_id: user)
       channel_to_leave = Channel.find_by(slack_channel_id: channel)
       participation = Participation.find_by(companion_id: companion.id, channel_id: channel_to_leave.id)
       participation.destroy unless participation.nil?
-      # member_count(channel)
+      member_count(channel)
 
     when "channel_left"
       bot_user_id = App.find_by(api_app_id: api_app).bot_user_id
@@ -73,7 +73,7 @@ class HomesController < ApplicationController
       channel_to_leave = Channel.find_by(slack_channel_id: channel)
       participation = Participation.find_by(companion_id: companion.id, channel_id: channel_to_leave.id)
       participation.destroy unless participation.nil?
-      # member_count(channel)
+      member_count(channel)
 
     when "message"
       # messageで受けるイベントは複数ある為,bot_user_idで選別
@@ -90,11 +90,7 @@ class HomesController < ApplicationController
   end
 
   def member_count(channel)
-    bot_token = Channel.find_by(slack_channel_id: channel).app.oauth_bot_token
-    conversation_info = curl_exec(base_url: "https://slack.com/api/conversations.info",
-                                  params: { "token": bot_token, "channel": channel, "include_num_members": true})
-    member_count = JSON.parse(conversation_info[0])["channel"]["num_members"]
-
+    member_count = Channel.find_by(slack_channel_id: channel).participations.count
     Channel.find_by(slack_channel_id: channel).update(member_count: member_count)
   end
 
