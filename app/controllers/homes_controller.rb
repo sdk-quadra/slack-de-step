@@ -82,7 +82,6 @@ class HomesController < ApplicationController
       end
 
     when "app_home_opened"
-      Channel.new(app_id: app_id, slack_channel_id: channel[:id], name: channel[:name], member_count: 0).save!
       transception = Transception.where(conversation_id: channel)
       transception.update(is_read: true)
     end
