@@ -38,7 +38,7 @@ class MessagesController < ApplicationController
     elsif params[:commit] == "登録" && @message.update(message_params)
 
       # 以前の予約送信は消す
-      delete_scheduled_message(@message.id)
+      delete_scheduled_messages(@message.id)
 
       build_message(@message)
     else
@@ -47,13 +47,25 @@ class MessagesController < ApplicationController
   end
 
   def destroy
-    message = params[:id]
+    message_id = params[:id]
 
-    delete_scheduled_message(message)
-    Message.destroy(message)
+    delete_scheduled_messages(message_id)
+    Message.destroy(message_id)
   end
 
   private
+
+    def test_message(message)
+      bot_token = @workspace.app.oauth_bot_token
+      member = session[:authed_slack_user_id]
+      if  message.image_url
+        curl_exec(base_url: "https://slack.com/api/chat.postMessage",
+                  params: { "token": bot_token, "channel": member, "blocks": "[{\"block_id\": \"test_message\", \"type\": \"section\",\"text\": {\"type\": \"plain_text\", \"text\": \"#{message.message}\"}}, {\"type\": \"image\", \"title\": {\"type\": \"plain_text\",\"text\": \"pitcure\"}, \"image_url\": \"#{message.image_url}\", \"block_id\": \"image4\",\"alt_text\": \"pitcure here\"}]" })
+      else
+        curl_exec(base_url: "https://slack.com/api/chat.postMessage",
+                  params: { "token": bot_token, "channel": member, "blocks": "[{\"block_id\": \"test_message\", \"type\": \"section\",\"text\": {\"type\": \"plain_text\", \"text\": \"#{message.message}\" }}]" })
+      end
+    end
 
     def build_message(message)
       x_days_time = x_days_time(params)
@@ -95,14 +107,16 @@ class MessagesController < ApplicationController
       )
     end
 
-    def delete_scheduled_message(message)
+    def delete_scheduled_messages(message_id)
       bot_token = @workspace.app.oauth_bot_token
-      members = Channel.find(@channel.id).companions
-      scheduled_message_id = IndividualMessage.find_by(message_id: message).scheduled_message_id
+      individual_messages = IndividualMessage.where(message_id: message_id)
 
-      members.each do |member|
-        curl_exec(base_url: "https://slack.com/api/chat.deleteScheduledMessage",
-                  params: { "token": bot_token, "channel": member.slack_user_id, "scheduled_message_id": scheduled_message_id })
+      individual_messages.each do |message|
+        scheduled_datetime = message.scheduled_datetime
+        if scheduled_datetime > Time.now
+          curl_exec(base_url: "https://slack.com/api/chat.deleteScheduledMessage",
+                    params: { "token": bot_token, "channel": message.companion.slack_user_id, "scheduled_message_id": message.scheduled_message_id })
+        end
       end
     end
 
@@ -122,18 +136,6 @@ class MessagesController < ApplicationController
       push_date = participation_datetime + x_days_time[:in_x_days].to_i.days
       push_datetime = Time.parse(push_date.strftime("%Y-%m-%d #{x_days_time[:time]}"))
       push_datetime
-    end
-
-    def test_message(message)
-      bot_token = @workspace.app.oauth_bot_token
-      member = session[:authed_slack_user_id]
-      if  message.image_url
-        curl_exec(base_url: "https://slack.com/api/chat.postMessage",
-                  params: { "token": bot_token, "channel": member, "blocks": "[{\"block_id\": \"test_message\", \"type\": \"section\",\"text\": {\"type\": \"plain_text\", \"text\": \"#{message.message}\"}}, {\"type\": \"image\", \"title\": {\"type\": \"plain_text\",\"text\": \"pitcure\"}, \"image_url\": \"#{message.image_url}\", \"block_id\": \"image4\",\"alt_text\": \"pitcure here\"}]" })
-      else
-        curl_exec(base_url: "https://slack.com/api/chat.postMessage",
-                  params: { "token": bot_token, "channel": member, "blocks": "[{\"block_id\": \"test_message\", \"type\": \"section\",\"text\": {\"type\": \"plain_text\", \"text\": \"#{message.message}\" }}]" })
-      end
     end
 
     def message_params
