@@ -12,11 +12,15 @@ class MessagesController < ApplicationController
 
   def create
     @message = Message.new(message_params)
-    if @message.save
+
+    if params[:commit] == "テスト送信" && @message.valid?
+      test_message(@message)
+    elsif params[:commit] == "登録" && @message.save
       build_message(@message)
     else
       render action: "new"
     end
+
   end
 
   def edit
@@ -29,7 +33,9 @@ class MessagesController < ApplicationController
       @message.image = nil
     end
 
-    if @message.update(message_params)
+    if params[:commit] == "テスト送信" && @message.valid?
+      test_message(@message)
+    elsif params[:commit] == "登録" && @message.update(message_params)
       build_message(@message)
     else
       render action: "edit"
@@ -46,15 +52,14 @@ class MessagesController < ApplicationController
     def build_message(message)
       x_days_time = x_days_time(params)
       members = Channel.find(@channel.id).companions
-
       members.each do |member|
         participation_datetime = member.participations.find_by(channel_id: @channel.id).created_at
         push_datetime = push_datetime(participation_datetime, x_days_time)
-        current_datetime = Time.now
 
-        if push_datetime > current_datetime
+        if push_datetime > Time.now
           schedule_message(member.slack_user_id, push_datetime, message)
         end
+
       end
     end
 
@@ -76,12 +81,21 @@ class MessagesController < ApplicationController
       push_datetime
     end
 
+    def test_message(message)
+      bot_token = @workspace.app.oauth_bot_token
+      member = session[:authed_slack_user_id]
+      if  message.image_url
+        curl_exec(base_url: "https://slack.com/api/chat.postMessage",
+                  params: { "token": bot_token, "channel": member, "blocks": "[{\"block_id\": \"test_message\", \"type\": \"section\",\"text\": {\"type\": \"plain_text\", \"text\": \"#{message.message}\"}}, {\"type\": \"image\", \"title\": {\"type\": \"plain_text\",\"text\": \"pitcure\"}, \"image_url\": \"#{message.image_url}\", \"block_id\": \"image4\",\"alt_text\": \"pitcure here\"}]" })
+      else
+        curl_exec(base_url: "https://slack.com/api/chat.postMessage",
+                  params: { "token": bot_token, "channel": member, "blocks": "[{\"block_id\": \"test_message\", \"type\": \"section\",\"text\": {\"type\": \"plain_text\", \"text\": \"#{message.message}\" }}]" })
+      end
+    end
+
     def schedule_message(member, push_datetime, message)
       bot_token = @workspace.app.oauth_bot_token
-      if params[:post_now]
-        curl_exec(base_url: "https://slack.com/api/chat.postMessage",
-                  params: { "token": bot_token, "channel": member, "blocks": "[{\"block_id\": \"#{message.id}\", \"type\": \"section\",\"text\": {\"type\": \"plain_text\", \"text\": \"#{message.message}\" }}]" })
-      elsif  message.image_url
+      if  message.image_url
         curl_exec(base_url: "https://slack.com/api/chat.scheduleMessage",
                   params: { "token": bot_token, "channel": member, "post_at": push_datetime.to_i, "blocks": "[{\"block_id\": \"#{message.id}\", \"type\": \"section\",\"text\": {\"type\": \"plain_text\", \"text\": \"#{message.message}\"}}, {\"type\": \"image\", \"title\": {\"type\": \"plain_text\",\"text\": \"pitcure\"}, \"image_url\": \"#{message.image_url}\", \"block_id\": \"image4\",\"alt_text\": \"pitcure here\"}]" })
       else
