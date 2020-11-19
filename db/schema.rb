@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_18_070302) do
+ActiveRecord::Schema.define(version: 2020_11_19_075456) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -42,6 +42,16 @@ ActiveRecord::Schema.define(version: 2020_11_18_070302) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "app_id", null: false
+  end
+
+  create_table "individual_messages", force: :cascade do |t|
+    t.integer "message_id", null: false
+    t.integer "companion_id", null: false
+    t.string "scheduled_message_id", null: false
+    t.boolean "is_deleted", default: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "scheduled_datetime", null: false
   end
 
   create_table "messages", force: :cascade do |t|
