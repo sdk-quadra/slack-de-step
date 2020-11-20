@@ -5,9 +5,11 @@ ja:
     attributes:
       message:
         message: メッセージ
+        image: 画像
   errors:
     format: "%{attribute}%{message}"
     messages:
+      max_size_error: は%{max_size}以下にしてください
       accepted: を受諾してください
       blank: を入力してください
       present: は入力しないでください
