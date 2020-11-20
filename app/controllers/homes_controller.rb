@@ -37,6 +37,10 @@ class HomesController < ApplicationController
       participate_channel(members, channel)
 
     when "channel_deleted"
+      bot_token = App.find_by(api_app_id: api_app).oauth_bot_token
+      message_ids = Channel.find_by(slack_channel_id: channel).messages.map(&:id)
+      delete_scheduled_messages(bot_token, message_ids)
+
       Channel.find_by(slack_channel_id: channel).destroy
 
     when "channel_rename"
@@ -141,4 +145,15 @@ class HomesController < ApplicationController
       end
     end
 
+    def delete_scheduled_messages(bot_token, message_ids)
+      individual_messages = IndividualMessage.where(message_id: message_ids)
+
+      individual_messages.each do |individual_message|
+        scheduled_datetime = individual_message.scheduled_datetime
+        if scheduled_datetime > Time.now
+          curl_exec(base_url: "https://slack.com/api/chat.deleteScheduledMessage",
+                    params: { "token": bot_token, "channel": individual_message.companion.slack_user_id, "scheduled_message_id": individual_message.scheduled_message_id })
+        end
+      end
+    end
 end
