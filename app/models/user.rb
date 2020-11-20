@@ -77,11 +77,18 @@ class User < ApplicationRecord
         channel.name = conversation["name"]
         channel.member_count = 0
         channel.name == "general" ? channel.display = true : channel.display = false
+
+        join_to_channel(oauth_bot_token, conversation)
       end
       # botをpublic channelに参加させる
       curl_exec(base_url: "https://slack.com/api/conversations.join", headers: { "Authorization": "Bearer " + oauth_bot_token },
                 params: { "channel": conversation["id"] })
     end
+  end
+
+  def self.join_to_channel(bot_token, channel)
+    curl_exec(base_url: "https://slack.com/api/conversations.join", headers: { "Authorization": "Bearer " + bot_token },
+              params: { "channel": channel[:id] })
   end
 
   def self.create_companions(auth, app)

@@ -76,13 +76,14 @@ class HomesController < ApplicationController
       member_count(channel)
 
     when "message"
+      return if params[:event][:subtype].present?
+
       message_id = params[:event][:blocks][0][:block_id]
       # messageで受けるイベントは複数ある為,bot_user_idで選別
       from_bot = App.exists?(bot_user_id: user)
-      is_subtype = params[:event][:subtype].present?
       is_test_message = message_id == "test_message" ? true : false
 
-      if from_bot && !is_subtype && !is_test_message
+      if from_bot && !is_test_message
         Transception.new(conversation_id: channel, message_id: message_id.to_i).save!
       end
 
