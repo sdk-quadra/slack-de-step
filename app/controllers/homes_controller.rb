@@ -114,7 +114,14 @@ class HomesController < ApplicationController
   def create_channel(api_app, channel)
     api_app_id = App.find_by(api_app_id: api_app).id
     name = channel_name(api_app, channel[:id])
-    Channel.create(app_id: api_app_id, name: name, slack_channel_id: channel[:id], member_count: 0)
+
+    Channel.find_or_create_by!(app_id: api_app_id, slack_channel_id: channel[:id]) do |c|
+      c.app_id = api_app_id
+      c.name = name
+      c.slack_channel_id = channel[:id]
+      c.member_count = 0
+    end
+
   end
 
   def join_to_channel(bot_token, channel)
