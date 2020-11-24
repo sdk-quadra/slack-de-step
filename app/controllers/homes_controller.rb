@@ -47,6 +47,7 @@ class HomesController < ApplicationController
       Channel.find_by(slack_channel_id: channel[:id]).update(name: channel[:name])
 
     when "member_joined_channel"
+      return if params[:authorizations][0][:is_bot] == "true"
 
       # 新規userの場合
       companion = Companion.find_or_create_by!(slack_user_id: user) do |c|
@@ -64,6 +65,23 @@ class HomesController < ApplicationController
       end
       member_count(channel)
 
+      messages = channel_to_join.messages
+
+      if messages
+        messages.each do |message|
+
+          push_timing = message.push_timing
+
+          participation_datetime = companion.participations.find_by(channel_id: channel_to_join.id).created_at
+          push_datetime = push_datetime(participation_datetime, push_timing)
+
+          if push_datetime > Time.now
+            schedule_message(api_app, companion, push_datetime, message)
+          end
+
+        end
+      end
+
     when "member_left_channel"
       companion = Companion.find_by(slack_user_id: user)
       channel_to_leave = Channel.find_by(slack_channel_id: channel)
@@ -71,13 +89,15 @@ class HomesController < ApplicationController
       participation.destroy unless participation.nil?
       member_count(channel)
 
-    when "channel_left"
-      bot_user_id = App.find_by(api_app_id: api_app).bot_user_id
-      companion = Companion.find_by(slack_user_id: bot_user_id)
-      channel_to_leave = Channel.find_by(slack_channel_id: channel)
-      participation = Participation.find_by(companion_id: companion.id, channel_id: channel_to_leave.id)
-      participation.destroy unless participation.nil?
-      member_count(channel)
+      bot_token = App.find_by(api_app_id: api_app).oauth_bot_token
+      messages = Channel.find_by(slack_channel_id: channel).messages
+      companion_id = Companion.find_by(slack_user_id: user).id
+      messages.each do |m|
+        individual_message = m.individual_messages.find_by(companion_id: companion_id)
+        curl_exec(base_url: "https://slack.com/api/chat.deleteScheduledMessage",
+                  params: { "token": bot_token, "channel": channel, "scheduled_message_id": individual_message.scheduled_message_id })
+        individual_message.destroy unless individual_message.nil?
+      end
 
     when "message"
       return if params[:event][:subtype].present?
@@ -94,6 +114,7 @@ class HomesController < ApplicationController
     when "app_home_opened"
       transception = Transception.where(conversation_id: channel)
       transception.update(is_read: true)
+
     end
     render status: 200, json: { status: 200 }
   end
@@ -162,5 +183,37 @@ class HomesController < ApplicationController
                     params: { "token": bot_token, "channel": individual_message.companion.slack_user_id, "scheduled_message_id": individual_message.scheduled_message_id })
         end
       end
+    end
+
+    def push_datetime(participation_datetime, push_timing)
+      push_date = participation_datetime + push_timing.in_x_days.to_i.days
+      push_datetime = Time.parse(push_date.strftime("%Y-%m-%d #{push_timing.time}"))
+      push_datetime
+    end
+
+    def schedule_message(api_app, member, push_datetime, message)
+      bot_token = App.find_by(api_app_id: api_app).oauth_bot_token
+      if message.image_url
+        scheduled_message = curl_exec(base_url: "https://slack.com/api/chat.scheduleMessage",
+                                      params: { "token": bot_token, "channel": member.slack_user_id, "post_at": push_datetime.to_i, "blocks": "[{\"block_id\": \"#{message.id}\", \"type\": \"section\",\"text\": {\"type\": \"plain_text\", \"text\": \"#{message.message}\"}}, {\"type\": \"image\", \"title\": {\"type\": \"plain_text\",\"text\": \"pitcure\"}, \"image_url\": \"#{message.image_url}\", \"block_id\": \"image4\",\"alt_text\": \"pitcure here\"}]" })
+      else
+        scheduled_message = curl_exec(base_url: "https://slack.com/api/chat.scheduleMessage",
+                                      params: { "token": bot_token, "channel": member.slack_user_id, "post_at": push_datetime.to_i, "blocks": "[{\"block_id\": \"#{message.id}\", \"type\": \"section\",\"text\": {\"type\": \"plain_text\", \"text\": \"#{message.message}\" }}]" })
+      end
+      save_individual_messages(member, message, scheduled_message)
+
+    end
+
+    def save_individual_messages(member, message, scheduled_message)
+      companion_id = member.id
+      message_id = message.id
+      scheduled_message_id = JSON.parse(scheduled_message[0])["scheduled_message_id"]
+      scheduled_timestamp = JSON.parse(scheduled_message[0])["post_at"]
+
+      individual_message = IndividualMessage.find_or_initialize_by(message_id: message_id, companion_id: companion_id)
+      individual_message.update_attributes(
+        scheduled_message_id: scheduled_message_id,
+        scheduled_datetime: Time.at(scheduled_timestamp)
+      )
     end
 end
