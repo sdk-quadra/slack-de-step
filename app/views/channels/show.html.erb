@@ -1,6 +1,6 @@
 <div class="wrapper">
   <div class="channels">
-    <img src="https://avatars.slack-edge.com/2020-10-12/1418393192325_a55bbafd0056bbddcb32_88.png" class="channels__ws-icon">
+    <%= link_to image_tag(@workspace.icon_url, class: "channels__ws-icon"), workspaces_path %>
     <% @channels.each do |channel| %>
       <div class="channel">
         <div class="channel__name">
