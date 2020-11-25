@@ -6,6 +6,7 @@ class HomesController < ApplicationController
   skip_before_action :check_logined
   before_action :already_logined
   include CurlBuilder
+  include MessageBuilder
 
   def index
   end
@@ -67,16 +68,21 @@ class HomesController < ApplicationController
 
       messages = channel_to_join.messages
 
+      bot_token = App.find_by(api_app_id: api_app).oauth_bot_token
+
       if messages
         messages.each do |message|
 
           push_timing = message.push_timing
+          x_days_time = {}
+          x_days_time.store(:in_x_days, push_timing.in_x_days)
+          x_days_time.store(:time, push_timing.time)
 
           participation_datetime = companion.participations.find_by(channel_id: channel_to_join.id).created_at
-          push_datetime = push_datetime(participation_datetime, push_timing)
+          push_datetime = push_datetime(participation_datetime, x_days_time)
 
           if push_datetime > Time.now
-            schedule_message(api_app, companion, push_datetime, message)
+            schedule_message(bot_token, companion, push_datetime, message)
           end
 
         end
@@ -119,53 +125,52 @@ class HomesController < ApplicationController
     render status: 200, json: { status: 200 }
   end
 
-  def member_count(channel)
-    member_count = Channel.find_by(slack_channel_id: channel).participations.count
-    Channel.find_by(slack_channel_id: channel).update(member_count: member_count)
-  end
-
-  def channel_name(api_app, channel)
-    bot_token = App.find_by(api_app_id: api_app).oauth_bot_token
-    conversation_info = curl_exec(base_url: "https://slack.com/api/conversations.info",
-                                  params: { "token": bot_token, "channel": channel })
-    channel_name = JSON.parse(conversation_info[0])["channel"]["name"]
-    channel_name
-  end
-
-  def create_channel(api_app, channel)
-    api_app_id = App.find_by(api_app_id: api_app).id
-    name = channel_name(api_app, channel[:id])
-
-    Channel.find_or_create_by!(app_id: api_app_id, slack_channel_id: channel[:id]) do |c|
-      c.app_id = api_app_id
-      c.name = name
-      c.slack_channel_id = channel[:id]
-      c.member_count = 0
-    end
-
-  end
-
-  def join_to_channel(bot_token, channel)
-    curl_exec(base_url: "https://slack.com/api/conversations.join", headers: { "Authorization": "Bearer " + bot_token },
-              params: { "channel": channel[:id] })
-  end
-
-  def conversations_members(bot_token, channel)
-    conversations_members = curl_exec(base_url: "https://slack.com/api/conversations.members", headers: { "Authorization": "Bearer " + bot_token },
-              params: { "channel": channel[:id] })
-    members = JSON.parse(conversations_members[0])["members"]
-    members
-  end
-
-  def participate_channel(members, channel)
-    members.each do |member|
-      companion_id = Companion.find_by(slack_user_id: member).id
-      channel_id = Channel.find_by(slack_channel_id: channel[:id]).id
-      Participation.create(companion_id: companion_id, channel_id: channel_id) unless App.exists?(bot_user_id: member)
-    end
-  end
-
   private
+    def member_count(channel)
+      member_count = Channel.find_by(slack_channel_id: channel).participations.count
+      Channel.find_by(slack_channel_id: channel).update(member_count: member_count)
+    end
+
+    def channel_name(api_app, channel)
+      bot_token = App.find_by(api_app_id: api_app).oauth_bot_token
+      conversation_info = curl_exec(base_url: "https://slack.com/api/conversations.info",
+                                    params: { "token": bot_token, "channel": channel })
+      channel_name = JSON.parse(conversation_info[0])["channel"]["name"]
+      channel_name
+    end
+
+    def create_channel(api_app, channel)
+      api_app_id = App.find_by(api_app_id: api_app).id
+      name = channel_name(api_app, channel[:id])
+
+      Channel.find_or_create_by!(app_id: api_app_id, slack_channel_id: channel[:id]) do |c|
+        c.app_id = api_app_id
+        c.name = name
+        c.slack_channel_id = channel[:id]
+        c.member_count = 0
+      end
+
+    end
+
+    def join_to_channel(bot_token, channel)
+      curl_exec(base_url: "https://slack.com/api/conversations.join", headers: { "Authorization": "Bearer " + bot_token },
+                params: { "channel": channel[:id] })
+    end
+
+    def conversations_members(bot_token, channel)
+      conversations_members = curl_exec(base_url: "https://slack.com/api/conversations.members", headers: { "Authorization": "Bearer " + bot_token },
+                params: { "channel": channel[:id] })
+      members = JSON.parse(conversations_members[0])["members"]
+      members
+    end
+
+    def participate_channel(members, channel)
+      members.each do |member|
+        companion_id = Companion.find_by(slack_user_id: member).id
+        channel_id = Channel.find_by(slack_channel_id: channel[:id]).id
+        Participation.create(companion_id: companion_id, channel_id: channel_id) unless App.exists?(bot_user_id: member)
+      end
+    end
 
     def already_logined
       if session[:user_id]
@@ -173,47 +178,4 @@ class HomesController < ApplicationController
       end
     end
 
-    def delete_scheduled_messages(bot_token, message_ids)
-      individual_messages = IndividualMessage.where(message_id: message_ids)
-
-      individual_messages.each do |individual_message|
-        scheduled_datetime = individual_message.scheduled_datetime
-        if scheduled_datetime > Time.now
-          curl_exec(base_url: "https://slack.com/api/chat.deleteScheduledMessage",
-                    params: { "token": bot_token, "channel": individual_message.companion.slack_user_id, "scheduled_message_id": individual_message.scheduled_message_id })
-        end
-      end
-    end
-
-    def push_datetime(participation_datetime, push_timing)
-      push_date = participation_datetime + push_timing.in_x_days.to_i.days
-      push_datetime = Time.parse(push_date.strftime("%Y-%m-%d #{push_timing.time}"))
-      push_datetime
-    end
-
-    def schedule_message(api_app, member, push_datetime, message)
-      bot_token = App.find_by(api_app_id: api_app).oauth_bot_token
-      if message.image_url
-        scheduled_message = curl_exec(base_url: "https://slack.com/api/chat.scheduleMessage",
-                                      params: { "token": bot_token, "channel": member.slack_user_id, "post_at": push_datetime.to_i, "blocks": "[{\"block_id\": \"#{message.id}\", \"type\": \"section\",\"text\": {\"type\": \"plain_text\", \"text\": \"#{message.message}\"}}, {\"type\": \"image\", \"title\": {\"type\": \"plain_text\",\"text\": \"pitcure\"}, \"image_url\": \"#{message.image_url}\", \"block_id\": \"image4\",\"alt_text\": \"pitcure here\"}]" })
-      else
-        scheduled_message = curl_exec(base_url: "https://slack.com/api/chat.scheduleMessage",
-                                      params: { "token": bot_token, "channel": member.slack_user_id, "post_at": push_datetime.to_i, "blocks": "[{\"block_id\": \"#{message.id}\", \"type\": \"section\",\"text\": {\"type\": \"plain_text\", \"text\": \"#{message.message}\" }}]" })
-      end
-      save_individual_messages(member, message, scheduled_message)
-
-    end
-
-    def save_individual_messages(member, message, scheduled_message)
-      companion_id = member.id
-      message_id = message.id
-      scheduled_message_id = JSON.parse(scheduled_message[0])["scheduled_message_id"]
-      scheduled_timestamp = JSON.parse(scheduled_message[0])["post_at"]
-
-      individual_message = IndividualMessage.find_or_initialize_by(message_id: message_id, companion_id: companion_id)
-      individual_message.update_attributes(
-        scheduled_message_id: scheduled_message_id,
-        scheduled_datetime: Time.at(scheduled_timestamp)
-      )
-    end
 end
