@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module CurlBuilder
   extend ActiveSupport::Concern
   def curl_build(base_url:, method: "GET", params: {}, headers: {}, body_filename: nil, verbose: true, silent: true, options: "")

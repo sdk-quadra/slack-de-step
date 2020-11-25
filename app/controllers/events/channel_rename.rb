@@ -1,5 +1,6 @@
-class Events::ChannelRename
+# frozen_string_literal: true
 
+class Events::ChannelRename
   def execute(params)
     # #
     # channel名を変更した時の処理
@@ -8,7 +9,5 @@ class Events::ChannelRename
     channel = params[:event][:channel]
 
     Channel.find_by(slack_channel_id: channel[:id]).update(name: channel[:name])
-
   end
-
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Events::MemberJoinedChannel
   include MessageBuilder
 
@@ -9,7 +11,6 @@ class Events::MemberJoinedChannel
     user = params[:event][:user]
     team = params[:team_id]
     channel = params[:event][:channel]
-    api_app = params[:api_app_id]
 
     return if params[:authorizations][0][:is_bot] == "true"
 
@@ -31,11 +32,8 @@ class Events::MemberJoinedChannel
 
     messages = channel_to_join.messages
 
-    # bot_token = App.find_by(api_app_id: api_app).oauth_bot_token
-
     if messages
       messages.each do |message|
-
         push_timing = message.push_timing
         x_days_time = {}
         x_days_time.store(:in_x_days, push_timing.in_x_days)
@@ -47,15 +45,12 @@ class Events::MemberJoinedChannel
         if push_datetime > Time.now
           schedule_message(bot_token, companion, push_datetime, message)
         end
-
       end
     end
-
   end
 
   def member_count(channel)
     member_count = Channel.find_by(slack_channel_id: channel).participations.count
     Channel.find_by(slack_channel_id: channel).update(member_count: member_count)
   end
-
 end

@@ -53,5 +53,4 @@ class HomesController < ApplicationController
         redirect_to workspaces_path
       end
     end
-
 end

@@ -1,5 +1,6 @@
-class Events::Message
+# frozen_string_literal: true
 
+class Events::Message
   def execute(params)
     # #
     # messageを受信した時の処理
@@ -21,5 +22,4 @@ class Events::Message
       Transception.new(conversation_id: channel, message_id: message_id.to_i).save!
     end
   end
-
 end

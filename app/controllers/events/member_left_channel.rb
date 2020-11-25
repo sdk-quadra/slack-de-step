@@ -1,8 +1,9 @@
+# frozen_string_literal: true
+
 class Events::MemberLeftChannel
   include CurlBuilder
 
   def execute(bot_token, params)
-
     # #
     # channelからuserが退出した時の処理
     # #
@@ -32,12 +33,10 @@ class Events::MemberLeftChannel
 
       individual_message.destroy unless individual_message.nil?
     end
-
   end
 
   def member_count(channel)
     member_count = Channel.find_by(slack_channel_id: channel).participations.count
     Channel.find_by(slack_channel_id: channel).update(member_count: member_count)
   end
-
 end

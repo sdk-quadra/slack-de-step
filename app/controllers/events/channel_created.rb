@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Events::ChannelCreated
   include CurlBuilder
 
@@ -22,14 +24,11 @@ class Events::ChannelCreated
 
   private
     def join_to_channel(bot_token, channel)
-
       curl_exec(base_url: "https://slack.com/api/conversations.join", headers: { "Authorization": "Bearer " + bot_token },
                 params: { "channel": channel[:id] })
-
     end
 
     def create_channel(api_app, channel)
-
       name = channel_name(api_app, channel[:id])
       api_app_id = App.find_by(api_app_id: api_app).id
 
@@ -39,7 +38,6 @@ class Events::ChannelCreated
         c.slack_channel_id = channel[:id]
         c.member_count = 0
       end
-
     end
 
     def channel_name(api_app, channel)
@@ -58,13 +56,10 @@ class Events::ChannelCreated
     end
 
     def participate_channel(members, channel)
-
       members.each do |member|
         companion_id = Companion.find_by(slack_user_id: member).id
         channel_id = Channel.find_by(slack_channel_id: channel[:id]).id
         Participation.create(companion_id: companion_id, channel_id: channel_id) unless App.exists?(bot_user_id: member)
       end
-
     end
-
 end

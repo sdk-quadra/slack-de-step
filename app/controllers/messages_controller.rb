@@ -22,7 +22,6 @@ class MessagesController < ApplicationController
     else
       render action: "new"
     end
-
   end
 
   def edit

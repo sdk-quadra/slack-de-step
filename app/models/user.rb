@@ -6,7 +6,6 @@ class User < ApplicationRecord
   extend CurlBuilder
 
   def self.find_or_create_form_auth(auth)
-    oauth_bot_token = JSON.parse(auth[0])["access_token"]
     oauth_user_token = JSON.parse(auth[0])["authed_user"]["access_token"]
 
     users_identity = curl_exec(base_url: "https://slack.com/api/users.identity", headers: { "Authorization": "Bearer " + oauth_user_token })
