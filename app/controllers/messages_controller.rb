@@ -3,7 +3,8 @@
 class MessagesController < ApplicationController
   before_action :set_workspace, only: [:new, :create, :edit, :update, :destroy]
   before_action :set_channel, only: [:new, :create, :edit, :update, :destroy]
-  include CurlBuilder
+  before_action :set_bot_token, only: [:new, :create, :edit, :update, :destroy]
+
   include MessageBuilder
 
   def new
@@ -15,9 +16,9 @@ class MessagesController < ApplicationController
     @message = Message.new(message_params)
 
     if params[:commit] == "テスト送信" && @message.valid?
-      test_message(@message)
+      test_message(@bot_token, @message)
     elsif params[:commit] == "登録" && @message.save
-      build_message(@message)
+      build_message(@bot_token, @message)
     else
       render action: "new"
     end
@@ -30,19 +31,17 @@ class MessagesController < ApplicationController
 
   def update
     @message = Message.find(params[:id])
-    if params[:delete_image]
-      @message.image = nil
-    end
+
+    @message.image = nil if params[:delete_image]
 
     if params[:commit] == "テスト送信" && @message.valid?
-      test_message(@message)
+      test_message(@bot_token, @message)
     elsif params[:commit] == "登録" && @message.update(message_params)
 
       # 以前の予約送信は消す
-      bot_token = @workspace.app.oauth_bot_token
-      delete_scheduled_messages(bot_token, @message.id)
+      delete_scheduled_messages(@bot_token, @message.id)
 
-      build_message(@message)
+      build_message(@bot_token, @message)
     else
       render action: "edit"
     end
@@ -51,8 +50,7 @@ class MessagesController < ApplicationController
   def destroy
     message_id = params[:id]
 
-    bot_token = @workspace.app.oauth_bot_token
-    delete_scheduled_messages(bot_token, message_id)
+    delete_scheduled_messages(@bot_token, message_id)
     Message.destroy(message_id)
   end
 
@@ -81,5 +79,9 @@ class MessagesController < ApplicationController
 
     def set_channel
       @channel = Channel.find(params[:channel_id])
+    end
+
+    def set_bot_token
+      @bot_token = Workspace.find(params[:workspace_id]).app.oauth_bot_token
     end
 end

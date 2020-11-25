@@ -1,8 +1,9 @@
 module MessageBuilder
   extend ActiveSupport::Concern
+  include CurlBuilder
 
-  def test_message(message)
-    bot_token = @workspace.app.oauth_bot_token
+  def test_message(bot_token, message)
+    # bot_token = @workspace.app.oauth_bot_token
     member = session[:authed_slack_user_id]
     if  message.image_url
       curl_exec(base_url: "https://slack.com/api/chat.postMessage",
@@ -13,9 +14,8 @@ module MessageBuilder
     end
   end
 
-  def build_message(message)
+  def build_message(bot_token, message)
     x_days_time = x_days_time(params)
-    bot_token = @workspace.app.oauth_bot_token
 
     members = Channel.find(@channel.id).companions
     members.each do |member|
