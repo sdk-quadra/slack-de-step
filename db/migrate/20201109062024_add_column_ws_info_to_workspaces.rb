@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddColumnWsInfoToWorkspaces < ActiveRecord::Migration[6.0]
   def change
     add_column :workspaces, :name, :string, null: false, default: ""

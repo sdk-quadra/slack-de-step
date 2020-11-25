@@ -25,7 +25,6 @@ class ChannelsController < ApplicationController
   end
 
   private
-
     def set_workspace
       @workspace = Workspace.find(params[:workspace_id])
     end

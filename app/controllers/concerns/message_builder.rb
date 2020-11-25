@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module MessageBuilder
   extend ActiveSupport::Concern
   include CurlBuilder
@@ -25,7 +27,6 @@ module MessageBuilder
       if push_datetime > Time.now
         schedule_message(bot_token, member, push_datetime, message)
       end
-
     end
   end
 
@@ -44,7 +45,6 @@ module MessageBuilder
                                     params: { "token": bot_token, "channel": member.slack_user_id, "post_at": push_datetime.to_i, "blocks": "[{\"block_id\": \"#{message.id}\", \"type\": \"section\",\"text\": {\"type\": \"plain_text\", \"text\": \"#{message.message}\" }}]" })
     end
     save_individual_messages(member, message, scheduled_message)
-
   end
 
   def delete_scheduled_messages(bot_token, message_ids)
@@ -71,5 +71,4 @@ module MessageBuilder
       scheduled_datetime: Time.at(scheduled_timestamp)
     )
   end
-
 end
