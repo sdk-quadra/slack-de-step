@@ -2,7 +2,7 @@
   <div class="channels">
     <%= link_to image_tag(@workspace.icon_url, class: "channels__ws-icon"), workspaces_path %>
     <% @channels.each do |channel| %>
-      <div class="channel">
+      <div class="channel <%= "channel__e__selected" if channel.id == @channel.id %>">
         <div class="channel__name">
           <%= link_to channel.name, channel.id.to_s %>
         </div>
@@ -29,7 +29,6 @@
     <div class="channel-messages__add-message">
       <%= link_to "+ メッセージを追加", new_workspace_channel_message_path(channel_id: @channel.id), class: "channel-messages__add-message-link" %>
     </div>
-
 
     <% @messages.each do |message| %>
 

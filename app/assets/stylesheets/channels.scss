@@ -10,16 +10,24 @@
 .channels {
   width: 12rem;
   background-color: #e7e9ed;
-  padding:1rem;
   min-height: 40rem;
 
   &__ws-icon {
+    padding: 1rem 1rem 0.3rem;
     border-radius: 2px;
     width: 50px;
   }
 
   &__add-channel {
     color: #666;
+  }
+}
+
+.channel {
+  padding: 0.3rem 1rem;
+
+  &__e__selected {
+    background-color: #CCCCCC;
   }
 }
 
