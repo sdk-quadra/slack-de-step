@@ -44,6 +44,9 @@ group :development, :test do
   gem "rubocop-performance"
   gem "rubocop-rails"
   gem "awesome_print"
+  gem "rspec-rails"
+  gem "factory_bot_rails"
+  gem "rack_session_access"
 end
 
 group :development do
