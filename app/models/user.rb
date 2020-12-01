@@ -3,6 +3,10 @@
 class User < ApplicationRecord
   has_many :possessions, dependent: :destroy
   has_many :workspaces, through: :possessions
+
+  validates :email, presence: true
+  validates :name, presence: true
+
   extend CurlBuilder
 
   def self.find_or_create_form_auth(auth)
