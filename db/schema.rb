@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -12,7 +10,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_20_075504) do
+ActiveRecord::Schema.define(version: 2020_12_01_053021) do
+
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -20,7 +19,6 @@ ActiveRecord::Schema.define(version: 2020_11_20_075504) do
     t.integer "workspace_id", null: false
     t.string "oauth_bot_token"
     t.string "bot_user_id"
-    t.boolean "is_deleted", default: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "api_app_id", null: false
@@ -28,7 +26,6 @@ ActiveRecord::Schema.define(version: 2020_11_20_075504) do
 
   create_table "channels", force: :cascade do |t|
     t.string "name", null: false
-    t.boolean "is_deleted", default: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "slack_channel_id", null: false
@@ -39,7 +36,6 @@ ActiveRecord::Schema.define(version: 2020_11_20_075504) do
 
   create_table "companions", force: :cascade do |t|
     t.string "slack_user_id", null: false
-    t.boolean "is_deleted", default: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "app_id", null: false
@@ -49,7 +45,6 @@ ActiveRecord::Schema.define(version: 2020_11_20_075504) do
     t.integer "message_id", null: false
     t.integer "companion_id", null: false
     t.string "scheduled_message_id", null: false
-    t.boolean "is_deleted", default: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.datetime "scheduled_datetime", null: false
@@ -59,7 +54,6 @@ ActiveRecord::Schema.define(version: 2020_11_20_075504) do
     t.integer "channel_id", null: false
     t.text "message", null: false
     t.string "image"
-    t.boolean "is_deleted", default: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
@@ -67,7 +61,6 @@ ActiveRecord::Schema.define(version: 2020_11_20_075504) do
   create_table "participations", force: :cascade do |t|
     t.integer "channel_id", null: false
     t.integer "companion_id", null: false
-    t.boolean "is_deleted", default: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
@@ -75,7 +68,6 @@ ActiveRecord::Schema.define(version: 2020_11_20_075504) do
   create_table "possessions", force: :cascade do |t|
     t.integer "user_id", default: 0
     t.integer "workspace_id", default: 0
-    t.boolean "is_deleted", default: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
@@ -84,7 +76,6 @@ ActiveRecord::Schema.define(version: 2020_11_20_075504) do
     t.integer "message_id", null: false
     t.time "time", null: false
     t.integer "in_x_days", null: false
-    t.boolean "is_deleted", default: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
@@ -92,7 +83,6 @@ ActiveRecord::Schema.define(version: 2020_11_20_075504) do
   create_table "transceptions", force: :cascade do |t|
     t.string "conversation_id", null: false
     t.boolean "is_read", default: false
-    t.boolean "is_deleted", default: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "message_id", null: false
@@ -101,17 +91,16 @@ ActiveRecord::Schema.define(version: 2020_11_20_075504) do
   create_table "users", force: :cascade do |t|
     t.string "email"
     t.string "name"
-    t.boolean "is_deleted", default: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "workspaces", force: :cascade do |t|
     t.string "slack_ws_id", null: false
-    t.boolean "is_deleted", default: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "name", null: false
     t.string "icon_url", null: false
   end
+
 end
