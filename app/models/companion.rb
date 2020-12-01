@@ -5,4 +5,6 @@ class Companion < ApplicationRecord
   has_many :participations, dependent: :destroy
   has_many :individual_messages, dependent: :destroy
   has_many :channels, through: :participations
+
+  validates :slack_user_id, presence: true
 end
