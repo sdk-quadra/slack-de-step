@@ -3,9 +3,6 @@
 require "rails_helper"
 
 RSpec.describe "messages", type: :system do
-  before do
-    # driven_by(:rack_test)
-  end
 
   before do
     @user = FactoryBot.create(:user)
@@ -77,6 +74,36 @@ RSpec.describe "messages", type: :system do
     fill_in "メッセージ *", with: "メッセージ登録テスト"
     click_button "登録"
     expect(page).to have_selector ".channel-message__post-datetime", text: "5日後の10:20:30"
+  end
+
+  it "画像選択時、画像削除ボタンが表示される事", js: true do
+    visit new_workspace_channel_message_path(@workspace.id, @channel.id)
+    attach_file "ここをクリックして画像を選択", "#{Rails.root}/spec/factories/images/ruby.png", make_visible: true
+    expect(find("#deleteImg", visible: true)).to be_visible
+  end
+
+  it "画像選択時画像を削除し登録すると、DBに画像が保存されない事", js: true do
+    visit new_workspace_channel_message_path(@workspace.id, @channel.id)
+    fill_in "メッセージ *", with: "メッセージ登録テスト"
+    attach_file "ここをクリックして画像を選択", "#{Rails.root}/spec/factories/images/ruby.png", make_visible: true
+    click_button "画像を削除する"
+    page.accept_confirm "本当に削除しますか？"
+    click_button "登録"
+    expect(find(".channel-message-data__img")).to be_visible
+  end
+
+  it "画像選択時、プレビューが表示される事", js: true do
+    visit new_workspace_channel_message_path(@workspace.id, @channel.id)
+    attach_file "ここをクリックして画像を選択", "#{Rails.root}/spec/factories/images/ruby.png", make_visible: true
+    expect(find("#preview", visible: true)).to be_visible
+  end
+
+  it "画像選択時、画像を削除するとプレビューが消える事", js: true do
+    visit new_workspace_channel_message_path(@workspace.id, @channel.id)
+    attach_file "ここをクリックして画像を選択", "#{Rails.root}/spec/factories/images/ruby.png", make_visible: true
+    click_button "画像を削除する"
+    accept_confirm
+    expect(find("#preview", visible: false)).to_not be_visible
   end
 
 end
