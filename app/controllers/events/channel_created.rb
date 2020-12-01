@@ -36,7 +36,6 @@ class Events::ChannelCreated
         c.app_id = api_app_id
         c.name = name
         c.slack_channel_id = channel[:id]
-        c.member_count = 0
       end
     end
 
