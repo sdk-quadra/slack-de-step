@@ -10,5 +10,4 @@ CarrierWave.configure do |config|
   config.fog_directory = "s3-slack-de-step"
   config.asset_host = "https://s3-slack-de-step.s3.amazonaws.com"
   config.cache_storage = :fog
-  config.fog_provider = "fog/aws"
 end
