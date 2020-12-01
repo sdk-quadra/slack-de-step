@@ -34,5 +34,4 @@ RSpec.describe "channels", type: :system do
     click_link "+ メッセージを追加"
     expect(page).to have_content "送信タイミング"
   end
-
 end
