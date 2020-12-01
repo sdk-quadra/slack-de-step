@@ -17,8 +17,10 @@ class MessagesController < ApplicationController
 
     if params[:commit] == "テスト送信" && @message.valid?
       test_message(@bot_token, @message)
+      redirect_to workspace_channel_path(@workspace, @channel)
     elsif params[:commit] == "登録" && @message.save
       build_message(@bot_token, @message)
+      redirect_to workspace_channel_path(@workspace, @channel)
     else
       render action: "new"
     end

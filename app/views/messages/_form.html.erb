@@ -8,14 +8,17 @@
       </ul>
     <% end %>
 
-    <h4 class="message-form__title-timing">送信タイミング *</h4>
-    チャンネル登録して
-    <%= m.fields_for :push_timing do |p| %>
-      <%= p.select :in_x_days, x_days_after %>日後の
-      <%= p.time_select :time, {prompt: false, ignore_date: true, include_seconds: true, minute_step: 1} %>に送信する
-    <% end %>
+    <label for="message_push_timing_attributes" class="message-form__title-timing">送信タイミング *</label>
+    <div class="message-form__push-timing">
+      チャンネル登録して
+      <%= m.fields_for :push_timing do |p| %>
+        <%= p.select :in_x_days, x_days_after %>日後の
+        <%= p.time_select :time, {prompt: false, ignore_date: true, include_seconds: true, minute_step: 1} %>
+      <% end %>
+      に送信する
+    </div>
 
-    <h4 class="message-form__title-message">メッセージ *</h4>
+    <label for="message_message" class="message-form__title-message">メッセージ *</label>
     <p><%= m.text_area :message, size: "60x12", class: "message-form__textarea" %></p>
     <p><%= m.label :image, "ここをクリックして画像を選択" %>
       <%= m.file_field :image, accept: 'image/*', class: "hidden message-form__file" %></p>

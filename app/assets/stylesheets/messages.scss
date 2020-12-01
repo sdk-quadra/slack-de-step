@@ -13,6 +13,7 @@
 
   &__channel-title {
     margin-top: 0;
+    margin-bottom: 1.2rem;
     background-color: #34163b;
     color: white;
     padding: 1rem;
@@ -28,12 +29,22 @@
 }
 
 .message-form {
+  &__title-message {
+    font-weight: bold;
+    display: block;
+  }
+  &__title-timing {
+    font-weight: bold;
+    display: block;
+  }
+  &__push-timing {
+    margin-bottom: 1.2rem;
+  }
   &__errors {
     padding-left: 1rem;
     color: red;
   }
 }
-
 
 .message-body {
   width:  30rem;
