@@ -3,7 +3,6 @@
 require "rails_helper"
 
 RSpec.describe "messages", type: :system do
-
   before do
     @user = FactoryBot.create(:user)
     @workspace = FactoryBot.create(:workspace)
@@ -105,5 +104,4 @@ RSpec.describe "messages", type: :system do
     accept_confirm
     expect(find("#preview", visible: false)).to_not be_visible
   end
-
 end
