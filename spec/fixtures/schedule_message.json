@@ -1,0 +1,26 @@
+{
+  "ok": true,
+  "scheduled_message_id": "Q01FW0E2VLM",
+  "channel": "D01BNHPD2DP",
+  "post_at": 1617202800,
+  "message": {
+    "bot_id": "B01B9UKR2PL",
+    "type": "message",
+    "text": "aaa",
+    "user": "U01B6RZ33L5",
+    "team": "T010E4HB6R4",
+    "bot_profile": {
+      "id": "B01B9UKR2PL",
+      "deleted": false,
+      "name": "sdk-quadra-super",
+      "updated": 1605576743,
+      "app_id": "A01BNHJJ21X",
+      "icons": {
+        "image_36": "https://avatars.slack-edge.com/2020-09-30/1411972136497_fdc5798e67330cadb425_36.png",
+        "image_48": "https://avatars.slack-edge.com/2020-09-30/1411972136497_fdc5798e67330cadb425_48.png",
+        "image_72": "https://avatars.slack-edge.com/2020-09-30/1411972136497_fdc5798e67330cadb425_72.png"
+      },
+      "team_id": "T010E4HB6R4"
+    }
+  }
+}
