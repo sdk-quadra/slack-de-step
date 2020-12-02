@@ -7,6 +7,7 @@ class ApplicationController < ActionController::Base
     def check_logined
       if action_name == "server"
       elsif ENV["RSPEC_JS_TEST"]
+      elsif ENV["RSPEC_API_TEST"]
       elsif session[:user_id] == nil
         redirect_to root_path
       end
