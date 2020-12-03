@@ -5,8 +5,10 @@ jobs:
       - image: circleci/ruby:2.6.3-node-browsers
         environment:
           RAILS_ENV: test
-          DATABASE_URL: "postgres://slackdestep@localhost:5432/slack_de_step"
+          DATABASE_URL: "postgres://slackdestep@127.0.0.1:5432/slack_de_step_test"
           PGHOST: 127.0.0.1
+          PGUSER: postgres
+          POSTGRES_DB: slack_de_step_test
 
     working_directory: ~/slack-de-step
 
