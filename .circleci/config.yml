@@ -5,6 +5,12 @@ jobs:
       - image: circleci/ruby:2.6.3-node-browsers
         environment:
           RAILS_ENV: test
+          DATABASE_URL: "postgres://postgres@localhost:5432/slack_de_step_test"
+
+      - image: circleci/postgres:10.3-alpine
+        environment:
+          POSTGRES_USER: postgres
+          POSTGRES_DB: slack_de_step_test
 
     working_directory: ~/slack-de-step
 
@@ -51,8 +57,24 @@ jobs:
           key: rails-yarn-{{ checksum "yarn.lock" }}
 
       - run:
+          name: rubocop
+          command: bundle exec rubocop -c .rubocop.yml -A
+
+      - run:
+          name: db migration
+          command: bundle exec rails db:schema:load
+
+      - run:
           name: System Test
           command: bundle exec rspec spec/system
+
+      - run:
+          name: Model Test
+          command: bundle exec rspec spec/models
+
+      - run:
+          name: Request Test
+          command: bundle exec rspec spec/requests
 
 workflows:
   version: 2
