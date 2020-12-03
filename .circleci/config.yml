@@ -61,10 +61,16 @@ jobs:
           command: bundle exec rubocop -c .rubocop.yml -A
 
       - run:
+          name: db migration
+          command: bundle exec rails db:schema:load
+
+      - run:
           name: System Test
-          command: |
-            bundle exec rails db:schema:load
-            bundle exec rspec spec/system
+          command: bundle exec rspec spec/system
+
+      - run:
+          name: Model Test
+          command: bundle exec rspec spec/models
 
 workflows:
   version: 2
