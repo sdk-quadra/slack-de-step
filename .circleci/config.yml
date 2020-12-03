@@ -72,6 +72,10 @@ jobs:
           name: Model Test
           command: bundle exec rspec spec/models
 
+      - run:
+          name: Request Test
+          command: bundle exec rspec spec/requests
+
 workflows:
   version: 2
 
