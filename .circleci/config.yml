@@ -56,7 +56,9 @@ jobs:
 
       - run:
           name: System Test
-          command: bundle exec rspec spec/system
+          command: |
+          bundle exec rails db:schema:load
+          bundle exec rspec spec/system
 
 workflows:
   version: 2
