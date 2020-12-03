@@ -37,5 +37,4 @@ RSpec.describe "Messages", type: :request do
 
     expect(curl_exec["ok"]).to eq true
   end
-
 end

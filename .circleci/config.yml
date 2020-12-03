@@ -57,6 +57,10 @@ jobs:
           key: rails-yarn-{{ checksum "yarn.lock" }}
 
       - run:
+          name: rubocop
+          command: bundle exec rubocop -c .rubocop.yml -A
+
+      - run:
           name: System Test
           command: |
             bundle exec rails db:schema:load
