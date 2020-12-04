@@ -6,7 +6,15 @@ class ChannelsController < ApplicationController
   include CurlBuilder
 
   def show
-    @channels = App.find_by(workspace_id: @workspace.id).channels
+    channels = App.find_by(workspace_id: @workspace.id).channels.sort do |x, y|
+      [-x[:member_count], x[:name]] <=> [-y[:member_count], y[:name]]
+    end
+
+    general_index = channels.index { |i| i.name == "general" }
+    general_channel = channels[general_index]
+
+    channels.reject! { |c| c.name == "general" }
+    @channels = channels.unshift(general_channel)
 
     post_messages = Transception.where(message_id: @channel.messages.map(&:id))
     @pushed_count = post_messages.count
