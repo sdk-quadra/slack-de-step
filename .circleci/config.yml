@@ -66,15 +66,15 @@ jobs:
 
       - run:
           name: System Test
-          command: bundle exec rspec spec/system
+          command: RSPEC=true bundle exec rspec spec/system
 
       - run:
           name: Model Test
-          command: bundle exec rspec spec/models
+          command: RSPEC=true bundle exec rspec spec/models
 
       - run:
           name: Request Test
-          command: bundle exec rspec spec/requests
+          command: RSPEC=true bundle exec rspec spec/requests
 
 workflows:
   version: 2
