@@ -18,6 +18,13 @@ body {
     margin: 0;
 }
 
+.menu {
+    flex-grow: 1;
+    padding: 1rem 1rem 1rem 0;
+    color: white;
+    text-decoration: none;
+}
+
 footer {
     background-color: #f5efe9;
 }
