@@ -6,6 +6,7 @@ ja:
       message:
         message: メッセージ
         image: 画像
+        max_message: 最大メッセージ数
   errors:
     format: "%{attribute}%{message}"
     messages:
