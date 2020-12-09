@@ -2,8 +2,11 @@
 
 class WorkspacesController < ApplicationController
   def index
-    user_id = session[:user_id]
-    possessions = Possession.where(user_id: user_id).map { |w| w.workspace_id }
-    @workspaces = Workspace.where(id: possessions)
+    workspace = Workspace.find_by(slack_ws_id: session[:workspace_id])
+    redirect_to workspace_channel_path(workspace.id, general_channel(workspace.app.id))
+  end
+
+  def general_channel(app_id)
+    Channel.where(name: "general").find_by(app_id: app_id)
   end
 end

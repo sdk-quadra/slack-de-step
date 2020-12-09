@@ -1,6 +1,6 @@
 <div class="wrapper">
   <div class="channels">
-    <%= link_to image_tag(@workspace.icon_url, class: "channels__ws-icon", alt: "workspace_icon"), workspaces_path %>
+    <%= image_tag(@workspace.icon_url, class: "channels__ws-icon", alt: "workspace_icon") %>
     <% @channels.each do |channel| %>
       <div class="channel<%= " channel__e__selected" if channel.id == @channel.id %>">
         <div class="channel__name">
@@ -11,15 +11,15 @@
         </div>
       </div>
     <% end %>
-    <div class="channels__add-channel">
-      + チャンネルを追加
-    </div>
   </div>
 
   <div class="channel-messages">
     <div class="channel-messages__channel-title">
       <h3 class="channel-messages__channel-name"># <%= @channel.name %></h3>
+      <%= link_to "≡", sessions_destroy_path, class: "menu" %>
+
     </div>
+
 
     <p class="channel-messages__desc">○月○日以降、このチャンネルに参加してから○日後のユーザーにボットから「DM」します</p>
     <div class="channel-messages__stat">

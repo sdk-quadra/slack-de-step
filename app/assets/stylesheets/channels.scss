@@ -37,12 +37,15 @@
   &__channel-title {
     background-color: #34163b;
     color: white;
+    display: flex;
   }
 
   &__channel-name {
     margin-top: 0;
-    padding: 1rem;
+    margin-bottom: 0;
+    padding: 1rem 0rem 1rem 1rem;
     text-align: center;
+    flex-grow: 100;
   }
 
   &__desc {

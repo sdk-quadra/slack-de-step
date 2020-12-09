@@ -12,6 +12,7 @@ class SessionsController < ApplicationController
       user = User.find_or_create_form_auth(oauth_v2_access)
       session[:user] = user
       session[:user_id] = user.id
+      session[:workspace_id] = JSON.parse(oauth_v2_access[0])["team"]["id"]
       session[:authed_slack_user_id] = JSON.parse(oauth_v2_access[0])["authed_user"]["id"]
       flash[:success] = "ユーザー認証が完了しました。"
       redirect_to workspaces_path

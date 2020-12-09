@@ -3,28 +3,28 @@
 // You can use Sass (SCSS) here: https://sass-lang.com/
 
 .back {
-  position: absolute;
-  text-decoration: none;
+  flex-grow: 1;
+  padding: 1rem 0 1rem 1rem;
   color: white;
+  text-decoration: none;
 }
 
 .message {
   min-height: 40rem;
 
   &__channel-title {
-    margin-top: 0;
     margin-bottom: 1.2rem;
     background-color: #34163b;
     color: white;
-    padding: 1rem;
-    position: relative;
+    display: flex;
   }
 
   &__channel-name {
-    width: 100%;
-    text-align: center;
     margin-top: 0;
     margin-bottom: 0;
+    text-align: center;
+    flex-grow: 100;
+    padding: 1rem 1rem 1rem 0;
   }
 }
 

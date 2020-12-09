@@ -4,6 +4,7 @@
     <h3 class="message__channel-name">
       # <%= @channel.name %>
     </h3>
+    <%= link_to "≡", sessions_destroy_path, class: "menu" %>
   </div>
   <%= render 'form', workspace: @workspace, channel: @channel, message: @message %>
 </div>
