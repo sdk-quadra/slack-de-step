@@ -6,6 +6,7 @@ jobs:
         environment:
           RAILS_ENV: test
           DATABASE_URL: "postgres://postgres@localhost:5432/slack_de_step_test"
+          TZ: "Asia/Tokyo"
 
       - image: circleci/postgres:10.3-alpine
         environment:
@@ -13,8 +14,6 @@ jobs:
           POSTGRES_DB: slack_de_step_test
 
     working_directory: ~/slack-de-step
-    environment:
-      TZ: "Asia/Tokyo"
 
     steps:
       - checkout
