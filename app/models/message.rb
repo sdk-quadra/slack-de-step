@@ -20,5 +20,4 @@ class Message < ApplicationRecord
       errors.add(:max_message, "は1チャネル#{MAX_MESSAGE_COUNT}個までです")
     end
   end
-
 end

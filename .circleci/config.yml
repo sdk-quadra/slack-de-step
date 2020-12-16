@@ -13,6 +13,8 @@ jobs:
           POSTGRES_DB: slack_de_step_test
 
     working_directory: ~/slack-de-step
+    environment:
+      TZ: "Asia/Tokyo"
 
     steps:
       - checkout

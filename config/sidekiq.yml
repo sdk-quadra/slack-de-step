@@ -1,0 +1,8 @@
+:verbose: false
+:pidfile: ./tmp/pids/sidekiq.pid
+:logfile: ./log/sidekiq.log
+:concurrency: 10
+:queues:
+  - delete_scheduled_message
+  - schedule_message
+  - default

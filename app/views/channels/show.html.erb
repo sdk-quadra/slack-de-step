@@ -38,8 +38,12 @@
         </div>
 
         <div class="channel-message-menu">
-          <%= link_to "編集", edit_workspace_channel_message_path(@workspace, message.channel_id, message.id) %><br />
-          <%= link_to "削除", workspace_channel_message_path(@workspace, message.channel_id, message.id), method: :delete %>
+          <% if message.modifiable == true %>
+            <%= link_to "編集", edit_workspace_channel_message_path(@workspace, message.channel_id, message.id) %><br />
+            <%= link_to "削除", workspace_channel_message_path(@workspace, message.channel_id, message.id), method: :delete %>
+          <% else %>
+            <p>現在処理中です。編集、削除はしばらく経ってからにしてください</p>
+          <% end %>
         </div>
 
         <div class="channel-message">

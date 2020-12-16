@@ -18,6 +18,11 @@ gem "bootsnap", ">= 1.4.2", require: false
 gem "carrierwave"
 gem "fog-aws"
 
+gem "redis-namespace"
+gem "sidekiq"
+
+gem "rails-i18n"
+
 group :development, :test do
   gem "byebug", platforms: %i[mri mingw x64_mingw]
   gem "rubocop"
