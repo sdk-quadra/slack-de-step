@@ -33,9 +33,9 @@ RSpec.describe "messages", type: :system do
     visit new_workspace_channel_message_path(@workspace.id, @channel.id)
     fill_in "メッセージ *", with: "メッセージ登録テスト"
 
-    hour = Time.now.since(300).strftime("%H")
-    minutes = Time.now.since(300).strftime("%M")
-    seconds = Time.now.since(300).strftime("%S")
+    hour = Time.now.since(30).strftime("%H")
+    minutes = Time.now.since(30).strftime("%M")
+    seconds = Time.now.since(30).strftime("%S")
 
     select hour, from: "message_push_timing_attributes_time_4i"
     select minutes, from: "message_push_timing_attributes_time_5i"
