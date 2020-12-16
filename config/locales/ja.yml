@@ -2,11 +2,14 @@ ja:
   activerecord:
     models:
       message: メッセージ
+      push_timing: 送信タイミング
     attributes:
       message:
         message: メッセージ
         image: 画像
         max_message: 最大メッセージ数
+      push_timing:
+        time: ""
   errors:
     format: "%{attribute}%{message}"
     messages:
