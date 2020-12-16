@@ -15,8 +15,51 @@ RSpec.describe "messages", type: :system do
     page.set_rack_session(user_id: @user.id)
     visit new_workspace_channel_message_path(@workspace.id, @channel.id)
     fill_in "メッセージ *", with: "メッセージ登録テスト"
+
+    hour = Time.now.since(5400).strftime("%H").to_i
+    minutes = Time.now.since(5400).strftime("%M").to_i
+    seconds = Time.now.since(5400).strftime("%S").to_i
+
+    select hour, from: "message_push_timing_attributes_time_4i"
+    select minutes, from: "message_push_timing_attributes_time_5i"
+    select seconds, from: "message_push_timing_attributes_time_6i"
+
     click_button "登録"
     expect(page).to have_selector ".channel-message-data__content", text: "メッセージ登録テスト"
+  end
+
+  it "現在時刻の5分以内はメッセージを登録できない事" do
+    page.set_rack_session(user_id: @user.id)
+    visit new_workspace_channel_message_path(@workspace.id, @channel.id)
+    fill_in "メッセージ *", with: "メッセージ登録テスト"
+
+    hour = Time.now.since(300).strftime("%H").to_i
+    minutes = Time.now.since(300).strftime("%M").to_i
+    seconds = Time.now.since(300).strftime("%S").to_i
+
+    select hour, from: "message_push_timing_attributes_time_4i"
+    select minutes, from: "message_push_timing_attributes_time_5i"
+    select seconds, from: "message_push_timing_attributes_time_6i"
+
+    click_button "登録"
+    expect(page).to have_content "現在時刻より10分以上後を指定してください"
+  end
+
+  it "セットしたばかりのメッセージは編集、削除できない事" do
+    page.set_rack_session(user_id: @user.id)
+    visit new_workspace_channel_message_path(@workspace.id, @channel.id)
+    fill_in "メッセージ *", with: "メッセージ登録テスト"
+
+    hour = Time.now.since(5400).strftime("%H").to_i
+    minutes = Time.now.since(5400).strftime("%M").to_i
+    seconds = Time.now.since(5400).strftime("%S").to_i
+
+    select hour, from: "message_push_timing_attributes_time_4i"
+    select minutes, from: "message_push_timing_attributes_time_5i"
+    select seconds, from: "message_push_timing_attributes_time_6i"
+
+    click_button "登録"
+    expect(page).to have_content "現在処理中です。編集、削除はしばらく経ってからにしてください"
   end
 
   it "テキスト未入力の場合は新規登録できない事" do
@@ -32,6 +75,15 @@ RSpec.describe "messages", type: :system do
     visit new_workspace_channel_message_path(@workspace.id, @channel.id)
     fill_in "メッセージ *", with: "メッセージ登録テスト"
     attach_file "ここをクリックして画像を選択", "#{Rails.root}/spec/factories/images/ruby.png"
+
+    hour = Time.now.since(5400).strftime("%H").to_i
+    minutes = Time.now.since(5400).strftime("%M").to_i
+    seconds = Time.now.since(5400).strftime("%S").to_i
+
+    select hour, from: "message_push_timing_attributes_time_4i"
+    select minutes, from: "message_push_timing_attributes_time_5i"
+    select seconds, from: "message_push_timing_attributes_time_6i"
+
     click_button "登録"
     expect(page).to have_content "メッセージ登録テスト"
     expect(find(".channel-message-data__img")).to be_visible
@@ -51,14 +103,32 @@ RSpec.describe "messages", type: :system do
     visit new_workspace_channel_message_path(@workspace.id, @channel.id)
     fill_in "メッセージ *", with: "メッセージ登録テスト"
     attach_file "ここをクリックして画像を選択", "#{Rails.root}/spec/factories/images/large.jpeg"
+
+    hour = Time.now.since(5400).strftime("%H").to_i
+    minutes = Time.now.since(5400).strftime("%M").to_i
+    seconds = Time.now.since(5400).strftime("%S").to_i
+
+    select hour, from: "message_push_timing_attributes_time_4i"
+    select minutes, from: "message_push_timing_attributes_time_5i"
+    select seconds, from: "message_push_timing_attributes_time_6i"
+
     click_button "登録"
-    expect(page).to have_content "画像は2 MB以下にしてください"
+    expect(page).to have_content "画像は2MB以下にしてください"
   end
 
   it "テスト送信してもDB保存されない事" do
     page.set_rack_session(user_id: @user.id)
     visit new_workspace_channel_message_path(@workspace.id, @channel.id)
     fill_in "メッセージ *", with: "メッセージ登録テスト"
+
+    hour = Time.now.since(5400).strftime("%H").to_i
+    minutes = Time.now.since(5400).strftime("%M").to_i
+    seconds = Time.now.since(5400).strftime("%S").to_i
+
+    select hour, from: "message_push_timing_attributes_time_4i"
+    select minutes, from: "message_push_timing_attributes_time_5i"
+    select seconds, from: "message_push_timing_attributes_time_6i"
+
     click_button "テスト送信"
     expect(page).to_not have_content "メッセージ登録テスト"
   end

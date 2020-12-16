@@ -17,10 +17,10 @@ RSpec.describe Message, type: :model do
 
   it "message_idなしではpush_timingを登録できない事" do
     push_timing = PushTiming.new(
-      time: Time.now,
+      time: Time.now.since(5400),
       in_x_days: 1
     )
-    expect(push_timing).to_not be_valid
+    expect { push_timing.save }.to raise_error(NoMethodError)
   end
 
   it "timeなしではpush_timingを登録できない事" do
@@ -34,7 +34,16 @@ RSpec.describe Message, type: :model do
   it "in_x_daysなしではpush_timingを登録できない事" do
     push_timing = PushTiming.new(
       message_id: @message.id,
-      time: Time.now
+      time: Time.now.since(5400)
+    )
+    expect(push_timing).to_not be_valid
+  end
+
+  it "現在時刻では投稿できない事" do
+    push_timing = PushTiming.new(
+      message_id: @message.id,
+      time: Time.now,
+      in_x_days: 1
     )
     expect(push_timing).to_not be_valid
   end

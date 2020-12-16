@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Events::MemberLeftChannel
-  include CurlBuilder
+  include MessageBuilder
 
   def execute(bot_token, params)
     # #
@@ -25,11 +25,10 @@ class Events::MemberLeftChannel
 
     companion_id = Companion.find_by(slack_user_id: user).id
 
-    messages.each do |m|
+    messages.each.with_index(1) do |m, index|
       individual_message = m.individual_messages.find_by(companion_id: companion_id)
 
-      curl_exec(base_url: "https://slack.com/api/chat.deleteScheduledMessage",
-                params: { "token": bot_token, "channel": channel, "scheduled_message_id": individual_message.scheduled_message_id })
+      delete_scheduled_message(bot_token, index, individual_message)
 
       individual_message.destroy unless individual_message.nil?
     end
