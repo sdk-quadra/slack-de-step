@@ -37,12 +37,14 @@ class MessagesController < ApplicationController
 
     if params[:commit] == "テスト送信" && @message.valid?
       test_message(@bot_token, @message)
+      redirect_to workspace_channel_path(@workspace, @channel)
     elsif params[:commit] == "登録" && @message.update(message_params)
 
       # 以前の予約送信は消す
       build_delete_message(@bot_token, @message.id)
 
       build_message(@bot_token, @message)
+      redirect_to workspace_channel_path(@workspace, @channel)
     else
       render action: "edit"
     end
@@ -53,6 +55,7 @@ class MessagesController < ApplicationController
 
     build_delete_message(@bot_token, message_id)
     Message.destroy(message_id)
+    redirect_to workspace_channel_path(@workspace, @channel)
   end
 
   private
