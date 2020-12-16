@@ -11,9 +11,10 @@ jobs:
         environment:
           POSTGRES_USER: postgres
           POSTGRES_DB: slack_de_step_test
-          TZ: "Asia/Tokyo"
 
     working_directory: ~/slack-de-step
+    environment:
+      TZ: "Asia/Tokyo"
 
     steps:
       - checkout
