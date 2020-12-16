@@ -40,7 +40,7 @@ class MessagesController < ApplicationController
     elsif params[:commit] == "登録" && @message.update(message_params)
 
       # 以前の予約送信は消す
-      delete_scheduled_messages(@bot_token, @message.id)
+      build_delete_message(@bot_token, @message.id)
 
       build_message(@bot_token, @message)
     else
@@ -51,7 +51,7 @@ class MessagesController < ApplicationController
   def destroy
     message_id = params[:id]
 
-    delete_scheduled_messages(@bot_token, message_id)
+    build_delete_message(@bot_token, message_id)
     Message.destroy(message_id)
   end
 
