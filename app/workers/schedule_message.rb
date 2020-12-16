@@ -18,5 +18,12 @@ class ScheduleMessage
     end
 
     save_individual_messages(member, message, scheduled_message)
+
+    # queueがなくなったら修正可能にする
+    queues = Sidekiq::ScheduledSet.new
+
+    if queues.size == 0
+      message.update(modifiable: true)
+    end
   end
 end

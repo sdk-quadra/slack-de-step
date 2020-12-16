@@ -17,6 +17,8 @@ module MessageBuilder
   end
 
   def build_message(bot_token, message)
+    message.update(modifiable: false)
+
     x_days_time = x_days_time(params)
 
     members = Channel.find(@channel.id).companions
