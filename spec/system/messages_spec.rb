@@ -16,9 +16,9 @@ RSpec.describe "messages", type: :system do
     visit new_workspace_channel_message_path(@workspace.id, @channel.id)
     fill_in "メッセージ *", with: "メッセージ登録テスト"
 
-    hour = Time.now.since(5400).strftime("%H").to_i
-    minutes = Time.now.since(5400).strftime("%M").to_i
-    seconds = Time.now.since(5400).strftime("%S").to_i
+    hour = Time.now.since(5400).strftime("%H")
+    minutes = Time.now.since(5400).strftime("%M")
+    seconds = Time.now.since(5400).strftime("%S")
 
     select hour, from: "message_push_timing_attributes_time_4i"
     select minutes, from: "message_push_timing_attributes_time_5i"
@@ -33,9 +33,9 @@ RSpec.describe "messages", type: :system do
     visit new_workspace_channel_message_path(@workspace.id, @channel.id)
     fill_in "メッセージ *", with: "メッセージ登録テスト"
 
-    hour = Time.now.since(300).strftime("%H").to_i
-    minutes = Time.now.since(300).strftime("%M").to_i
-    seconds = Time.now.since(300).strftime("%S").to_i
+    hour = Time.now.since(300).strftime("%H")
+    minutes = Time.now.since(300).strftime("%M")
+    seconds = Time.now.since(300).strftime("%S")
 
     select hour, from: "message_push_timing_attributes_time_4i"
     select minutes, from: "message_push_timing_attributes_time_5i"
@@ -50,9 +50,9 @@ RSpec.describe "messages", type: :system do
     visit new_workspace_channel_message_path(@workspace.id, @channel.id)
     fill_in "メッセージ *", with: "メッセージ登録テスト"
 
-    hour = Time.now.since(5400).strftime("%H").to_i
-    minutes = Time.now.since(5400).strftime("%M").to_i
-    seconds = Time.now.since(5400).strftime("%S").to_i
+    hour = Time.now.since(5400).strftime("%H")
+    minutes = Time.now.since(5400).strftime("%M")
+    seconds = Time.now.since(5400).strftime("%S")
 
     select hour, from: "message_push_timing_attributes_time_4i"
     select minutes, from: "message_push_timing_attributes_time_5i"
@@ -76,9 +76,9 @@ RSpec.describe "messages", type: :system do
     fill_in "メッセージ *", with: "メッセージ登録テスト"
     attach_file "ここをクリックして画像を選択", "#{Rails.root}/spec/factories/images/ruby.png"
 
-    hour = Time.now.since(5400).strftime("%H").to_i
-    minutes = Time.now.since(5400).strftime("%M").to_i
-    seconds = Time.now.since(5400).strftime("%S").to_i
+    hour = Time.now.since(5400).strftime("%H")
+    minutes = Time.now.since(5400).strftime("%M")
+    seconds = Time.now.since(5400).strftime("%S")
 
     select hour, from: "message_push_timing_attributes_time_4i"
     select minutes, from: "message_push_timing_attributes_time_5i"
@@ -104,9 +104,9 @@ RSpec.describe "messages", type: :system do
     fill_in "メッセージ *", with: "メッセージ登録テスト"
     attach_file "ここをクリックして画像を選択", "#{Rails.root}/spec/factories/images/large.jpeg"
 
-    hour = Time.now.since(5400).strftime("%H").to_i
-    minutes = Time.now.since(5400).strftime("%M").to_i
-    seconds = Time.now.since(5400).strftime("%S").to_i
+    hour = Time.now.since(5400).strftime("%H")
+    minutes = Time.now.since(5400).strftime("%M")
+    seconds = Time.now.since(5400).strftime("%S")
 
     select hour, from: "message_push_timing_attributes_time_4i"
     select minutes, from: "message_push_timing_attributes_time_5i"
@@ -121,9 +121,9 @@ RSpec.describe "messages", type: :system do
     visit new_workspace_channel_message_path(@workspace.id, @channel.id)
     fill_in "メッセージ *", with: "メッセージ登録テスト"
 
-    hour = Time.now.since(5400).strftime("%H").to_i
-    minutes = Time.now.since(5400).strftime("%M").to_i
-    seconds = Time.now.since(5400).strftime("%S").to_i
+    hour = Time.now.since(5400).strftime("%H")
+    minutes = Time.now.since(5400).strftime("%M")
+    seconds = Time.now.since(5400).strftime("%S")
 
     select hour, from: "message_push_timing_attributes_time_4i"
     select minutes, from: "message_push_timing_attributes_time_5i"
