@@ -6,7 +6,6 @@ jobs:
         environment:
           RAILS_ENV: test
           DATABASE_URL: "postgres://postgres@localhost:5432/slack_de_step_test"
-          TZ: "Asia/Tokyo"
 
       - image: circleci/postgres:10.3-alpine
         environment:
