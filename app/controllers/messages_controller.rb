@@ -60,18 +60,6 @@ class MessagesController < ApplicationController
   end
 
   private
-    def x_days_time(params)
-      x_days_time = {}
-      x_days_time.store(:in_x_days, params[:message][:push_timing_attributes][:in_x_days])
-
-      time_hour = params[:message][:push_timing_attributes]["time(4i)"]
-      time_minute = params[:message][:push_timing_attributes]["time(5i)"]
-      time_second = params[:message][:push_timing_attributes]["time(6i)"]
-
-      x_days_time.store(:time, "#{time_hour}:#{time_minute}:#{time_second}")
-      x_days_time
-    end
-
     def message_params
       params.require(:message).permit(:message, :image,
                                     push_timing_attributes: [:id, :in_x_days, :time])
