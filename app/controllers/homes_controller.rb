@@ -6,6 +6,8 @@ class HomesController < ApplicationController
   skip_before_action :check_logined
   before_action :already_logined
 
+  include CryptBuilder
+
   def index
   end
 
@@ -19,7 +21,7 @@ class HomesController < ApplicationController
 
   def event(params)
     event = params[:event][:type]
-    bot_token = App.find_by(api_app_id: params[:api_app_id]).oauth_bot_token
+    bot_token = decrypt_token(App.find_by(api_app_id: params[:api_app_id]).oauth_bot_token)
 
     case event
     when "channel_created"

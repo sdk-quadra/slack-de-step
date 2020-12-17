@@ -6,6 +6,7 @@ class MessagesController < ApplicationController
   before_action :set_bot_token, only: [:new, :create, :edit, :update, :destroy]
 
   include MessageBuilder
+  include CryptBuilder
 
   def new
     @message = Message.new
@@ -86,6 +87,6 @@ class MessagesController < ApplicationController
     end
 
     def set_bot_token
-      @bot_token = Workspace.find(params[:workspace_id]).app.oauth_bot_token
+      @bot_token = decrypt_token(Workspace.find(params[:workspace_id]).app.oauth_bot_token)
     end
 end
