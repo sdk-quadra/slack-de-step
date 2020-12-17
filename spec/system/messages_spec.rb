@@ -18,11 +18,8 @@ RSpec.describe "messages", type: :system do
 
     hour = Time.now.since(5400).strftime("%H")
     minutes = Time.now.since(5400).strftime("%M")
-    seconds = Time.now.since(5400).strftime("%S")
 
-    select hour, from: "message_push_timing_attributes_time_4i"
-    select minutes, from: "message_push_timing_attributes_time_5i"
-    select seconds, from: "message_push_timing_attributes_time_6i"
+    find("#message_push_timing_attributes_time").set("#{hour}:#{minutes}")
 
     click_button "登録"
     expect(page).to have_selector ".channel-message-data__content", text: "メッセージ登録テスト"
@@ -33,13 +30,10 @@ RSpec.describe "messages", type: :system do
     visit new_workspace_channel_message_path(@workspace.id, @channel.id)
     fill_in "メッセージ *", with: "メッセージ登録テスト"
 
-    hour = Time.now.since(30).strftime("%H")
-    minutes = Time.now.since(30).strftime("%M")
-    seconds = Time.now.since(30).strftime("%S")
+    hour = Time.now.since(300).strftime("%H")
+    minutes = Time.now.since(300).strftime("%M")
 
-    select hour, from: "message_push_timing_attributes_time_4i"
-    select minutes, from: "message_push_timing_attributes_time_5i"
-    select seconds, from: "message_push_timing_attributes_time_6i"
+    find("#message_push_timing_attributes_time").set("#{hour}:#{minutes}")
 
     click_button "登録"
     expect(page).to have_content "現在時刻より10分以上後を指定してください"
@@ -52,11 +46,8 @@ RSpec.describe "messages", type: :system do
 
     hour = Time.now.since(5400).strftime("%H")
     minutes = Time.now.since(5400).strftime("%M")
-    seconds = Time.now.since(5400).strftime("%S")
 
-    select hour, from: "message_push_timing_attributes_time_4i"
-    select minutes, from: "message_push_timing_attributes_time_5i"
-    select seconds, from: "message_push_timing_attributes_time_6i"
+    find("#message_push_timing_attributes_time").set("#{hour}:#{minutes}")
 
     click_button "登録"
     expect(page).to have_content "現在処理中です。編集、削除はしばらく経ってからにしてください"
@@ -78,11 +69,8 @@ RSpec.describe "messages", type: :system do
 
     hour = Time.now.since(5400).strftime("%H")
     minutes = Time.now.since(5400).strftime("%M")
-    seconds = Time.now.since(5400).strftime("%S")
 
-    select hour, from: "message_push_timing_attributes_time_4i"
-    select minutes, from: "message_push_timing_attributes_time_5i"
-    select seconds, from: "message_push_timing_attributes_time_6i"
+    find("#message_push_timing_attributes_time").set("#{hour}:#{minutes}")
 
     click_button "登録"
     expect(page).to have_content "メッセージ登録テスト"
@@ -106,11 +94,8 @@ RSpec.describe "messages", type: :system do
 
     hour = Time.now.since(5400).strftime("%H")
     minutes = Time.now.since(5400).strftime("%M")
-    seconds = Time.now.since(5400).strftime("%S")
 
-    select hour, from: "message_push_timing_attributes_time_4i"
-    select minutes, from: "message_push_timing_attributes_time_5i"
-    select seconds, from: "message_push_timing_attributes_time_6i"
+    find("#message_push_timing_attributes_time").set("#{hour}:#{minutes}")
 
     click_button "登録"
     expect(page).to have_content "画像は2MB以下にしてください"
@@ -123,11 +108,8 @@ RSpec.describe "messages", type: :system do
 
     hour = Time.now.since(5400).strftime("%H")
     minutes = Time.now.since(5400).strftime("%M")
-    seconds = Time.now.since(5400).strftime("%S")
 
-    select hour, from: "message_push_timing_attributes_time_4i"
-    select minutes, from: "message_push_timing_attributes_time_5i"
-    select seconds, from: "message_push_timing_attributes_time_6i"
+    find("#message_push_timing_attributes_time").set("#{hour}:#{minutes}")
 
     click_button "テスト送信"
     expect(page).to_not have_content "メッセージ登録テスト"
@@ -136,13 +118,13 @@ RSpec.describe "messages", type: :system do
   it "送信タイミングの日時がDB保存されている事" do
     page.set_rack_session(user_id: @user.id)
     visit new_workspace_channel_message_path(@workspace.id, @channel.id)
-    select 5, from: "message_push_timing_attributes_in_x_days"
-    select 10, from: "message_push_timing_attributes_time_4i"
-    select 20, from: "message_push_timing_attributes_time_5i"
-    select 30, from: "message_push_timing_attributes_time_6i"
+
+    find("#message_push_timing_attributes_in_x_days").set("1")
+    find("#message_push_timing_attributes_time").set("23:45")
+
     fill_in "メッセージ *", with: "メッセージ登録テスト"
     click_button "登録"
-    expect(page).to have_selector ".channel-message__post-datetime", text: "5日後の10:20:30"
+    expect(page).to have_selector ".channel-message__post-datetime", text: "1日後の23:45:00"
   end
 
   it "画像選択時、画像削除ボタンが表示される事", js: true do

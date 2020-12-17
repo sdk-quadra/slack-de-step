@@ -19,12 +19,13 @@ module MessageBuilder
   def build_message(bot_token, message)
     message.update(modifiable: false)
 
-    x_days_time = x_days_time(params)
+    in_x_days = params[:message][:push_timing_attributes][:in_x_days]
+    time = params[:message][:push_timing_attributes][:time]
 
     members = Channel.find(@channel.id).companions
     members.each.with_index(1) do |member, index|
       participation_datetime = member.participations.find_by(channel_id: @channel.id).created_at
-      push_datetime = push_datetime(participation_datetime, x_days_time)
+      push_datetime = push_datetime(participation_datetime, in_x_days, time)
 
       if push_datetime > Time.now
         schedule_message(bot_token, member, push_datetime, message, index)
@@ -32,9 +33,9 @@ module MessageBuilder
     end
   end
 
-  def push_datetime(participation_datetime, x_days_time)
-    push_date = participation_datetime + x_days_time[:in_x_days].to_i.days
-    push_datetime = Time.parse(push_date.strftime("%Y-%m-%d #{x_days_time[:time]}"))
+  def push_datetime(participation_datetime, in_x_days, time)
+    push_date = participation_datetime + in_x_days.to_i.days
+    push_datetime = Time.parse(push_date.strftime("%Y-%m-%d #{time}"))
     push_datetime
   end
 
