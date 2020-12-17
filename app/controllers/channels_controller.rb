@@ -4,6 +4,7 @@ class ChannelsController < ApplicationController
   before_action :set_workspace, only: [:show]
   before_action :set_channel, only: [:show]
   include CurlBuilder
+  include CryptBuilder
 
   def show
     channels = App.find_by(workspace_id: @workspace.id).channels.sort do |x, y|
@@ -20,7 +21,7 @@ class ChannelsController < ApplicationController
     @pushed_count = post_messages.count
     @is_read = post_messages.where(is_read: true).count
 
-    bot_token = @workspace.app.oauth_bot_token
+    bot_token = decrypt_token(@workspace.app.oauth_bot_token)
     bot_user_id = @workspace.app.bot_user_id
 
     user_info = curl_exec(base_url: "https://slack.com/api/users.info?user=#{bot_user_id}", headers: { "Authorization": "Bearer " + bot_token })

@@ -8,6 +8,7 @@ class User < ApplicationRecord
   validates :name, presence: true
 
   extend CurlBuilder
+  extend CryptBuilder
 
   def self.find_or_create_form_auth(auth)
     oauth_user_token = JSON.parse(auth[0])["authed_user"]["access_token"]
@@ -51,10 +52,12 @@ class User < ApplicationRecord
     bot_user_id = auth["bot_user_id"]
     api_app_id = auth["app_id"]
 
+    encrypt_token = encrypt_token(oauth_bot_token)
+
     # workspace_idがすでにあれば、更新する
     app = App.find_or_initialize_by(workspace_id: workspace.id)
     app.update_attributes(
-      oauth_bot_token: oauth_bot_token,
+      oauth_bot_token: encrypt_token,
       bot_user_id: bot_user_id,
       api_app_id: api_app_id
     )
