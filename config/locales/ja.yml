@@ -9,7 +9,8 @@ ja:
         image: 画像
         max_message: 最大メッセージ数
       push_timing:
-        time: ""
+        time: 時刻
+        in_x_days: ○日後
   errors:
     format: "%{attribute}%{message}"
     messages:

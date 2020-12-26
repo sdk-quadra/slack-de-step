@@ -110,5 +110,11 @@
 
 <%= render partial: "overlay/channels_info" %>
 <%= render partial: "overlay/delete_message" %>
+<%= render partial: "overlay/commit_message" %>
 
-<data id="overlay-type" value="delete-message"></data>
+<% if flash[:commit_message] %>
+  <style> #overlay-commit-message { display: block;} </style>
+  <data id="overlay-type" value="commit-message"></data>
+<% else %>
+  <data id="overlay-type" value="delete-message"></data>
+<% end %>

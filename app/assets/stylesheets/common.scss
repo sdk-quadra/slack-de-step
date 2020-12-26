@@ -35,3 +35,14 @@ body {
     font-size: $littlesmaller;
   }
 }
+
+.fa-chevron-left {
+  color: $white;
+}
+
+.back {
+  flex-grow: 1;
+  padding: 1rem 0 1rem 1rem;
+  color: $white;
+  text-decoration: none;
+}

@@ -1,8 +1,9 @@
+// 画像のプレビューを表示するjs
 document.addEventListener('DOMContentLoaded', () => {
     const preview = document.getElementById('preview')
     if (preview){
         if (preview.src === '' || preview.src === null) {
-            document.getElementById('deleteImg').style.display = 'none'
+            document.getElementById('delete-image').style.display = 'none'
         }
     }
 
@@ -14,27 +15,17 @@ document.addEventListener('DOMContentLoaded', () => {
             const reader = new FileReader()
             reader.onloadend = function () {
                 document.getElementById('preview').src = reader.result
-                document.getElementById('deleteImg').style.display = 'block'
-                document.getElementById('delete_check').checked = false
+                document.getElementById('preview').classList.add("message-form__preview-img")
+                document.getElementById('delete-image').style.display = 'inline-block'
+                document.getElementById('delete-image-check').checked = false
             }
             if (file) {
                 reader.readAsDataURL(file)
             } else {
+                // 画像選択画面でキャンセルした場合
                 document.getElementById('preview').src = ''
-                document.getElementById('deleteImg').style.display = 'none'
-            }
-        })
-    }
-
-    const deleteBtn = document.getElementById('deleteImg')
-    if (deleteBtn){
-        deleteBtn.addEventListener('click', () => {
-            const result = window.confirm('本当に削除しますか？')
-
-            if (result) {
-                document.getElementById('preview').src = ''
-                document.getElementById('delete_check').checked = true
-                document.getElementById('deleteImg').style.display = 'none'
+                document.getElementById('preview').classList.remove("message-form__preview-img")
+                document.getElementById('delete-image').style.display = 'none'
             }
         })
     }
