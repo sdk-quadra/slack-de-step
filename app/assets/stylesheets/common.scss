@@ -3,3 +3,35 @@
 body {
   margin: 0;
 }
+
+.sign-out {
+
+  &__icon {
+    padding: 1rem 1rem 1rem 0;
+    flex-grow: 1;
+    cursor: pointer;
+  }
+  &__menu {
+    display: none;
+    position: absolute;
+    top: 2.5rem;
+    right: 0;
+    background-color: $white;
+    padding: 0;
+    border: 1px solid $lightsilver;
+    border-radius: 3px;
+    list-style: none;
+  }
+  &__list {
+    padding: 0.2rem 1rem;
+    text-align: center;
+  }
+  &__list:hover {
+    background-color: $weakgray;
+  }
+  &__link {
+    text-decoration: none;
+    color: $stronggray;
+    font-size: $littlesmaller;
+  }
+}

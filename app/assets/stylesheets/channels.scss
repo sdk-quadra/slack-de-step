@@ -1,33 +1,62 @@
-// Place all the styles related to the channels controller here.
-// They will automatically be included in application.css.
-// You can use Sass (SCSS) here: https://sass-lang.com/
+@import "variables";
 
 .wrapper {
   display: flex;
   flex-direction: row;
+  min-height: 70rem;
 }
 
 .channels {
-  width: 12rem;
-  background-color: #e7e9ed;
-  min-height: 40rem;
+  background-color: $weakgray;
 
-  &__ws-icon {
-    padding: 1rem 1rem 0.3rem;
-    border-radius: 2px;
-    width: 50px;
+  &__workspace-info {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
   }
 
-  &__add-channel {
-    color: #666;
+  &__workspace-icon {
+    border-radius: 2px;
+    width: 50px;
+    margin-right: 1rem;
+  }
+  &__workspace-name {
+  }
+  &__about-number-of-people {
+    padding: 1rem 1.5rem;
+    font-size: $littlesmaller;
+    cursor: pointer;
   }
 }
 
-.channel {
-  padding: 0.3rem 1rem;
+.fa-info {
+  margin-right: 0.3rem;
+  color: $slackpurple;
+}
 
+.channel {
+  padding: 1rem 1.5rem;
+
+  &:hover {
+    background-color: $lightsilver;
+  }
+  &__name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 12rem;
+  }
+  &__name-link {
+    color: $black;
+    text-decoration: none;
+    font-weight: bold;
+  }
+  &__number-of-people {
+    color: $stronggray;
+    font-size: $littlesmaller;
+  }
   &__e__selected {
-    background-color: #CCCCCC;
+    background-color: $lightsilver;
   }
 }
 
@@ -35,15 +64,19 @@
   width: 100%;
 
   &__channel-title {
-    background-color: #34163b;
-    color: white;
+    background-color: $slackpurple;
+    color: $white;
     display: flex;
+    align-items: center;
+    margin-bottom: 2rem;
+    height: 4.2rem;
+    position: relative;
   }
 
   &__channel-name {
     margin-top: 0;
     margin-bottom: 0;
-    padding: 1rem 0rem 1rem 1rem;
+    padding: 1rem 0rem 1rem 2rem;
     text-align: center;
     flex-grow: 100;
   }
@@ -53,83 +86,208 @@
   }
 
   &__stat {
-    color: #666;
-    font-size: 0.9rem;
+    color: $stronggray;
+    font-size: $littlesmaller;
     text-align: center;
   }
 
   &__add-message {
-    font-size: 1.1rem;
-    margin: 1rem 7rem 2rem;
     text-align: center;
-    border: 1px solid #666;
     padding: 2rem 0;
   }
 
   &__add-message-link {
+    background-color: $slackblue;
+    border-radius: 3px;
+    border: 1px solid $slackblue;
+    color: $white;
+    padding: 1rem 3rem;
+    cursor: pointer;
+    width: 8rem;
+    margin: 0.3rem;
     text-decoration: none;
-    color: black;
   }
 }
 
 .channel-message {
   display: flex;
   flex-direction: row;
-  padding: 1rem;
+  padding: 0.5rem 1.5rem 1rem;
+  position: relative;
 
+  &__post-datetime-label {
+    text-align: center;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  &__post-datetime {
+    border: 1px solid $gainsboro;
+    width: 10rem;
+    margin: 0 auto;
+    border-radius: 15px;
+    padding: 0.2rem 0.5rem;
+  }
   &__sender-icon {
     width: 50px;
     height: 50px;
     border-radius: 5px;
   }
 
-  &__post-datetime-label {
+  &__no-message-yet {
     text-align: center;
-    margin-bottom: 1rem;
+    padding: 5rem;
   }
-
-  &__post-datetime {
-    border: 1px solid #ccc;
-    width: 10rem;
-    margin: 0 auto;
-    border-radius: 5px;
+  &__no-message-yet-image {
+    width: 180px;
   }
 }
 
-.channel-message-menu {
-  text-align: right;
-  font-size: 0.8rem;
-  color: #666;
-  margin: 1rem;
-}
 .channel-message-data {
-  font-size: 0.9rem;
   padding: 0 1rem 1rem;
+  width: 90%;
 
   &__sender-name {
     font-weight: bold;
   }
-
-  &__sender-name > p {
-    margin-top: 0;
+  &__content {
+    color: $stronggray;
   }
-
-  &__img {
-    max-width: 200px;
-    max-height: 200px;
+  &__image {
+    max-width: 250px;
+    max-height: 250px;
     border-radius: 2px;
+  }
+  &__state {
+    font-size: $littlesmaller;
+    color: $stronggray;
+    margin-top: 1rem;
+  }
+  &__modification {
+    position: absolute;
+    top: 2.8rem;
+    right: 1.5rem;
+  }
+  &__modification-menu {
+    list-style: none;
+    margin-top: 2rem;
+    display: none;
+    max-width: 30rem;
+    border: 1px solid $lightsilver;
+    border-radius: 3px;
+    background-color: $white;
+    padding-left: 0;
+  }
+  &__modification-list {
+    padding: 0.2rem 1rem;
+    text-align: center;
+    cursor: pointer;
+  }
+  &__processing {
+    padding: 0.2rem 1rem;
+    text-align: center;
+  }
+  &__modification-list:hover {
+    background-color: $gainsboro;
+  }
+  &__modification-link {
+    color: $stronggray;
+    text-decoration: none;
+  }
+  &__modification-icon {
+    padding: 0.5rem 0.8rem;
+    cursor: pointer;
+    position: absolute;
+    right: 0;
+  }
+  &__modification-icon:hover {
+    background-color: $weakgray;
+    border-radius: 3px;
+  }
+  &__delete-message-link {
+    display: none;
   }
 }
 
 .channel-message-divider {
   display: flex;
   align-items: center;
+
+  &::before, &::after {
+    content: '';
+    height: 1px;
+    background-color: $gainsboro;
+    flex-grow: 1;
+  }
+}
+.channel-message-list:last-child {
+  margin-bottom: 2rem;
 }
 
-.channel-message-divider::before,
-.channel-message-divider::after {
-  content: '';
-  height: 1px;
-  background-color: #ccc;
-  flex-grow: 1;
+
+#overlay-delete-message,
+#overlay-commit-message,
+#overlay-test-submit,
+#overlay-delete-image,
+#overlay-channels-info {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1;
+  display: none;
+}
+.modal {
+  width: 20rem;
+  height: 15rem;
+  padding: 1rem 2rem;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  background-color: $white;
+  border-radius: 10px;
+  border: 1px solid $lightsilver;
+  transform: translate(-50%,-50%);
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+
+  &__image {
+    padding-bottom: 0.5rem;
+  }
+  &__image > img {
+    width: 100px;
+  }
+  &__title {
+    font-weight: bold;
+    padding-bottom: 1.5rem;
+  }
+  &__desc {
+    padding-bottom: 1.5rem;
+  }
+  &__cancel {
+    background: none;
+    border-radius: 3px;
+    border: 1px solid $slackblue;
+    color: $slackblue;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    width: 8rem;
+    margin: 0.3rem;
+  }
+  &__delete-message,
+  &__delete-image {
+    background-color: $slackblue;
+    border-radius: 3px;
+    border: 1px solid $slackblue;
+    color: $white;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    width: 8rem;
+    margin: 0.3rem;
+  }
 }
