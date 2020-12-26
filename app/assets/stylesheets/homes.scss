@@ -1,25 +1,91 @@
-// Place all the styles related to the homes controller here.
-// They will automatically be included in application.css.
-// You can use Sass (SCSS) here: https://sass-lang.com/
+@import "variables";
 
-.landing-page {
-  width: 30rem;
+.lp {
   margin: 0 auto;
-  padding: 1rem 0;
-  min-height: 40rem;
-}
-
-.landing-page-title {
-  font-size: 1.2rem;
-  font-weight: normal;
-
-  &__app-name {
-    font-size: 2rem;
-    font-weight: bold;
+  &__header {
+    background-color: $slackpurple;
+  }
+  &__header-items {
+    display: flex;
+    align-items: center;
+    max-width: $lpwidth;
+    margin: 0 auto;
+    height: 4.2rem;
+  }
+  &__logo {
+    margin-left: 1rem;
+    flex-grow: 1;
+    color: white;
+  }
+  &__header-sign-in-image {
+    width: 180px;
+    padding: 1rem 1rem 0.6rem 0;
+  }
+  &__sign-in-image {
+    width: 180px;
+  }
+  &__sign-in-image-large {
+    width: 240px;
+  }
+  &__firstview {
+    max-width: $lpwidth;
+    margin: 2rem auto 4rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+  }
+  &__firstview-text > h1 {
+    margin-top: 0;
+  }
+  &__firstview-text > h1 > span {
+    font-size: 1.2rem;
+  }
+  &__firstview-image {
+    width: 50%;
+  }
+  &__features {
+    display: flex;
+    max-width: $lpwidth;
+    margin: 2rem auto 4rem;
+  }
+  &__feature {
+    width: 360px;
+    padding: 0 20px;
+  }
+  &__feature-image {
+    width: 250px;
+    height: 180px;
   }
 }
 
-.landing-page-cta {
-  text-align: center;
-  margin: 2rem 0;
+.lp-how-to-use {
+  background-color: #f6f6f6;
+
+  &__wrapper {
+    max-width: $lpwidth;
+    margin: 0 auto;
+    padding: 2rem 2rem 4rem;
+  }
+  &__title {
+    text-align: center;
+  }
+  &__step {
+    display: flex;
+    margin: 2rem auto 4rem;
+    justify-content: space-around;
+    align-items: center;
+  }
+  &__step-title {
+    margin-top: 0;
+  }
+  &__step-text {
+    width: 40%;
+  }
+  &__step-image {
+    width: 50%;
+    border-radius: 20px;
+  }
+  &__cta {
+    text-align: center;
+  }
 }
