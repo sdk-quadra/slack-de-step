@@ -18,7 +18,7 @@ RSpec.describe "channels", type: :system do
   it "ログアウトするとログインページに戻る事" do
     page.set_rack_session(user_id: @user.id)
     visit workspace_channel_path(@workspace.id, @channel.id)
-    click_link "≡"
+    click_link "ログアウト"
     expect(page).to have_content "\"〇日目\"の人にメッセージを送る"
   end
 
@@ -31,7 +31,7 @@ RSpec.describe "channels", type: :system do
   it "メッセージ新規追加でメッセージ作成画面に遷移する事" do
     page.set_rack_session(user_id: @user.id)
     visit workspace_channel_path(@workspace.id, @channel.id)
-    click_link "+ メッセージを追加"
+    find(".channel-messages__add-message-link").click
     expect(page).to have_content "送信タイミング"
   end
 end

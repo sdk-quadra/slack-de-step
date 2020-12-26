@@ -74,7 +74,7 @@ RSpec.describe "messages", type: :system do
 
     click_button "登録"
     expect(page).to have_content "メッセージ登録テスト"
-    expect(find(".channel-message-data__img")).to be_visible
+    expect(find(".channel-message-data__image")).to be_visible
   end
 
   it "テキストメッセージなし+画像は新規登録できない事" do
@@ -124,7 +124,7 @@ RSpec.describe "messages", type: :system do
 
     fill_in "メッセージ *", with: "メッセージ登録テスト"
     click_button "登録"
-    expect(page).to have_selector ".channel-message__post-datetime", text: "1日後の23:45:00"
+    expect(page).to have_selector ".channel-message__post-datetime", text: "1日後の23:45"
   end
 
   it "画像選択時、画像削除ボタンが表示される事", js: true do
@@ -140,7 +140,7 @@ RSpec.describe "messages", type: :system do
     click_button "画像を削除する"
     page.accept_confirm "本当に削除しますか？"
     click_button "登録"
-    expect(find(".channel-message-data__img")).to be_visible
+    expect(find(".channel-message-data__image")).to be_visible
   end
 
   it "画像選択時、プレビューが表示される事", js: true do

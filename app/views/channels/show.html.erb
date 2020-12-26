@@ -1,49 +1,58 @@
 <div class="wrapper">
   <div class="channels">
-    <%= image_tag(@workspace.icon_url, class: "channels__ws-icon", alt: "workspace_icon") %>
+    <div class="channels__workspace-info">
+      <%= image_tag(@workspace.icon_url, class: "channels__workspace-icon", alt: "workspace_icon") %>
+      <span class="channels__workspace-name"><%= @workspace.name %></span>
+    </div>
+
     <% @channels.each do |channel| %>
-      <div class="channel<%= " channel__e__selected" if channel.id == @channel.id %>">
-        <div class="channel__name">
-          <%= link_to channel.name, channel.id.to_s %>
+      <%= link_to channel.id.to_s, class: "channel__name-link" do %>
+        <div class="channel<%= " channel__e__selected" if channel.id == @channel.id %>">
+          <div class="channel__name">
+            <%= channel.name %>
+          </div>
+          <div class="channel__number-of-people">
+            <%= channel.member_count %>人
+          </div>
         </div>
-        <div class="channel__number-of-people">
-          <%= channel.member_count %>人
-        </div>
-      </div>
+      <% end %>
     <% end %>
+    <div class="channels__about-number-of-people">
+      <i class="fas fa-info"></i>人数について
+    </div>
+
   </div>
 
   <div class="channel-messages">
     <div class="channel-messages__channel-title">
       <h3 class="channel-messages__channel-name"># <%= @channel.name %></h3>
-      <%= link_to "≡", sessions_destroy_path, class: "menu" %>
+
+      <div class="sign-out">
+        <i class="fas fa-ellipsis-v sign-out__icon"></i>
+        <ul class="sign-out__menu">
+          <li class="sign-out__list">
+            <%= link_to "ログアウト", sessions_destroy_path, class: "sign-out__link" %>
+          </li>
+        </ul>
+      </div>
 
     </div>
 
-
-    <p class="channel-messages__desc">○月○日以降、このチャンネルに参加してから○日後のユーザーにボットから「DM」します</p>
+    <p class="channel-messages__desc">このチャンネルに参加して○日後のユーザーに「DM」します</p>
     <div class="channel-messages__stat">
       <p>送信済合計 <%= @pushed_count %> / 既読数合計 <%= @is_read %></p>
     </div>
 
     <div class="channel-messages__add-message">
-      <%= link_to "+ メッセージを追加", new_workspace_channel_message_path(channel_id: @channel.id), class: "channel-messages__add-message-link" %>
+      <%= link_to new_workspace_channel_message_path(channel_id: @channel.id), class: "channel-messages__add-message-link" do %>
+        <i class="fas fa-plus-circle"></i> メッセージを追加
+      <% end %>
     </div>
 
     <% @messages.each do |message| %>
-
       <div class="channel-message-list">
         <div class="channel-message__post-datetime-label channel-message-divider">
-          <p class="channel-message__post-datetime"><%= message.push_timing.in_x_days %>日後の<%= message.push_timing.time.strftime('%H:%M:%S') %></p>
-        </div>
-
-        <div class="channel-message-menu">
-          <% if message.modifiable == true %>
-            <%= link_to "編集", edit_workspace_channel_message_path(@workspace, message.channel_id, message.id) %><br />
-            <%= link_to "削除", workspace_channel_message_path(@workspace, message.channel_id, message.id), method: :delete %>
-          <% else %>
-            <p>現在処理中です。編集、削除はしばらく経ってからにしてください</p>
-          <% end %>
+          <p class="channel-message__post-datetime"><%= message.push_timing.in_x_days %>日後の<%= message.push_timing.time.strftime('%H:%M') %></p>
         </div>
 
         <div class="channel-message">
@@ -54,19 +63,52 @@
             </div>
 
             <div class="channel-message-data__content">
-              <% if message.message %>
-                <%= simple_format(message.message) %>
-              <% end %>
-              <% if message.image_url %>
-                <%= image_tag(message.image_url, {class: "channel-message-data__img"}) %>
-              <% end %>
+              <%= simple_format(message.message) %>
+              <%= image_tag(message.image_url, {class: "channel-message-data__image"}) if message.image_url%>
+            </div>
+
+            <div class="channel-message-data__state">
+
+              <div class="channel-message-data__modification">
+                <i class="fas fa-ellipsis-v channel-message-data__modification-icon"></i>
+                <ul class="channel-message-data__modification-menu">
+                  <% if message.modifiable == true %>
+                    <%= link_to edit_workspace_channel_message_path(@workspace, message.channel_id, message.id), class: "channel-message-data__modification-link" do %>
+                      <li class="channel-message-data__modification-list">編集</li>
+                    <% end %>
+
+                    <data class="channel-message-data__delete-message-confirm" value="message-<%= message.id %>">
+                      <li class="channel-message-data__modification-list">削除</li>
+                    </data>
+
+                    <%= link_to "削除", workspace_channel_message_path(@workspace, message.channel_id, message.id), class: "channel-message-data__delete-message-link", id: "message-#{message.id}", method: :delete %>
+
+                  <% else %>
+                    <li class="channel-message-data__processing">
+                      現在処理中です。編集、削除はしばらく経ってからにしてください
+                    </li>
+                  <% end %>
+                </ul>
+              </div>
             </div>
           </div>
         </div>
-
       </div>
 
     <% end %>
 
+    <% unless @messages.present? %>
+      <div class="channel-message__no-message-yet">
+        <%= image_tag "no_message_yet.png", class: "channel-message__no-message-yet-image" %>
+        <p class="message-yet-text">「+ メッセージを追加」をクリックして<br />
+          コミュニケーションを開始しましょう</p>
+      </div>
+    <% end %>
+
   </div>
 </div>
+
+<%= render partial: "overlay/channels_info" %>
+<%= render partial: "overlay/delete_message" %>
+
+<data id="overlay-type" value="delete-message"></data>
