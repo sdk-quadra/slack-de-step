@@ -1,22 +1,17 @@
-// Place all the styles related to the messages controller here.
-// They will automatically be included in application.css.
-// You can use Sass (SCSS) here: https://sass-lang.com/
+@import "variables";
 
-.back {
-  flex-grow: 1;
-  padding: 1rem 0 1rem 1rem;
-  color: white;
-  text-decoration: none;
+.field_with_errors {
+  display: inline;
 }
 
 .message {
-  min-height: 40rem;
-
   &__channel-title {
-    margin-bottom: 1.2rem;
-    background-color: #34163b;
-    color: white;
+    margin-bottom: 2rem;
+    background-color: $slackpurple;;
+    color: $white;
     display: flex;
+    align-items: center;
+    height: 4.2rem;
   }
 
   &__channel-name {
@@ -24,48 +19,114 @@
     margin-bottom: 0;
     text-align: center;
     flex-grow: 100;
-    padding: 1rem 1rem 1rem 0;
+    padding: 1rem 0;
   }
 }
 
 .message-form {
-  &__title-message {
+  &__errors-title {
     font-weight: bold;
     display: block;
+    margin-bottom: 0.5rem;
+  }
+  &__errors {
+    margin-bottom: 2.5rem;
+    padding-bottom: 2.5rem;
+    border-bottom: 1px solid $weakgray;
+    color: $slackpink;
   }
   &__title-timing {
     font-weight: bold;
     display: block;
+    margin-bottom: 0.5rem;
   }
   &__push-timing {
-    margin-bottom: 1.2rem;
+    margin-bottom: 2.5rem;
+    padding-bottom: 2.5rem;
+    border-bottom: 1px solid $weakgray;
+    color: $stronggray;
   }
-  &__errors {
-    padding-left: 1rem;
-    color: red;
+  &__number {
+    padding: 0.3rem;
+    border: 1px solid $lightsilver;
+  }
+  &__time {
+    padding: 0.2rem;
+    border: 1px solid $lightsilver;
+  }
+  &__title-message {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+  &__textarea {
+    padding: 0.5rem;
+    color: $stronggray;
+    border: 1px solid $lightsilver;
+  }
+
+  &__submit {
+    text-align: center;
+    margin: 3rem;
+  }
+
+  &__preview-img {
+    min-width: 200px;
+    min-height: 200px;
+    max-width: 475px;
+    max-height: 475px;
+    border-radius: 3px;
+  }
+
+  &__delete-img {
+    color: $stronggray;
+    font-size: $littlesmaller;
+    cursor: pointer;
+  }
+
+  &__delete-img:hover {
+    text-decoration: underline;
+  }
+
+  &__test-submit {
+    background: none;
+    border-radius: 3px;
+    border: 1px solid $slackblue;
+    color: $slackblue;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    width: 8rem;
+    margin: 0.3rem;
+  }
+
+  &__commit {
+    background-color: $slackblue;
+    border-radius: 3px;
+    border: 1px solid $slackblue;
+    color: $white;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    width: 8rem;
+    margin: 0.3rem;
   }
 }
 
 .message-body {
   width:  30rem;
   margin: 0 auto;
-  font-size: 0.9rem;
+  font-size: $littlesmaller;
 }
 
-.message-timing {
-  width:  34rem;
-  margin: 0 auto;
-  font-size: 0.9rem;
-}
+.fa-upload {
+  color: $stronggray;
+  padding: 0.75rem 1rem;
+  background-color: $weakgray;
+  border-radius: 5px;
+  cursor: pointer;
 
-.message-form {
-  &__button-submit {
-    text-align: center;
-    margin: 3rem;
-  }
-
-  &__preview-img {
-    width: 200px;
+  span {
+    font-weight: 200;
+    margin-left: 0.5rem;
   }
 }
 
