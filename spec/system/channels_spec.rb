@@ -19,7 +19,7 @@ RSpec.describe "channels", type: :system do
     page.set_rack_session(user_id: @user.id)
     visit workspace_channel_path(@workspace.id, @channel.id)
     click_link "≡"
-    expect(page).to have_content "相対日時でslackメッセージを送る"
+    expect(page).to have_content "\"〇日目\"の人にメッセージを送る"
   end
 
   it "channel一覧サイドバーにchannel名が表示されている事" do

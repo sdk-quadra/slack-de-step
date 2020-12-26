@@ -21,5 +21,4 @@ module CryptBuilder
     crypt = ActiveSupport::MessageEncryptor.new(key)
     crypt
   end
-
 end
