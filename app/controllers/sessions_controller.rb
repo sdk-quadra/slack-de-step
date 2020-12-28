@@ -14,15 +14,14 @@ class SessionsController < ApplicationController
       session[:user_id] = user.id
       session[:workspace_id] = JSON.parse(oauth_v2_access[0])["team"]["id"]
       session[:authed_slack_user_id] = JSON.parse(oauth_v2_access[0])["authed_user"]["id"]
-      flash[:success] = "ユーザー認証が完了しました。"
       redirect_to workspaces_path
     else
-      flash.now[:danger] = "ログインに失敗しました"
+      redirect_to root_path, flash:  { login_failed: "ログインに失敗しました"}
     end
   end
 
   def destroy
     session[:user_id] = nil
-    redirect_to root_path, notice: "ログアウトしました"
+    redirect_to root_path, flash: { logout: "ログアウトしました"}
   end
 end

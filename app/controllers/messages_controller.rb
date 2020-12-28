@@ -16,6 +16,8 @@ class MessagesController < ApplicationController
   def create
     @message = Message.new(message_params)
 
+    @message.image = nil if params["delete-image"]
+
     if params[:commit] == "テスト送信" && @message.valid?
       test_message(@bot_token, @message)
       flash.now[:test_submit] = true
@@ -35,7 +37,7 @@ class MessagesController < ApplicationController
   def update
     @message = Message.find(params[:id])
 
-    @message.image = nil if params[:delete-image]
+    @message.image = nil if params["delete-image"]
 
     if params[:commit] == "テスト送信" && @message.update(message_params)
       test_message(@bot_token, @message)
