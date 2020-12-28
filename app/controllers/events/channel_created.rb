@@ -9,38 +9,38 @@ class Events::ChannelCreated
     # #
 
     channel = params[:event][:channel]
-    api_app = params[:api_app_id]
+    team = params[:team_id]
 
     # botをchannel登録する # channel_created => member_joined_channelの順に動くのは確実(botを埋めてからしかlogに出ないので)
+    bot_join_to_channel(bot_token, channel)
 
-    join_to_channel(bot_token, channel)
-
-    create_channel(api_app, channel)
+    create_channel(bot_token, team, channel)
 
     members = conversations_members(bot_token, channel)
 
     participate_channel(members, channel)
+
+    member_count(channel)
   end
 
   private
-    def join_to_channel(bot_token, channel)
+    def bot_join_to_channel(bot_token, channel)
       curl_exec(base_url: "https://slack.com/api/conversations.join", headers: { "Authorization": "Bearer " + bot_token },
                 params: { "channel": channel[:id] })
     end
 
-    def create_channel(api_app, channel)
-      name = channel_name(api_app, channel[:id])
-      api_app_id = App.find_by(api_app_id: api_app).id
+    def create_channel(bot_token, team, channel)
+      name = channel_name(bot_token, channel[:id])
+      app_id = Workspace.find_by(slack_ws_id: team).app.id
 
-      Channel.find_or_create_by!(app_id: api_app_id, slack_channel_id: channel[:id]) do |c|
-        c.app_id = api_app_id
+      Channel.find_or_create_by!(app_id: app_id, slack_channel_id: channel[:id]) do |c|
+        c.app_id = app_id
         c.name = name
         c.slack_channel_id = channel[:id]
       end
     end
 
-    def channel_name(api_app, channel)
-      bot_token = App.find_by(api_app_id: api_app).oauth_bot_token
+    def channel_name(bot_token, channel)
       conversation_info = curl_exec(base_url: "https://slack.com/api/conversations.info",
                                     params: { "token": bot_token, "channel": channel })
       channel_name = JSON.parse(conversation_info[0])["channel"]["name"]
@@ -60,5 +60,10 @@ class Events::ChannelCreated
         channel_id = Channel.find_by(slack_channel_id: channel[:id]).id
         Participation.create(companion_id: companion_id, channel_id: channel_id) unless App.exists?(bot_user_id: member)
       end
+    end
+
+    def member_count(channel)
+      member_count = Channel.find_by(slack_channel_id: channel).participations.count
+      Channel.find_by(slack_channel_id: channel).update(member_count: member_count)
     end
 end
