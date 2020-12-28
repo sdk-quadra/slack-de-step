@@ -12,16 +12,22 @@ class SessionsController < ApplicationController
       user = User.find_or_create_form_auth(oauth_v2_access)
       session[:user] = user
       session[:user_id] = user.id
-      session[:workspace_id] = JSON.parse(oauth_v2_access[0])["team"]["id"]
       session[:authed_slack_user_id] = JSON.parse(oauth_v2_access[0])["authed_user"]["id"]
-      redirect_to workspaces_path
+
+      slack_ws_id = JSON.parse(oauth_v2_access[0])["team"]["id"]
+      workspace = Workspace.find_by(slack_ws_id: slack_ws_id)
+      redirect_to workspace_channel_path(workspace.id, general_channel(workspace.app.id))
     else
-      redirect_to root_path, flash:  { login_failed: "ログインに失敗しました"}
+      redirect_to root_path, flash:  { login_failed: "ログインに失敗しました" }
     end
+  end
+
+  def general_channel(app_id)
+    Channel.where(name: "general").find_by(app_id: app_id)
   end
 
   def destroy
     session[:user_id] = nil
-    redirect_to root_path, flash: { logout: "ログアウトしました"}
+    redirect_to root_path, flash: { logout: "ログアウトしました" }
   end
 end
