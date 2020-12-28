@@ -2,6 +2,15 @@
 
 .lp {
   margin: 0 auto;
+  &__flash {
+    text-align: center;
+    padding: 1rem;
+    color: $white;
+    background-color: $slackgreen;
+  }
+  &__flash-login-failed {
+    background-color: $slackpink;
+  }
   &__header {
     background-color: $slackpurple;
   }

@@ -16,14 +16,15 @@ class MessagesController < ApplicationController
   def create
     @message = Message.new(message_params)
 
+    @message.image = nil if params["delete-image"]
+
     if params[:commit] == "テスト送信" && @message.valid?
       test_message(@bot_token, @message)
       flash.now[:test_submit] = true
       render action: "new"
     elsif params[:commit] == "登録" && @message.save
       build_message(@bot_token, @message)
-      # redirect_to workspace_channel_path(@workspace, @channel), flash: { commit_message: true }
-      redirect_to workspace_channel_path(@workspace, @channel)
+      redirect_to workspace_channel_path(@workspace, @channel), flash: { commit_message: true }
     else
       render action: "new"
     end
@@ -36,7 +37,7 @@ class MessagesController < ApplicationController
   def update
     @message = Message.find(params[:id])
 
-    @message.image = nil if params[:delete-image]
+    @message.image = nil if params["delete-image"]
 
     if params[:commit] == "テスト送信" && @message.update(message_params)
       test_message(@bot_token, @message)

@@ -1,4 +1,10 @@
 <div class="lp">
+  <% flash.each do |k, v| %>
+    <div class="lp__flash <%= "lp__flash-login-failed" if k == "login_failed" %>">
+      <div class="lp__flash-text "><%= v %></div>
+    </div>
+  <% end %>
+
   <div class="lp__header">
     <div class="lp__header-items">
       <h3 class="lp__logo">

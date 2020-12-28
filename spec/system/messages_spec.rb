@@ -155,7 +155,8 @@ RSpec.describe "messages", type: :system do
 
     click_button "削除する"
     click_button "登録"
-    expect(find(".channel-message-data__image")).to be_visible
+
+    expect(page).to have_no_selector(".channel-message-data__image")
   end
 
   it "画像選択時、プレビューが表示される事", js: true do
