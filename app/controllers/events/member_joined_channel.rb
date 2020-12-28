@@ -35,12 +35,9 @@ class Events::MemberJoinedChannel
     if messages
       messages.each do |message|
         push_timing = message.push_timing
-        x_days_time = {}
-        x_days_time.store(:in_x_days, push_timing.in_x_days)
-        x_days_time.store(:time, push_timing.time)
 
         participation_datetime = companion.participations.find_by(channel_id: channel_to_join.id).created_at
-        push_datetime = push_datetime(participation_datetime, x_days_time)
+        push_datetime = push_datetime(participation_datetime, push_timing.in_x_days, push_timing.time)
 
         if push_datetime > Time.now
           schedule_message(bot_token, companion, push_datetime, message)
