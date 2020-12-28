@@ -21,7 +21,7 @@ class HomesController < ApplicationController
 
   def event(params)
     event = params[:event][:type]
-    bot_token = decrypt_token(App.find_by(api_app_id: params[:api_app_id]).oauth_bot_token)
+    bot_token = decrypt_token(Workspace.find_by(slack_ws_id: params[:team_id]).app.oauth_bot_token)
 
     case event
     when "channel_created"
