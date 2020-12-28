@@ -22,8 +22,7 @@ class MessagesController < ApplicationController
       render action: "new"
     elsif params[:commit] == "登録" && @message.save
       build_message(@bot_token, @message)
-      # redirect_to workspace_channel_path(@workspace, @channel), flash: { commit_message: true }
-      redirect_to workspace_channel_path(@workspace, @channel)
+      redirect_to workspace_channel_path(@workspace, @channel), flash: { commit_message: true }
     else
       render action: "new"
     end
