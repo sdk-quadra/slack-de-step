@@ -58,12 +58,19 @@ class Events::ChannelCreated
       members.each do |member|
         companion_id = Companion.find_by(slack_user_id: member).id
         channel_id = Channel.find_by(slack_channel_id: channel[:id]).id
-        Participation.create(companion_id: companion_id, channel_id: channel_id) unless App.exists?(bot_user_id: member)
+        # Participation.create(companion_id: companion_id, channel_id: channel_id) unless App.exists?(bot_user_id: member)
+
+        unless App.exists?(bot_user_id: member)
+          Participation.find_or_create_by!(companion_id: companion_id, channel_id: channel_id) do |p|
+            p.companion_id = companion_id
+            p.channel_id = channel_id
+          end
+        end
       end
     end
 
     def member_count(channel)
-      member_count = Channel.find_by(slack_channel_id: channel).participations.count
-      Channel.find_by(slack_channel_id: channel).update(member_count: member_count)
+      member_count = Channel.find_by(slack_channel_id: channel[:id]).participations.count
+      Channel.find_by(slack_channel_id: channel[:id]).update(member_count: member_count)
     end
 end
