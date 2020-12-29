@@ -43,14 +43,15 @@ class MessagesController < ApplicationController
 
     if params[:commit] == "テスト送信" && @message.update(message_params)
       test_message(@bot_token, @message)
-      redirect_to workspace_channel_path(@workspace, @channel)
+      flash.now[:test_submit] = true
+      render action: "edit"
     elsif params[:commit] == "登録" && @message.update(message_params)
 
       # 以前の予約送信は消す
       build_delete_message(@bot_token, @message.id)
 
       build_message(@bot_token, @message)
-      redirect_to workspace_channel_path(@workspace, @channel)
+      redirect_to workspace_channel_path(@workspace, @channel), flash: { commit_message: true }
     else
       render action: "edit"
     end
