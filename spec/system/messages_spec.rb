@@ -9,6 +9,8 @@ RSpec.describe "messages", type: :system do
     @possession = FactoryBot.create(:possession, user_id: @user.id, workspace_id: @workspace.id)
     @app = FactoryBot.create(:app, workspace_id: @workspace.id)
     @channel = FactoryBot.create(:channel, app_id: @app.id)
+    @companion = FactoryBot.create(:companion, app_id: @app.id)
+    @participation = FactoryBot.create(:participation, channel_id: @channel.id, companion_id: @companion.id)
   end
 
   it "テキストメッセージを新規登録できる事" do
