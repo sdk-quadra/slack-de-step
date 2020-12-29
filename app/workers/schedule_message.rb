@@ -5,8 +5,6 @@ class ScheduleMessage
   sidekiq_options queue: :schedule_message, retry: 5
 
   include MessageBuilder
-  include SlackApiBaseurl
-  include SlackApiBlocks
 
   def perform(bot_token, member, push_timestamp, message_id)
     message = Message.find(message_id)
