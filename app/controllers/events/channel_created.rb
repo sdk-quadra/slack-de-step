@@ -2,6 +2,7 @@
 
 class Events::ChannelCreated
   include CurlBuilder
+  include ChannelBuilder
   include SlackApiBaseurl
 
   def execute(bot_token, params)
@@ -12,16 +13,13 @@ class Events::ChannelCreated
     channel = params[:event][:channel]
     team = params[:team_id]
 
-    # botをchannel登録する # channel_created => member_joined_channelの順に動くのは確実(botを埋めてからしかlogに出ないので)
+    # botをchannel登録する。botがchannelに入らないとchannelのeventを検知できないので
     bot_join_to_channel(bot_token, channel)
 
     create_channel(bot_token, team, channel)
-
     members = conversations_members(bot_token, channel)
-
     participate_channel(members, channel)
-
-    member_count(channel)
+    member_count(channel[:id])
   end
 
   private
@@ -59,7 +57,6 @@ class Events::ChannelCreated
       members.each do |member|
         companion_id = Companion.find_by(slack_user_id: member).id
         channel_id = Channel.find_by(slack_channel_id: channel[:id]).id
-        # Participation.create(companion_id: companion_id, channel_id: channel_id) unless App.exists?(bot_user_id: member)
 
         unless App.exists?(bot_user_id: member)
           Participation.find_or_create_by!(companion_id: companion_id, channel_id: channel_id) do |p|
@@ -68,10 +65,5 @@ class Events::ChannelCreated
           end
         end
       end
-    end
-
-    def member_count(channel)
-      member_count = Channel.find_by(slack_channel_id: channel[:id]).participations.count
-      Channel.find_by(slack_channel_id: channel[:id]).update(member_count: member_count)
     end
 end
