@@ -9,11 +9,12 @@ class User < ApplicationRecord
 
   extend CurlBuilder
   extend CryptBuilder
+  extend SlackApiBaseurl
 
   def self.find_or_create_form_auth(auth)
     oauth_user_token = JSON.parse(auth[0])["authed_user"]["access_token"]
 
-    users_identity = curl_exec(base_url: "https://slack.com/api/users.identity", headers: { "Authorization": "Bearer " + oauth_user_token })
+    users_identity = curl_exec(base_url: url_users_identity, headers: { "Authorization": "Bearer " + oauth_user_token })
     user_name = JSON.parse(users_identity[0])["user"]["name"]
     user_email = JSON.parse(users_identity[0])["user"]["email"]
 
@@ -73,7 +74,7 @@ class User < ApplicationRecord
 
   def self.create_channels(auth, app)
     oauth_bot_token = auth["access_token"]
-    conversations = curl_exec(base_url: "https://slack.com/api/conversations.list", headers: { "Authorization": "Bearer " + oauth_bot_token })
+    conversations = curl_exec(base_url: url_conversations_list, headers: { "Authorization": "Bearer " + oauth_bot_token })
     conversations = JSON.parse(conversations[0])["channels"]
 
     conversations.each do |conversation|
@@ -86,19 +87,19 @@ class User < ApplicationRecord
         join_to_channel(oauth_bot_token, conversation)
       end
       # botをpublic channelに参加させる
-      curl_exec(base_url: "https://slack.com/api/conversations.join", headers: { "Authorization": "Bearer " + oauth_bot_token },
+      curl_exec(base_url: url_conversations_join, headers: { "Authorization": "Bearer " + oauth_bot_token },
                 params: { "channel": conversation["id"] })
     end
   end
 
   def self.join_to_channel(bot_token, channel)
-    curl_exec(base_url: "https://slack.com/api/conversations.join", headers: { "Authorization": "Bearer " + bot_token },
+    curl_exec(base_url: url_conversations_join, headers: { "Authorization": "Bearer " + bot_token },
               params: { "channel": channel[:id] })
   end
 
   def self.create_companions(auth, app)
     oauth_bot_token = auth["access_token"]
-    users = curl_exec(base_url: "https://slack.com/api/users.list", headers: { "Authorization": "Bearer " + oauth_bot_token })
+    users = curl_exec(base_url: url_users_list, headers: { "Authorization": "Bearer " + oauth_bot_token })
     users = JSON.parse(users[0])["members"]
 
     users.each do |user|

@@ -5,6 +5,7 @@ class ChannelsController < ApplicationController
   before_action :set_channel, only: [:show]
   include CurlBuilder
   include CryptBuilder
+  include SlackApiBaseurl
 
   def show
     channels = App.find_by(workspace_id: @workspace.id).channels.sort do |x, y|
@@ -24,7 +25,8 @@ class ChannelsController < ApplicationController
     bot_token = decrypt_token(@workspace.app.oauth_bot_token)
     bot_user_id = @workspace.app.bot_user_id
 
-    user_info = curl_exec(base_url: "https://slack.com/api/users.info?user=#{bot_user_id}", headers: { "Authorization": "Bearer " + bot_token })
+    user_info = curl_exec(base_url: url_users_info, headers: { "Authorization": "Bearer " + bot_token },
+                          params: { "user": bot_user_id })
     @user_info_realname = JSON.parse(user_info[0])["user"]["real_name"]
     @user_info_profile_image = JSON.parse(user_info[0])["user"]["profile"]["image_192"]
 
