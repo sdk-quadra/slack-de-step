@@ -24,7 +24,7 @@ class ScheduleMessage
     # queueがなくなったら修正可能にする
     queues = Sidekiq::ScheduledSet.new
 
-    if queues.size == 0
+    if queues.size <= 0
       message.update(modifiable: true)
     end
   end
