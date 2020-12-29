@@ -15,8 +15,8 @@ class Events::MemberJoinedChannel
     return if params[:authorizations][0][:is_bot] == "true"
 
     # 新規参加userの場合
-    companion = Companion.find_or_create_by!(slack_user_id: user) do |c|
-      app_id = Workspace.find_by(slack_ws_id: team).app.id
+    app_id = Workspace.find_by(slack_ws_id: team).app.id
+    companion = Companion.find_or_create_by!(app_id: app_id, slack_user_id: user) do |c|
       c.app_id = app_id
       c.slack_user_id = user
     end
