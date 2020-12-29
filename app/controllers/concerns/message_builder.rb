@@ -3,16 +3,18 @@
 module MessageBuilder
   extend ActiveSupport::Concern
   include CurlBuilder
+  include SlackApiBaseurl
+  include SlackApiBlocks
   MIN_POLLING_TIME = 5
 
   def test_message(bot_token, message)
     member = session[:authed_slack_user_id]
     if message.image_url
-      curl_exec(base_url: "https://slack.com/api/chat.postMessage",
-                params: { "token": bot_token, "channel": member, "blocks": "[{\"block_id\": \"test_message\", \"type\": \"section\",\"text\": {\"type\": \"plain_text\", \"text\": \"#{message.message}\"}}, {\"type\": \"image\", \"title\": {\"type\": \"plain_text\",\"text\": \"pitcure\"}, \"image_url\": \"#{message.image_url}\", \"block_id\": \"image4\",\"alt_text\": \"pitcure here\"}]" })
+      curl_exec(base_url: url_chat_post_message,
+                params: { "token": bot_token, "channel": member, "blocks": test_blocks_text_with_image(message) })
     else
-      curl_exec(base_url: "https://slack.com/api/chat.postMessage",
-                params: { "token": bot_token, "channel": member, "blocks": "[{\"block_id\": \"test_message\", \"type\": \"section\",\"text\": {\"type\": \"plain_text\", \"text\": \"#{message.message}\" }}]" })
+      curl_exec(base_url: url_chat_post_message,
+                params: { "token": bot_token, "channel": member, "blocks": test_blocks_text(message) })
     end
   end
 
