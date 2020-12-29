@@ -51,7 +51,6 @@ class User < ApplicationRecord
   def self.create_app(auth, workspace)
     oauth_bot_token = auth["access_token"]
     bot_user_id = auth["bot_user_id"]
-    api_app_id = auth["app_id"]
 
     encrypt_token = encrypt_token(oauth_bot_token)
 
@@ -59,8 +58,7 @@ class User < ApplicationRecord
     app = App.find_or_initialize_by(workspace_id: workspace.id)
     app.update_attributes(
       oauth_bot_token: encrypt_token,
-      bot_user_id: bot_user_id,
-      api_app_id: api_app_id
+      bot_user_id: bot_user_id
     )
     app
   end
