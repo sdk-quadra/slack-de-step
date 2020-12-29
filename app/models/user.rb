@@ -82,7 +82,6 @@ class User < ApplicationRecord
         channel.app_id = app.id
         channel.slack_channel_id = conversation["id"]
         channel.name = conversation["name"]
-        channel.name == "general" ? channel.display = true : channel.display = false
 
         join_to_channel(oauth_bot_token, conversation)
       end
