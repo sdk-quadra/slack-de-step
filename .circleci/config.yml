@@ -12,6 +12,8 @@ jobs:
           POSTGRES_USER: postgres
           POSTGRES_DB: slack_de_step_test
 
+      - image: redis
+
     working_directory: ~/slack-de-step
     environment:
       TZ: "Asia/Tokyo"
