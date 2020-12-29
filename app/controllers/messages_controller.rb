@@ -32,10 +32,12 @@ class MessagesController < ApplicationController
 
   def edit
     @message = Message.find(params[:id])
+    inaccessible_while_processing(@message)
   end
 
   def update
     @message = Message.find(params[:id])
+    inaccessible_while_processing(@message)
 
     @message.image = nil if params["delete-image"]
 
@@ -55,10 +57,11 @@ class MessagesController < ApplicationController
   end
 
   def destroy
-    message_id = params[:id]
+    @message = Message.find(params[:id])
+    inaccessible_while_processing(@message)
 
-    build_delete_message(@bot_token, message_id)
-    Message.destroy(message_id)
+    build_delete_message(@bot_token, @message.id)
+    @message.destroy
     redirect_to workspace_channel_path(@workspace, @channel)
   end
 
@@ -67,6 +70,10 @@ class MessagesController < ApplicationController
       params.require(:message).permit(:message, :image,
                                       push_timing_attributes: [:id, :in_x_days, :time])
           .merge(channel_id: @channel.id)
+    end
+
+    def inaccessible_while_processing(message)
+      redirect_to workspace_channel_path(@workspace, @channel) if message.modifiable == false
     end
 
     def set_workspace
