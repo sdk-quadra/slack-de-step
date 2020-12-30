@@ -1,6 +1,5 @@
 require('@rails/ujs').start()
 require('@rails/activestorage').start()
-require('channels')
 require('./preview-image')
 require('./ellipsis')
 require('./modal-channels-info')
