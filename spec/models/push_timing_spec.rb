@@ -4,11 +4,15 @@ require "rails_helper"
 
 RSpec.describe Message, type: :model do
   before do
+    @user = FactoryBot.create(:user)
     @workspace = FactoryBot.create(:workspace)
+    @possession = FactoryBot.create(:possession, user_id: @user.id, workspace_id: @workspace.id)
     @app = FactoryBot.create(:app, workspace_id: @workspace.id)
     @channel = FactoryBot.create(:channel, app_id: @app.id)
     @message = FactoryBot.create(:message, channel_id: @channel.id)
     @push_timing = FactoryBot.create(:push_timing, message_id: @message.id)
+    @companion = FactoryBot.create(:companion, app_id: @app.id)
+    @participation = FactoryBot.create(:participation, channel_id: @channel.id, companion_id: @companion.id)
   end
 
   it "push_timingを登録できる事" do
