@@ -11,6 +11,7 @@ ja:
       push_timing:
         time: 時刻
         in_x_days: ○日後
+        time_now: 現在
   errors:
     format: "%{attribute}%{message}"
     messages:
