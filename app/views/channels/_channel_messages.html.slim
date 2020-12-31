@@ -1,0 +1,23 @@
+.channel-messages
+  .channel-messages__channel-title
+    h3.channel-messages__channel-name
+      = "# #{@channel.name}"
+    = render partial: "shared/icon/sign_out"
+
+  p.channel-messages__desc
+    | このチャンネルに参加して○日後のユーザーに「DM」します
+
+  .channel-messages__stat
+    p
+      = "送信済合計 #{@pushed_count} / 既読数合計 #{@is_read}"
+
+  .channel-messages__add-message
+    = link_to new_workspace_channel_message_path(channel_id: @channel.id), class: "channel-messages__add-message-link" do
+      i[class="fas fa-plus-circle"]
+      |  メッセージを追加
+
+  - @messages.each do |message|
+    = render partial: "channel_message", locals: {message: message}
+
+  - unless @messages.present?
+    = render partial: "no_message_yet"

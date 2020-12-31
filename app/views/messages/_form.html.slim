@@ -1,0 +1,23 @@
+.message-body
+  = form_with(model: [workspace, channel, message], class: "message-form", local: true) do |m|
+    - if message.errors.any?
+      label[for="message_errors" class="message-form__errors-title"]
+        | 以下の内容を修正して下さい *
+      = render partial: "error_messages", locals: {message: message}
+
+    label[for="message_push_timing_attributes" class="message-form__title-timing"]
+      | 送信タイミング *
+
+    = render partial: "push_timing", locals: {m: m}
+
+    label[for="message_message" class="message-form__title-message"]
+      | メッセージ *
+    = render partial: "message", locals: {m: m}
+
+    .message-form__submit
+      = m.submit "テスト送信", class: "message-form__test-submit", id: "message-form__test-submit"
+      = m.submit "登録", class: "message-form__commit", id: "message-form__commit"
+
+.overlay
+  = render partial: "shared/overlay"
+  = render partial: "shared/overlay_type"

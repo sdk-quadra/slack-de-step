@@ -1,0 +1,18 @@
+= m.text_area :message, size: "62x12", class: "message-form__textarea"
+p
+  = m.label :image, "<i class='fas fa-upload fa-sm'><span>画像を選択</span></i>".html_safe
+  = m.file_field :image, accept: 'image/*', class: "hidden message-form__file"
+
+- if @message.image_url.present?
+  p
+    = image_tag(@message.image_url, {id: 'preview', class: "message-form__preview-img"})
+
+- else
+  p
+    img#preview
+
+data#delete-image.message-form__delete-img
+  | 画像を削除する
+
+p
+  = check_box_tag "delete-image", true, false, id: "delete-image-check", class: "hidden"
