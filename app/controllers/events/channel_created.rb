@@ -17,8 +17,8 @@ class Events::ChannelCreated
     bot_join_to_channel(bot_token, channel)
 
     create_channel(bot_token, team, channel)
-    members = conversations_members(bot_token, channel)
-    participate_channel(members, channel)
+    channel_members = channel_members(bot_token, channel)
+    participate_channel(channel_members, channel)
     member_count(channel[:id])
   end
 
@@ -40,17 +40,27 @@ class Events::ChannelCreated
     end
 
     def channel_name(bot_token, channel)
-      conversation_info = curl_exec(base_url: url_conversations_info,
-                                    params: { "token": bot_token, "channel": channel })
-      channel_name = JSON.parse(conversation_info[0])["channel"]["name"]
+      conversations_info = conversations_info(bot_token, channel)
+      channel_name = JSON.parse(conversations_info[0])["channel"]["name"]
       channel_name
+    end
+
+    def conversations_info(bot_token, channel)
+      conversations_info = curl_exec(base_url: url_conversations_info,
+                                    params: { "token": bot_token, "channel": channel })
+      conversations_info
+    end
+
+    def channel_members(bot_token, channel)
+      conversations_members = conversations_members(bot_token, channel)
+      members = JSON.parse(conversations_members[0])["members"]
+      members
     end
 
     def conversations_members(bot_token, channel)
       conversations_members = curl_exec(base_url: url_conversations_members, headers: { "Authorization": "Bearer " + bot_token },
                                         params: { "channel": channel[:id] })
-      members = JSON.parse(conversations_members[0])["members"]
-      members
+      conversations_members
     end
 
     def participate_channel(members, channel)
