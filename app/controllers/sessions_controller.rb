@@ -7,7 +7,7 @@ class SessionsController < ApplicationController
 
   def create
     code = params[:code]
-    oauth_v2_access = curl_exec(base_url: "https://slack.com/api/oauth.v2.access", params: { "code": code, "client_id": ENV["SLACK_CLIENT_ID"], "client_secret": ENV["SLACK_CLIENT_SECRET"] })
+    oauth_v2_access = oauth_v2_access(code)
 
     if oauth_v2_access.present?
       user = User.find_or_create_form_auth(oauth_v2_access)
@@ -26,5 +26,10 @@ class SessionsController < ApplicationController
   def destroy
     session[:user_id] = nil
     redirect_to root_path, flash: { logout: "ログアウトしました" }
+  end
+
+  def oauth_v2_access(code)
+    oauth_v2_access = curl_exec(base_url: "https://slack.com/api/oauth.v2.access", params: { "code": code, "client_id": ENV["SLACK_CLIENT_ID"], "client_secret": ENV["SLACK_CLIENT_SECRET"] })
+    oauth_v2_access
   end
 end

@@ -17,10 +17,9 @@ class ChannelsController < ApplicationController
     bot_token = decrypt_token(@workspace.app.oauth_bot_token)
     bot_user_id = @workspace.app.bot_user_id
 
-    user_info = curl_exec(base_url: url_users_info, headers: { "Authorization": "Bearer " + bot_token },
-                          params: { "user": bot_user_id })
-    @user_info_realname = JSON.parse(user_info[0])["user"]["real_name"]
-    @user_info_profile_image = JSON.parse(user_info[0])["user"]["profile"]["image_192"]
+    users_info = users_info(bot_token, bot_user_id)
+    @user_info_realname = JSON.parse(users_info[0])["user"]["real_name"]
+    @user_info_profile_image = JSON.parse(users_info[0])["user"]["profile"]["image_192"]
 
     @messages = sort_messages
   end
@@ -52,5 +51,11 @@ class ChannelsController < ApplicationController
         [message.push_timing.in_x_days, message.push_timing.time.to_i]
       end
       messages
+    end
+
+    def users_info(bot_token, bot_user_id)
+      users_info = curl_exec(base_url: url_users_info, headers: { "Authorization": "Bearer " + bot_token },
+                             params: { "user": bot_user_id })
+      users_info
     end
 end
