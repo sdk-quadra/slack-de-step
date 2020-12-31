@@ -1,0 +1,37 @@
+.lp-how-to-use__wrapper
+  h2.lp-how-to-use__title
+    | slack de stepで自動メッセージを送るまで
+
+  .lp-how-to-use__step
+    .lp-how-to-use__step-text
+      h3.lp-how-to-use__step-title
+        | step 1
+      .lp-how-to-use__step-desc
+        | 下の「sign in with slack」ボタンからあなたのslackアカウントとslack de stepを連携します（無料！）
+    = image_tag "top_square.jpeg", class: "lp-how-to-use__step-image"
+
+  .lp-how-to-use__step
+    = image_tag "channels.png", class: "lp-how-to-use__step-image"
+
+    .lp-how-to-use__step-text
+      h3.lp-how-to-use__step-title
+        | step 2
+
+      .lp-how-to-use__step-desc
+        | メッセージを送りたいチャンネルを選択して「メッセージを追加」します
+
+  .lp-how-to-use__step
+    .lp-how-to-use__step-text
+      h3.lp-how-to-use__step-title
+        | step 3
+
+      .lp-how-to-use__step-desc
+        | メッセージを送りたいタイミングを指定して登録をクリック。もちろんテスト送信もできます！
+
+    = image_tag "message.png", class: "lp-how-to-use__step-image"
+
+  .lp-how-to-use__cta
+    h3
+      | 今すぐ無料で使ってみる<br />↓↓↓
+    = link_to "https://slack.com/oauth/v2/authorize?client_id=1014153380854.1396596614065&scope=channels:history,channels:join,channels:read,chat:write,files:write,im:history,im:read,team:read,users:read&user_scope=identity.avatar,identity.basic,identity.email,identity.team", class: "lp__sign-in-link" do
+      = image_tag "sign_in_with_slack@2x.png", class: "lp__sign-in-image-large"

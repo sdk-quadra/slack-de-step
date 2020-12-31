@@ -1,0 +1,5 @@
+.sign-out
+  i[class="fas fa-ellipsis-v sign-out__icon"]
+  ul.sign-out__menu
+    li.sign-out__list
+      = link_to "ログアウト", sessions_destroy_path, class: "sign-out__link"

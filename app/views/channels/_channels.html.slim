@@ -1,0 +1,17 @@
+.channels
+  .channels__workspace-info
+    = image_tag(@workspace.icon_url, class: "channels__workspace-icon", alt: "workspace_icon")
+    span.channels__workspace-name
+      = @workspace.name
+
+  - @channels.each do |channel|
+    = link_to channel.id.to_s, class: "channel__name-link" do
+      div[class="channel #{'channel__e__selected' if channel.id == @channel.id}"]
+        .channel__name
+          = channel.name
+        .channel__number-of-people
+          = "#{channel.member_count}人"
+
+  .channels__about-number-of-people
+    i[class="fas fa-info"]
+      | 人数について

@@ -1,0 +1,18 @@
+.channel-message-list
+  div[class="channel-message__post-datetime-label channel-message-divider"]
+    p.channel-message__post-datetime
+      = "#{message.push_timing.in_x_days}日後の#{message.push_timing.time.strftime('%H:%M')}"
+
+  .channel-message
+    = image_tag(@user_info_profile_image, class: "channel-message__sender-icon")
+    .channel-message-data
+      .channel-message-data__sender-name
+        = @user_info_realname
+
+      .channel-message-data__content
+        = simple_format(message.message)
+        = image_tag(message.image_url, {class: "channel-message-data__image"}) if message.image_url
+
+      .channel-message-data__state
+        .channel-message-data__modification
+          = render partial: "modification", locals: {message: message}
