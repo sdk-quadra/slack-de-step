@@ -2,6 +2,7 @@
 
 class SessionsController < ApplicationController
   skip_before_action :check_logined
+  include ChannelBuilder
   include CurlBuilder
 
   def create
@@ -20,10 +21,6 @@ class SessionsController < ApplicationController
     else
       redirect_to root_path, flash:  { login_failed: "ログインに失敗しました" }
     end
-  end
-
-  def general_channel(app_id)
-    Channel.where(name: "general").find_by(app_id: app_id)
   end
 
   def destroy

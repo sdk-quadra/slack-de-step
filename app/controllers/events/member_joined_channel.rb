@@ -17,7 +17,7 @@ class Events::MemberJoinedChannel
     channel_to_join = Channel.find_by(slack_channel_id: channel)
 
     # 新規参加userの場合
-    companion = regist_companion(team)
+    companion = regist_companion(team, user)
     participate_channel(user, channel_to_join, companion)
 
     member_count(channel)
@@ -28,7 +28,7 @@ class Events::MemberJoinedChannel
   end
 
   private
-    def regist_companion(team)
+    def regist_companion(team, user)
       app_id = Workspace.find_by(slack_ws_id: team).app.id
       companion = Companion.find_or_create_by!(app_id: app_id, slack_user_id: user) do |c|
         c.app_id = app_id

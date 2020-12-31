@@ -5,9 +5,7 @@ class ApplicationController < ActionController::Base
 
   private
     def check_logined
-      if action_name == "server"
-      elsif ENV["RSPEC"]
-      elsif session[:user_id] == nil
+      if session[:user_id] == nil && !ENV["RSPEC"]
         redirect_to root_path
       end
     end
