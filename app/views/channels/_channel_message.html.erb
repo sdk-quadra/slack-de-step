@@ -1,0 +1,25 @@
+<div class="channel-message-list">
+  <div class="channel-message__post-datetime-label channel-message-divider">
+    <p class="channel-message__post-datetime"><%= message.push_timing.in_x_days %>日後の<%= message.push_timing.time.strftime('%H:%M') %></p>
+  </div>
+
+  <div class="channel-message">
+        <%= image_tag(@user_info_profile_image, class: "channel-message__sender-icon") %>
+    <div class="channel-message-data">
+      <div class="channel-message-data__sender-name">
+        <%= @user_info_realname %>
+      </div>
+
+      <div class="channel-message-data__content">
+        <%= simple_format(message.message) %>
+        <%= image_tag(message.image_url, {class: "channel-message-data__image"}) if message.image_url%>
+      </div>
+
+      <div class="channel-message-data__state">
+        <div class="channel-message-data__modification">
+          <%= render partial: "modification", locals: {message: message} %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

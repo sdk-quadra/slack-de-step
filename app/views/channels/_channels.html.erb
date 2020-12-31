@@ -1,0 +1,24 @@
+<div class="channels">
+  <div class="channels__workspace-info">
+    <%= image_tag(@workspace.icon_url, class: "channels__workspace-icon", alt: "workspace_icon") %>
+    <span class="channels__workspace-name"><%= @workspace.name %></span>
+  </div>
+
+  <% @channels.each do |channel| %>
+    <%= link_to channel.id.to_s, class: "channel__name-link" do %>
+      <div class="channel<%= " channel__e__selected" if channel.id == @channel.id %>">
+        <div class="channel__name">
+          <%= channel.name %>
+        </div>
+        <div class="channel__number-of-people">
+          <%= channel.member_count %>人
+        </div>
+      </div>
+    <% end %>
+  <% end %>
+
+  <div class="channels__about-number-of-people">
+    <i class="fas fa-info"></i>人数について
+  </div>
+</div>
+

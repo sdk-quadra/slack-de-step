@@ -8,19 +8,11 @@ class ChannelsController < ApplicationController
   include SlackApiBaseurl
 
   def show
-    channels = App.find_by(workspace_id: @workspace.id).channels.sort do |x, y|
-      [-x[:member_count], x[:name]] <=> [-y[:member_count], y[:name]]
-    end
+    @channels = sort_channels
 
-    general_index = channels.index { |i| i.name == "general" }
-    general_channel = channels[general_index]
-
-    channels.reject! { |c| c.name == "general" }
-    @channels = channels.unshift(general_channel)
-
-    post_messages = Transception.where(message_id: @channel.messages.map(&:id))
-    @pushed_count = post_messages.count
-    @is_read = post_messages.where(is_read: true).count
+    posted_messages = Transception.where(message_id: @channel.messages.map(&:id))
+    @pushed_count = posted_messages.count
+    @is_read = posted_messages.where(is_read: true).count
 
     bot_token = decrypt_token(@workspace.app.oauth_bot_token)
     bot_user_id = @workspace.app.bot_user_id
@@ -30,9 +22,7 @@ class ChannelsController < ApplicationController
     @user_info_realname = JSON.parse(user_info[0])["user"]["real_name"]
     @user_info_profile_image = JSON.parse(user_info[0])["user"]["profile"]["image_192"]
 
-    @messages = Message.where(channel_id: params[:id]).sort_by do |message|
-      [message.push_timing.in_x_days, message.push_timing.time.to_i]
-    end
+    @messages = sort_messages
   end
 
   private
@@ -42,5 +32,25 @@ class ChannelsController < ApplicationController
 
     def set_channel
       @channel = Channel.find(params[:id])
+    end
+
+    def sort_channels
+      channels = App.find_by(workspace_id: @workspace.id).channels.sort do |x, y|
+        [-x[:member_count], x[:name]] <=> [-y[:member_count], y[:name]]
+      end
+
+      general_index = channels.index { |i| i.name == "general" }
+      general_channel = channels[general_index]
+
+      channels.reject! { |c| c.name == "general" }
+      sorted_channels = channels.unshift(general_channel)
+      sorted_channels
+    end
+
+    def sort_messages
+      messages = Message.where(channel_id: params[:id]).sort_by do |message|
+        [message.push_timing.in_x_days, message.push_timing.time.to_i]
+      end
+      messages
     end
 end
