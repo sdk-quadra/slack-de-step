@@ -1,0 +1,13 @@
+<% if flash[:commit_message] %>
+  <style> #overlay-commit-message { display: block;} </style>
+  <data id="overlay-type" value="commit-message"></data>
+
+<% elsif flash[:test_submit] %>
+  <style> #overlay-test-submit { display: block;} </style>
+  <data id="overlay-type" value="test-submit"></data>
+
+<% else %>
+  <data id="overlay-type" value="delete-message"></data>
+
+<% end %>
+

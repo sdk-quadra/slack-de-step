@@ -1,0 +1,19 @@
+<i class="fas fa-ellipsis-v channel-message-data__modification-icon"></i>
+<ul class="channel-message-data__modification-menu">
+  <% if message.modifiable == true %>
+    <%= link_to edit_workspace_channel_message_path(@workspace, message.channel_id, message.id), class: "channel-message-data__modification-link" do %>
+      <li class="channel-message-data__modification-list">編集</li>
+    <% end %>
+
+    <data class="channel-message-data__delete-message-confirm" value="message-<%= message.id %>">
+      <li class="channel-message-data__modification-list">削除</li>
+    </data>
+
+    <%= link_to "削除", workspace_channel_message_path(@workspace, message.channel_id, message.id), class: "channel-message-data__delete-message-link", id: "message-#{message.id}", method: :delete %>
+
+  <% else %>
+    <li class="channel-message-data__processing">
+      現在処理中です。編集、削除はしばらく経ってからにしてください
+    </li>
+  <% end %>
+</ul>

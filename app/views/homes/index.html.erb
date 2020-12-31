@@ -1,100 +1,19 @@
 <div class="lp">
-  <% flash.each do |k, v| %>
-    <div class="lp__flash <%= "lp__flash-login-failed" if k == "login_failed" %>">
-      <div class="lp__flash-text "><%= v %></div>
-    </div>
-  <% end %>
+  <%= render partial: "flash" %>
 
   <div class="lp__header">
-    <div class="lp__header-items">
-      <h3 class="lp__logo">
-        Slack De Step
-      </h3>
-      <%= link_to "https://slack.com/oauth/v2/authorize?client_id=1014153380854.1396596614065&scope=channels:history,channels:join,channels:read,chat:write,files:write,im:history,im:read,team:read,users:read&user_scope=identity.avatar,identity.basic,identity.email,identity.team", class: "lp__sign-in-link" do %>
-        <%= image_tag "sign_in_with_slack@2x.png", class: "lp__header-sign-in-image" %>
-      <% end %>
-    </div>
+    <%= render partial: "header" %>
   </div>
 
   <div class="lp__firstview">
-    <div class="lp__firstview-text">
-      <h1><span>"〇日目"の人にメッセージを送る</span><br />
-        Slack De Step</h1>
-      <%= link_to "https://slack.com/oauth/v2/authorize?client_id=1014153380854.1396596614065&scope=channels:history,channels:join,channels:read,chat:write,files:write,im:history,im:read,team:read,users:read&user_scope=identity.avatar,identity.basic,identity.email,identity.team", class: "lp__sign-in-link" do %>
-        <%= image_tag "sign_in_with_slack@2x.png", class: "lp__sign-in-image" %>
-      <% end %>
-    </div>
-
-    <%= image_tag "maintenance.svg", class: "lp__firstview-image" %>
-
+    <%= render partial: "first_view" %>
   </div>
 
   <div class="lp__features">
-    <div class="lp__feature">
-      <%= image_tag "start-up.svg", class: "lp__feature-image" %>
-      <h3 class="lp__feature-title">○日経ったら送信：</h3>
-      <p class="lp__feature-desc">slackのチャンネルに参加して○日経ったユーザーに対して、メッセージを自動で送信できます。</p>
-    </div>
-
-    <div class="lp__feature">
-      <%= image_tag "development.svg", class: "lp__feature-image" %>
-      <h3 class="lp__feature-title">既読数が分かる：</h3>
-      <p class="lp__feature-desc">合計の既読数、送信数が分かります。</p>
-    </div>
-
-    <div class="lp__feature">
-      <%= image_tag "speed-optimisation.svg", class: "lp__feature-image" %>
-      <h3 class="lp__feature-title">アカウント登録は不要：</h3>
-      <p class="lp__feature-desc">slackのアカウントさえあればすぐに利用できます。slack de stepには登録不要！</p>
-    </div>
+    <%= render partial: "features" %>
   </div>
-
 </div>
 
 <div class="lp-how-to-use">
-  <div class="lp-how-to-use__wrapper">
-    <h2 class="lp-how-to-use__title">slack de stepで自動メッセージを送るまで</h2>
-
-    <div class="lp-how-to-use__step">
-      <div class="lp-how-to-use__step-text">
-        <h3 class="lp-how-to-use__step-title">step 1</h3>
-        <div class="lp-how-to-use__step-desc">
-          下の「sign in with slack」ボタンから
-          あなたのslackアカウントと
-          slack de stepを連携します（無料！）
-        </div>
-      </div>
-      <%= image_tag "top_square.jpeg", class: "lp-how-to-use__step-image" %>
-    </div>
-
-    <div class="lp-how-to-use__step">
-      <%= image_tag "channels.png", class: "lp-how-to-use__step-image" %>
-      <div class="lp-how-to-use__step-text">
-        <h3 class="lp-how-to-use__step-title">step 2</h3>
-        <div class="lp-how-to-use__step-desc">
-          メッセージを送りたいチャンネルを選択して
-          「メッセージを追加」します
-        </div>
-      </div>
-    </div>
-
-    <div class="lp-how-to-use__step">
-      <div class="lp-how-to-use__step-text">
-        <h3 class="lp-how-to-use__step-title">step 3</h3>
-        <div class="lp-how-to-use__step-desc">
-          メッセージを送りたいタイミングを指定して
-          登録をクリック。
-          もちろんテスト送信もできます！
-        </div>
-      </div>
-      <%= image_tag "message.png", class: "lp-how-to-use__step-image" %>
-    </div>
-    <div class="lp-how-to-use__cta">
-      <h3>今すぐ無料で使ってみる<br />
-        ↓↓↓</h3>
-      <%= link_to "https://slack.com/oauth/v2/authorize?client_id=1014153380854.1396596614065&scope=channels:history,channels:join,channels:read,chat:write,files:write,im:history,im:read,team:read,users:read&user_scope=identity.avatar,identity.basic,identity.email,identity.team", class: "lp__sign-in-link" do %>
-        <%= image_tag "sign_in_with_slack@2x.png", class: "lp__sign-in-image-large" %>
-      <% end %>
-    </div>
-  </div>
+  <%= render partial: "how_to_use" %>
 </div>

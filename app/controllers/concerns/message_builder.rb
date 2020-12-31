@@ -33,18 +33,6 @@ module MessageBuilder
     end
   end
 
-  def push_datetime(participation_datetime, in_x_days, time)
-    push_date = participation_datetime + in_x_days.to_i.days
-    push_datetime = Time.parse(push_date.strftime("%Y-%m-%d #{time}"))
-    push_datetime
-  end
-
-  def schedule_message(bot_token, member, push_datetime, message, index = 1)
-    # 予約が完了するまで編集不可にする
-    message.update(modifiable: false)
-    ScheduleMessage.perform_in(index*MIN_POLLING_TIME.seconds, bot_token, member.slack_user_id, push_datetime.to_i, message.id)
-  end
-
   def build_delete_message(bot_token, message_id)
     individual_messages = IndividualMessage.where(message_id: message_id)
     individual_messages.each.with_index(1) do |individual_message, index|
@@ -55,8 +43,14 @@ module MessageBuilder
     end
   end
 
+  def schedule_message(bot_token, member, push_datetime, message, index = 1)
+    # 予約が完了するまで編集不可にする
+    message.update(modifiable: false)
+    ScheduleMessage.perform_in(index * MIN_POLLING_TIME.seconds, bot_token, member.slack_user_id, push_datetime.to_i, message.id)
+  end
+
   def delete_scheduled_message(bot_token, index, individual_message)
-    DeleteScheduledMessage.perform_in(index*MIN_POLLING_TIME.seconds, bot_token, individual_message.companion.slack_user_id, individual_message.scheduled_message_id)
+    DeleteScheduledMessage.perform_in(index * MIN_POLLING_TIME.seconds, bot_token, individual_message.companion.slack_user_id, individual_message.scheduled_message_id)
   end
 
   def save_individual_messages(member, message, scheduled_message)
@@ -71,4 +65,11 @@ module MessageBuilder
       scheduled_datetime: Time.at(scheduled_timestamp)
     )
   end
+
+  private
+    def push_datetime(participation_datetime, in_x_days, time)
+      push_date = participation_datetime + in_x_days.to_i.days
+      push_datetime = Time.parse(push_date.strftime("%Y-%m-%d #{time}"))
+      push_datetime
+    end
 end

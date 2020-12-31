@@ -2,35 +2,14 @@
   <%= form_with(model: [workspace, channel, message], class: "message-form", local: true) do |m| %>
     <% if message.errors.any? %>
       <label for="message_errors" class="message-form__errors-title">以下の内容を修正して下さい *</label>
-      <ul class="message-form__errors">
-        <% message.errors.full_messages.each do |error| %>
-          <li class="message-form__error"><%= error %></li>
-        <% end %>
-      </ul>
+      <%= render partial: "error_messages", locals: {message: message} %>
     <% end %>
 
     <label for="message_push_timing_attributes" class="message-form__title-timing">送信タイミング *</label>
-    <div class="message-form__push-timing">
-      チャンネル登録して
-      <%= m.fields_for :push_timing do |p| %>
-        <%= p.number_field :in_x_days, min: 0, max: 100, class: "message-form__number" %>日後の
-        <%= p.time_field :time, class: "message-form__time" %> に送信する
-      <% end %>
-    </div>
+    <%= render partial: "push_timing", locals: {m: m} %>
 
     <label for="message_message" class="message-form__title-message">メッセージ *</label>
-    <%= m.text_area :message, size: "62x12", class: "message-form__textarea" %>
-    <p><%= m.label :image, "<i class='fas fa-upload fa-sm'><span>画像を選択</span></i>".html_safe %>
-      <%= m.file_field :image, accept: 'image/*', class: "hidden message-form__file" %></p>
-    <% if @message.image_url.present? %>
-      <p><%= image_tag(@message.image_url, {id: 'preview', class: "message-form__preview-img"}) %></p>
-    <% else %>
-      <p><img id="preview"></p>
-    <% end %>
-
-    <data id="delete-image" class="message-form__delete-img">画像を削除する</data>
-
-    <p><%= check_box_tag "delete-image", true, false, id: "delete-image-check", class: "hidden" %></p>
+    <%= render partial: "message", locals: {m: m} %>
 
     <div class="message-form__submit">
       <%= m.submit "テスト送信", class: "message-form__test-submit", id: "message-form__test-submit" %>
@@ -40,12 +19,7 @@
   <% end %>
 </div>
 
-<%= render partial: "overlay/test_submit" %>
-<%= render partial: "overlay/delete_image" %>
-
-<% if flash[:test_submit] %>
-  <style> #overlay-test-submit { display: block;} </style>
-  <data id="overlay-type" value="test-submit"></data>
-<% else %>
-  <data id="overlay-type" value="delete-image"></data>
-<% end %>
+<div class="overlay">
+  <%= render partial: "shared/overlay" %>
+  <%= render partial: "shared/overlay_type" %>
+</div>
