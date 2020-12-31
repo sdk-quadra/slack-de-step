@@ -117,9 +117,8 @@ RSpec.describe "messages", type: :system do
 
     find("#message_push_timing_attributes_in_x_days").set("1")
     find("#message_push_timing_attributes_time").set("#{hour}:#{minutes}")
-
     click_button "テスト送信"
-    click_button "戻る"
+    find("#overlay-test-submit").find(:xpath, ".//div/div[2]/button").click
     find(".back").click
 
     expect(page).to_not have_content "メッセージ登録テスト"
