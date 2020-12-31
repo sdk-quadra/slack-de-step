@@ -6,6 +6,7 @@ class HomesController < ApplicationController
   skip_before_action :check_logined
   before_action :already_logined
 
+  include ChannelBuilder
   include CryptBuilder
 
   def index
@@ -52,7 +53,11 @@ class HomesController < ApplicationController
   private
     def already_logined
       if session[:user_id]
-        redirect_to workspaces_path
+        authed_slack_user_id = session[:authed_slack_user_id]
+        app_id = Companion.find_by(slack_user_id: authed_slack_user_id).app_id
+        workspace_id = App.find(app_id).workspace.id
+
+        redirect_to workspace_channel_path(workspace_id, general_channel(app_id))
       end
     end
 end
