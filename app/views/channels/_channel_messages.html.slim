@@ -12,7 +12,7 @@
       = "送信済合計 #{@pushed_count} / 既読数合計 #{@is_read}"
 
   .channel-messages__add-message
-    = link_to new_workspace_channel_message_path(channel_id: @channel.id), class: "channel-messages__add-message-link" do
+    = link_to new_channel_message_path(channel_id: @channel.id), class: "channel-messages__add-message-link" do
       i[class="fas fa-plus-circle"]
       |  メッセージを追加
 

@@ -48,7 +48,4 @@ Rails.application.configure do
 
   # Raises error for missing translations.
   # config.action_view.raise_on_missing_translations = true
-
-  # session書き換え
-  config.middleware.use RackSessionAccess::Middleware
 end

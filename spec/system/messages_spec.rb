@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.describe "messages", type: :system do
-  before do
+  before(:context) do
     @user = FactoryBot.create(:user)
     @workspace = FactoryBot.create(:workspace)
     @possession = FactoryBot.create(:possession, user_id: @user.id, workspace_id: @workspace.id)
@@ -13,164 +13,161 @@ RSpec.describe "messages", type: :system do
     @participation = FactoryBot.create(:participation, channel_id: @channel.id, companion_id: @companion.id)
   end
 
-  it "テキストメッセージを新規登録できる事" do
-    page.set_rack_session(user_id: @user.id)
-    visit new_workspace_channel_message_path(@workspace.id, @channel.id)
-    fill_in "メッセージ *", with: "メッセージ登録テスト"
+  context "sessionを伴うtest" do
+    let(:rspec_session) { { workspace_id: @workspace.id } }
 
-    hour = Time.now.since(5400).strftime("%H")
-    minutes = Time.now.since(5400).strftime("%M")
+    it "テキストメッセージを新規登録できる事" do
+      visit new_channel_message_path(@channel.id)
+      fill_in "メッセージ *", with: "メッセージ登録テスト"
 
-    find("#message_push_timing_attributes_in_x_days").set("1")
-    find("#message_push_timing_attributes_time").set("#{hour}:#{minutes}")
+      hour = Time.now.since(5400).strftime("%H")
+      minutes = Time.now.since(5400).strftime("%M")
 
-    click_button "登録"
-    expect(page).to have_selector ".modal__title", text: "メッセージを登録しました"
-  end
+      find("#message_push_timing_attributes_in_x_days").set("1")
+      find("#message_push_timing_attributes_time").set("#{hour}:#{minutes}")
 
-  it "現在時刻の5分以内はメッセージを登録できない事" do
-    page.set_rack_session(user_id: @user.id)
-    visit new_workspace_channel_message_path(@workspace.id, @channel.id)
-    fill_in "メッセージ *", with: "メッセージ登録テスト"
+      click_button "登録"
+      expect(page).to have_selector ".modal__title", text: "メッセージを登録しました"
+    end
 
-    hour = Time.now.since(300).strftime("%H")
-    minutes = Time.now.since(300).strftime("%M")
+    it "現在時刻の5分以内はメッセージを登録できない事" do
+      visit new_channel_message_path(@channel.id)
+      fill_in "メッセージ *", with: "メッセージ登録テスト"
 
-    find("#message_push_timing_attributes_time").set("#{hour}:#{minutes}")
+      hour = Time.now.since(300).strftime("%H")
+      minutes = Time.now.since(300).strftime("%M")
 
-    click_button "登録"
-    expect(page).to have_content "現在時刻より10分以上後を指定してください"
-  end
+      find("#message_push_timing_attributes_time").set("#{hour}:#{minutes}")
 
-  it "セットしたばかりのメッセージは編集、削除できない事" do
-    page.set_rack_session(user_id: @user.id)
-    visit new_workspace_channel_message_path(@workspace.id, @channel.id)
-    fill_in "メッセージ *", with: "メッセージ登録テスト"
+      click_button "登録"
+      expect(page).to have_content "現在時刻より10分以上後を指定してください"
+    end
 
-    hour = Time.now.since(5400).strftime("%H")
-    minutes = Time.now.since(5400).strftime("%M")
+    it "セットしたばかりのメッセージは編集、削除できない事" do
+      visit new_channel_message_path(@channel.id)
+      fill_in "メッセージ *", with: "メッセージ登録テスト"
 
-    find("#message_push_timing_attributes_in_x_days").set("1")
-    find("#message_push_timing_attributes_time").set("#{hour}:#{minutes}")
+      hour = Time.now.since(5400).strftime("%H")
+      minutes = Time.now.since(5400).strftime("%M")
 
-    click_button "登録"
-    expect(page).to have_content "現在処理中です。編集、削除はしばらく経ってからにしてください"
-  end
+      find("#message_push_timing_attributes_in_x_days").set("1")
+      find("#message_push_timing_attributes_time").set("#{hour}:#{minutes}")
 
-  it "テキスト未入力の場合は新規登録できない事" do
-    page.set_rack_session(user_id: @user.id)
-    visit new_workspace_channel_message_path(@workspace.id, @channel.id)
-    fill_in "メッセージ *", with: ""
-    click_button "登録"
-    expect(page).to have_content "メッセージを入力してください"
-  end
+      click_button "登録"
+      expect(page).to have_content "現在処理中です。編集、削除はしばらく経ってからにしてください"
+    end
 
-  it "テキストメッセージ+画像を新規登録できる事" do
-    page.set_rack_session(user_id: @user.id)
-    visit new_workspace_channel_message_path(@workspace.id, @channel.id)
-    fill_in "メッセージ *", with: "メッセージ登録テスト"
-    attach_file "画像を選択", "#{Rails.root}/spec/factories/images/ruby.png"
+    it "テキスト未入力の場合は新規登録できない事" do
+      visit new_channel_message_path(@channel.id)
+      fill_in "メッセージ *", with: ""
+      click_button "登録"
+      expect(page).to have_content "メッセージを入力してください"
+    end
 
-    hour = Time.now.since(5400).strftime("%H")
-    minutes = Time.now.since(5400).strftime("%M")
+    it "テキストメッセージ+画像を新規登録できる事" do
+      visit new_channel_message_path(@channel.id)
+      fill_in "メッセージ *", with: "メッセージ登録テスト"
+      attach_file "画像を選択", "#{Rails.root}/spec/factories/images/ruby.png"
 
-    find("#message_push_timing_attributes_in_x_days").set("1")
-    find("#message_push_timing_attributes_time").set("#{hour}:#{minutes}")
+      hour = Time.now.since(5400).strftime("%H")
+      minutes = Time.now.since(5400).strftime("%M")
 
-    click_button "登録"
-    expect(page).to have_content "メッセージ登録テスト"
-    expect(find(".channel-message-data__image")).to be_visible
-  end
+      find("#message_push_timing_attributes_in_x_days").set("1")
+      find("#message_push_timing_attributes_time").set("#{hour}:#{minutes}")
 
-  it "テキストメッセージなし+画像は新規登録できない事" do
-    page.set_rack_session(user_id: @user.id)
-    visit new_workspace_channel_message_path(@workspace.id, @channel.id)
-    fill_in "メッセージ *", with: ""
-    attach_file "画像を選択", "#{Rails.root}/spec/factories/images/ruby.png"
-    click_button "登録"
-    expect(page).to have_content "メッセージを入力してください"
-  end
+      click_button "登録"
+      expect(page).to have_content "メッセージ登録テスト"
+      expect(find(".channel-message-data__image")).to be_visible
+    end
 
-  it "画像が2MBを超える場合は新規登録できない事" do
-    page.set_rack_session(user_id: @user.id)
-    visit new_workspace_channel_message_path(@workspace.id, @channel.id)
-    fill_in "メッセージ *", with: "メッセージ登録テスト"
-    attach_file "画像を選択", "#{Rails.root}/spec/factories/images/large.jpeg"
+    it "テキストメッセージなし+画像は新規登録できない事" do
+      visit new_channel_message_path(@channel.id)
+      fill_in "メッセージ *", with: ""
+      attach_file "画像を選択", "#{Rails.root}/spec/factories/images/ruby.png"
+      click_button "登録"
+      expect(page).to have_content "メッセージを入力してください"
+    end
 
-    hour = Time.now.since(5400).strftime("%H")
-    minutes = Time.now.since(5400).strftime("%M")
+    it "画像が2MBを超える場合は新規登録できない事" do
+      visit new_channel_message_path(@channel.id)
+      fill_in "メッセージ *", with: "メッセージ登録テスト"
+      attach_file "画像を選択", "#{Rails.root}/spec/factories/images/large.jpeg"
 
-    find("#message_push_timing_attributes_in_x_days").set("#{hour}:#{minutes}")
-    find("#message_push_timing_attributes_time").set("#{hour}:#{minutes}")
+      hour = Time.now.since(5400).strftime("%H")
+      minutes = Time.now.since(5400).strftime("%M")
 
-    click_button "登録"
-    expect(page).to have_content "画像は2MB以下にしてください"
-  end
+      find("#message_push_timing_attributes_in_x_days").set("#{hour}:#{minutes}")
+      find("#message_push_timing_attributes_time").set("#{hour}:#{minutes}")
 
-  it "テスト送信してもDB保存されない事" do
-    page.set_rack_session(user_id: @user.id)
-    visit new_workspace_channel_message_path(@workspace.id, @channel.id)
-    fill_in "メッセージ *", with: "メッセージ登録テスト"
+      click_button "登録"
+      expect(page).to have_content "画像は2MB以下にしてください"
+    end
 
-    hour = Time.now.since(5400).strftime("%H")
-    minutes = Time.now.since(5400).strftime("%M")
+    it "テスト送信してもDB保存されない事" do
+      visit new_channel_message_path(@channel.id)
+      fill_in "メッセージ *", with: "メッセージ登録テスト"
 
-    find("#message_push_timing_attributes_in_x_days").set("1")
-    find("#message_push_timing_attributes_time").set("#{hour}:#{minutes}")
-    click_button "テスト送信"
-    find("#overlay-test-submit").find(:xpath, ".//div/div[2]/button").click
-    find(".back").click
+      hour = Time.now.since(5400).strftime("%H")
+      minutes = Time.now.since(5400).strftime("%M")
 
-    expect(page).to_not have_content "メッセージ登録テスト"
-  end
+      find("#message_push_timing_attributes_in_x_days").set("1")
+      find("#message_push_timing_attributes_time").set("#{hour}:#{minutes}")
+      click_button "テスト送信"
+      find("#overlay-test-submit").find(:xpath, ".//div/div[2]/button").click
+      find(".back").click
 
-  it "送信タイミングの日時がDB保存されている事" do
-    page.set_rack_session(user_id: @user.id)
-    visit new_workspace_channel_message_path(@workspace.id, @channel.id)
+      expect(page).to_not have_content "メッセージ登録テスト"
+    end
 
-    find("#message_push_timing_attributes_in_x_days").set("1")
-    find("#message_push_timing_attributes_time").set("23:45")
+    it "送信タイミングの日時がDB保存されている事" do
+      visit new_channel_message_path(@channel.id)
 
-    fill_in "メッセージ *", with: "メッセージ登録テスト"
-    click_button "登録"
-    expect(page).to have_selector ".channel-message__post-datetime", text: "1日後の23:45"
-  end
+      find("#message_push_timing_attributes_in_x_days").set("1")
+      find("#message_push_timing_attributes_time").set("23:45")
 
-  it "画像選択時、画像削除ボタンが表示される事", js: true do
-    visit new_workspace_channel_message_path(@workspace.id, @channel.id)
-    attach_file "画像を選択", "#{Rails.root}/spec/factories/images/ruby.png", make_visible: true
-    expect(find("#delete-image", visible: true)).to be_visible
-  end
+      fill_in "メッセージ *", with: "メッセージ登録テスト"
+      click_button "登録"
+      expect(page).to have_selector ".channel-message__post-datetime", text: "1日後の23:45"
+    end
 
-  it "画像選択時画像を削除し登録すると、DBに画像が保存されない事", js: true do
-    visit new_workspace_channel_message_path(@workspace.id, @channel.id)
-    fill_in "メッセージ *", with: "メッセージ登録テスト"
-    attach_file "画像を選択", "#{Rails.root}/spec/factories/images/ruby.png", make_visible: true
+    context "jsを伴うtest" do
+      it "画像選択時、画像削除ボタンが表示される事", js: true do
+        visit new_channel_message_path(@channel.id)
+        attach_file "画像を選択", "#{Rails.root}/spec/factories/images/ruby.png", make_visible: true
+        expect(find("#delete-image", visible: true)).to be_visible
+      end
 
-    hour = Time.now.since(5400).strftime("%H")
-    minutes = Time.now.since(5400).strftime("%M")
+      it "画像選択時画像を削除し登録すると、DBに画像が保存されない事", js: true do
+        visit new_channel_message_path(@channel.id)
+        fill_in "メッセージ *", with: "メッセージ登録テスト"
+        attach_file "画像を選択", "#{Rails.root}/spec/factories/images/ruby.png", make_visible: true
 
-    find("#message_push_timing_attributes_in_x_days").set("1")
-    find("#message_push_timing_attributes_time").set("#{hour}:#{minutes}")
-    find(".message-form__delete-img").click
+        hour = Time.now.since(5400).strftime("%H")
+        minutes = Time.now.since(5400).strftime("%M")
 
-    click_button "削除する"
-    click_button "登録"
+        find("#message_push_timing_attributes_in_x_days").set("1")
+        find("#message_push_timing_attributes_time").set("#{hour}:#{minutes}")
+        find(".message-form__delete-img").click
 
-    expect(page).to have_no_selector(".channel-message-data__image")
-  end
+        click_button "削除する"
+        click_button "登録"
 
-  it "画像選択時、プレビューが表示される事", js: true do
-    visit new_workspace_channel_message_path(@workspace.id, @channel.id)
-    attach_file "画像を選択", "#{Rails.root}/spec/factories/images/ruby.png", make_visible: true
-    expect(find("#preview", visible: true)).to be_visible
-  end
+        expect(page).to have_no_selector(".channel-message-data__image")
+      end
 
-  it "画像選択時、画像を削除するとプレビューが消える事", js: true do
-    visit new_workspace_channel_message_path(@workspace.id, @channel.id)
-    attach_file "画像を選択", "#{Rails.root}/spec/factories/images/ruby.png", make_visible: true
-    find(".message-form__delete-img").click
-    click_button "削除する"
-    expect(find("#preview", visible: false)).to_not be_visible
+      it "画像選択時、プレビューが表示される事", js: true do
+        visit new_channel_message_path(@channel.id)
+        attach_file "画像を選択", "#{Rails.root}/spec/factories/images/ruby.png", make_visible: true
+        expect(find("#preview", visible: true)).to be_visible
+      end
+
+      it "画像選択時、画像を削除するとプレビューが消える事", js: true do
+        visit new_channel_message_path(@channel.id)
+        attach_file "画像を選択", "#{Rails.root}/spec/factories/images/ruby.png", make_visible: true
+        find(".message-form__delete-img").click
+        click_button "削除する"
+        expect(find("#preview", visible: false)).to_not be_visible
+      end
+    end
   end
 end

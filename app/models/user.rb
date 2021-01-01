@@ -23,9 +23,10 @@ class User < ApplicationRecord
       u.email = user_email
     end
 
-    first_regist(JSON.parse(users_identity[0]), JSON.parse(auth[0]), user)
+    workspace = first_regist(JSON.parse(users_identity[0]), JSON.parse(auth[0]), user)
 
-    user
+    # user
+    workspace
   end
 
   def self.first_regist(users_identity, auth, user)
@@ -34,6 +35,7 @@ class User < ApplicationRecord
     create_possession(user, workspace)
     create_channels(auth, app)
     create_companions(auth, app)
+    workspace
   end
 
   def self.create_workspace(users_identity)

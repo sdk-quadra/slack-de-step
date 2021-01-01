@@ -26,7 +26,7 @@ class ChannelsController < ApplicationController
 
   private
     def set_workspace
-      @workspace = Workspace.find(params[:workspace_id])
+      @workspace = Workspace.find(session[:workspace_id])
     end
 
     def set_channel
