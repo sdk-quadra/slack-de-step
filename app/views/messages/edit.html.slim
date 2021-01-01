@@ -1,6 +1,6 @@
 .message
   .message__channel-title
-    = link_to workspace_channel_path(@workspace, @channel), class: "back" do
+    = link_to channel_path(@channel), class: "back" do
       i[class="fas fa-chevron-left"]
 
     h3.message__channel-name
@@ -8,4 +8,4 @@
 
     = render partial: "shared/icon/sign_out"
 
-  = render 'form', workspace: @workspace, channel: @channel, message: @message
+  = render 'form', channel: @channel, message: @message

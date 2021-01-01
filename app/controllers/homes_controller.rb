@@ -52,12 +52,9 @@ class HomesController < ApplicationController
 
   private
     def already_logined
-      if session[:user_id]
-        authed_slack_user_id = session[:authed_slack_user_id]
-        app_id = Companion.find_by(slack_user_id: authed_slack_user_id).app_id
-        workspace_id = App.find(app_id).workspace.id
-
-        redirect_to workspace_channel_path(workspace_id, general_channel(app_id))
+      if session[:workspace_id]
+        app_id = Companion.find_by(slack_user_id: session[:authed_slack_user_id]).app_id
+        redirect_to channel_path(general_channel(app_id))
       end
     end
 end

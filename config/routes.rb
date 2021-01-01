@@ -7,10 +7,8 @@ Rails.application.routes.draw do
 
   get "auth/:provider/callback" => "sessions#create"
 
-  resources :workspaces, only: [] do
-    resources :channels, only: :show do
-      resources :messages, only: [:new, :create, :edit, :update, :destroy]
-    end
+  resources :channels, only: :show do
+    resources :messages, only: [:new, :create, :edit, :update, :destroy]
   end
 
   get "server" => "homes#server"

@@ -5,7 +5,7 @@ class ApplicationController < ActionController::Base
 
   private
     def check_logined
-      if session[:user_id] == nil && !ENV["RSPEC"]
+      if session[:workspace_id] == nil
         redirect_to root_path
       end
     end

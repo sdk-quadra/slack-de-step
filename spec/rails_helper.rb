@@ -64,8 +64,9 @@ RSpec.configure do |config|
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
 
-  # selenium追記
+
   config.before(:each) do |example|
+    # selenium追記
     if example.metadata[:type] == :system
       if example.metadata[:js]
         # driven_by :selenium_chrome_headless, screen_size: [1400, 1400]
@@ -74,5 +75,11 @@ RSpec.configure do |config|
         driven_by :rack_test
       end
     end
+
+    # rspecでsessionを使えるようにする
+    # let(:rspec_session) で指定された値を セッションの初期値とする
+    session = defined?(rspec_session) ? rspec_session : {}
+    # sessionメソッドを上書き
+    allow_any_instance_of(ActionDispatch::Request).to receive(:session).and_return(session)
   end
 end

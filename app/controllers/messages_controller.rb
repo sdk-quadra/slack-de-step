@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class MessagesController < ApplicationController
-  before_action :set_workspace, only: [:new, :create, :edit, :update, :destroy]
   before_action :set_channel, only: [:new, :create, :edit, :update, :destroy]
   before_action :set_bot_token, only: [:new, :create, :edit, :update, :destroy]
 
@@ -24,7 +23,7 @@ class MessagesController < ApplicationController
       render action: "new"
     elsif params[:commit] == "登録" && @message.save
       build_message(@bot_token, @message)
-      redirect_to workspace_channel_path(@workspace, @channel), flash: { commit_message: true }
+      redirect_to channel_path(@channel), flash: { commit_message: true }
     else
       render action: "new"
     end
@@ -51,7 +50,7 @@ class MessagesController < ApplicationController
       build_delete_message(@bot_token, @message.id)
 
       build_message(@bot_token, @message)
-      redirect_to workspace_channel_path(@workspace, @channel), flash: { commit_message: true }
+      redirect_to channel_path(@channel), flash: { commit_message: true }
     else
       render action: "edit"
     end
@@ -63,7 +62,7 @@ class MessagesController < ApplicationController
 
     build_delete_message(@bot_token, @message.id)
     @message.destroy
-    redirect_to workspace_channel_path(@workspace, @channel)
+    redirect_to channel_path(@channel)
   end
 
   private
@@ -74,11 +73,7 @@ class MessagesController < ApplicationController
     end
 
     def inaccessible_while_processing(message)
-      redirect_to workspace_channel_path(@workspace, @channel) if message.modifiable == false
-    end
-
-    def set_workspace
-      @workspace = Workspace.find(params[:workspace_id])
+      redirect_to channel_path(@channel) if message.modifiable == false
     end
 
     def set_channel
@@ -86,6 +81,6 @@ class MessagesController < ApplicationController
     end
 
     def set_bot_token
-      @bot_token = decrypt_token(Workspace.find(params[:workspace_id]).app.oauth_bot_token)
+      @bot_token = decrypt_token(Workspace.find(session[:workspace_id]).app.oauth_bot_token)
     end
 end

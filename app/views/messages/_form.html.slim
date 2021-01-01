@@ -1,5 +1,5 @@
 .message-body
-  = form_with(model: [workspace, channel, message], class: "message-form", local: true) do |m|
+  = form_with(model: [channel, message], class: "message-form", local: true) do |m|
     - if message.errors.any?
       label[for="message_errors" class="message-form__errors-title"]
         | 以下の内容を修正して下さい *
