@@ -33,6 +33,7 @@ group :development, :test do
   gem "awesome_print"
   gem "rspec-rails"
   gem "factory_bot_rails"
+  gem "slim_lint"
 end
 
 group :development do

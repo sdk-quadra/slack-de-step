@@ -1,11 +1,11 @@
 = m.text_area :message, size: "62x12", class: "message-form__textarea"
 p
   = m.label :image, "<i class='fas fa-upload fa-sm'><span>画像を選択</span></i>".html_safe
-  = m.file_field :image, accept: 'image/*', class: "hidden message-form__file"
+  = m.file_field :image, accept: "image/*", class: "hidden message-form__file"
 
 - if @message.image_url.present?
   p
-    = image_tag(@message.image_url, {id: 'preview', class: "message-form__preview-img"})
+    = image_tag(@message.image_url, { id: "preview", class: "message-form__preview-img" })
 
 - else
   p
