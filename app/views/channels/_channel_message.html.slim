@@ -11,8 +11,8 @@
 
       .channel-message-data__content
         = simple_format(message.message)
-        = image_tag(message.image_url, {class: "channel-message-data__image"}) if message.image_url
+        = image_tag(message.image_url, { class: "channel-message-data__image" }) if message.image_url
 
       .channel-message-data__state
         .channel-message-data__modification
-          = render partial: "modification", locals: {message: message}
+          = render partial: "modification", locals: { message: message }

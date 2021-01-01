@@ -17,7 +17,7 @@
       |  メッセージを追加
 
   - @messages.each do |message|
-    = render partial: "channel_message", locals: {message: message}
+    = render partial: "channel_message", locals: { message: message }
 
   - unless @messages.present?
     = render partial: "no_message_yet"

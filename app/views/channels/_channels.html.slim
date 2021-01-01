@@ -6,7 +6,7 @@
 
   - @channels.each do |channel|
     = link_to channel.id.to_s, class: "channel__name-link" do
-      div[class="channel #{'channel__e__selected' if channel.id == @channel.id}"]
+      div[class="channel #{"channel__e__selected" if channel.id == @channel.id}"]
         .channel__name
           = channel.name
         .channel__number-of-people
