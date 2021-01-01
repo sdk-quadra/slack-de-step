@@ -8,4 +8,34 @@ class Channel < ApplicationRecord
 
   validates :name, presence: true
   validates :slack_channel_id, presence: true
+
+  extend CurlBuilder
+  extend SlackApiBaseurl
+
+  def self.create_channels(auth, app)
+    oauth_bot_token = auth["access_token"]
+    conversations_list = conversations_list(oauth_bot_token)
+    conversations = JSON.parse(conversations_list[0])["channels"]
+
+    conversations.each do |conversation|
+      Channel.find_or_create_by!(app_id: app.id, slack_channel_id: conversation["id"]) do |channel|
+        channel.app_id = app.id
+        channel.slack_channel_id = conversation["id"]
+        channel.name = conversation["name"]
+      end
+      # botをpublic channelに参加させる
+      bot_join_to_channel(oauth_bot_token, conversation)
+    end
+  end
+
+  private
+    def self.conversations_list(oauth_bot_token)
+      conversations_list = curl_exec(base_url: url_conversations_list, headers: { "Authorization": "Bearer " + oauth_bot_token })
+      conversations_list
+    end
+
+    def self.bot_join_to_channel(bot_token, channel)
+      curl_exec(base_url: url_conversations_join, headers: { "Authorization": "Bearer " + bot_token },
+                params: { "channel": channel[:id] })
+    end
 end

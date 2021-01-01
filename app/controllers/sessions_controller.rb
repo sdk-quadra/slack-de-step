@@ -10,7 +10,7 @@ class SessionsController < ApplicationController
     oauth_v2_access = oauth_v2_access(code)
 
     if oauth_v2_access.present?
-      workspace = User.find_or_create_form_auth(oauth_v2_access)
+      workspace = User.find_or_create_from_auth(oauth_v2_access)
       session[:workspace_id] = workspace.id
       session[:authed_slack_user_id] = JSON.parse(oauth_v2_access[0])["authed_user"]["id"]
 
