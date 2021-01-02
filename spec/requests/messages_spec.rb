@@ -3,8 +3,6 @@
 require "rails_helper"
 
 RSpec.describe "Messages", type: :request do
-  include CurlBuilder
-
   before do
     @workspace = FactoryBot.create(:workspace)
     @app = FactoryBot.create(:app, workspace_id: @workspace.id)

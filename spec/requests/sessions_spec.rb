@@ -3,8 +3,6 @@
 require "rails_helper"
 
 RSpec.describe "Messages", type: :request do
-  include CurlBuilder
-
   it "bot_tokenを取得できる事" do
     file = ActiveSupport::JSON.decode(File.read("spec/fixtures/oauth_v2_access.json"))
     session = SessionsController.new

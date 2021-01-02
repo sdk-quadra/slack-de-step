@@ -30,6 +30,23 @@ RSpec.describe "messages", type: :system do
       expect(page).to have_selector ".modal__title", text: "メッセージを登録しました"
     end
 
+    it "テキストメッセージを編集できる事" do
+      @message = FactoryBot.create(:message, channel_id: @channel.id)
+      @push_timing = FactoryBot.create(:push_timing, message_id: @message.id)
+
+      visit edit_channel_message_path(@channel.id, @message.id)
+      fill_in "メッセージ *", with: "メッセージ登録テスト_編集"
+
+      hour = Time.now.since(5400).strftime("%H")
+      minutes = Time.now.since(5400).strftime("%M")
+
+      find("#message_push_timing_attributes_in_x_days").set("1")
+      find("#message_push_timing_attributes_time").set("#{hour}:#{minutes}")
+
+      click_button "登録"
+      expect(page).to have_selector ".modal__title", text: "メッセージを登録しました"
+    end
+
     it "現在時刻の5分以内はメッセージを登録できない事" do
       visit new_channel_message_path(@channel.id)
       fill_in "メッセージ *", with: "メッセージ登録テスト"
@@ -62,6 +79,24 @@ RSpec.describe "messages", type: :system do
       fill_in "メッセージ *", with: ""
       click_button "登録"
       expect(page).to have_content "メッセージを入力してください"
+    end
+
+    it "○日後を入力していない場合は新規登録できない事" do
+      visit new_channel_message_path(@channel.id)
+      find("#message_push_timing_attributes_time").set("23:45")
+
+      fill_in "メッセージ *", with: "メッセージ登録テスト"
+      click_button "登録"
+      expect(page).to have_content "○日後を入力してください"
+    end
+
+    it "時刻を入力していない場合は新規登録できない事" do
+      visit new_channel_message_path(@channel.id)
+      find("#message_push_timing_attributes_in_x_days").set("1")
+
+      fill_in "メッセージ *", with: "メッセージ登録テスト"
+      click_button "登録"
+      expect(page).to have_content "時刻を入力してください"
     end
 
     it "テキストメッセージ+画像を新規登録できる事" do
@@ -130,6 +165,21 @@ RSpec.describe "messages", type: :system do
       expect(page).to have_selector ".channel-message__post-datetime", text: "1日後の23:45"
     end
 
+    it "1つのchannelにメッセージを50以上登録できない事" do
+      50.times {
+        @message = FactoryBot.create(:message, channel_id: @channel.id)
+        @push_timing = FactoryBot.create(:push_timing, message_id: @message.id)
+      }
+
+      visit new_channel_message_path(@channel.id)
+      find("#message_push_timing_attributes_in_x_days").set("1")
+      find("#message_push_timing_attributes_time").set("23:45")
+
+      fill_in "メッセージ *", with: "メッセージ登録テスト"
+      click_button "登録"
+      expect(page).to have_content "最大メッセージ数は1つのchannelで50までです"
+    end
+
     context "jsを伴うtest" do
       it "画像選択時、画像削除ボタンが表示される事", js: true do
         visit new_channel_message_path(@channel.id)
@@ -167,6 +217,34 @@ RSpec.describe "messages", type: :system do
         find(".message-form__delete-img").click
         click_button "削除する"
         expect(find("#preview", visible: false)).to_not be_visible
+      end
+
+      it "テスト送信後、modalが表示される事", js: true do
+        visit new_channel_message_path(@channel.id)
+        fill_in "メッセージ *", with: "メッセージ登録テスト"
+
+        hour = Time.now.since(5400).strftime("%H")
+        minutes = Time.now.since(5400).strftime("%M")
+
+        find("#message_push_timing_attributes_in_x_days").set("1")
+        find("#message_push_timing_attributes_time").set("#{hour}:#{minutes}")
+        click_button "テスト送信"
+
+        expect(page).to have_content "テスト送信しました"
+      end
+
+      it "メッセージ登録後、modalが表示される事", js: true do
+        visit new_channel_message_path(@channel.id)
+        fill_in "メッセージ *", with: "メッセージ登録テスト"
+
+        hour = Time.now.since(5400).strftime("%H")
+        minutes = Time.now.since(5400).strftime("%M")
+
+        find("#message_push_timing_attributes_in_x_days").set("1")
+        find("#message_push_timing_attributes_time").set("#{hour}:#{minutes}")
+        click_button "登録"
+
+        expect(page).to have_content "メッセージを登録しました"
       end
     end
   end
