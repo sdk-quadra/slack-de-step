@@ -3,8 +3,6 @@
 require "rails_helper"
 
 RSpec.describe "Messages", type: :request do
-  include CurlBuilder
-
   it "user情報を取得できる事" do
     file = ActiveSupport::JSON.decode(File.read("spec/fixtures/users_info.json"))
     channel = ChannelsController.new

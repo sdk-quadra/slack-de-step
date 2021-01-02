@@ -17,7 +17,7 @@ class Message < ApplicationRecord
 
   def limit_message
     if channel.present? && channel.messages.count >= MAX_MESSAGE_COUNT
-      errors.add(:max_message, "は1チャネル#{MAX_MESSAGE_COUNT}個までです")
+      errors.add(:max_message, "は1つのchannelで#{MAX_MESSAGE_COUNT}までです")
     end
   end
 end

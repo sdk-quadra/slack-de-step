@@ -3,8 +3,6 @@
 require "rails_helper"
 
 RSpec.describe "Messages", type: :request do
-  include CurlBuilder
-
   it "channelに参加できる事" do
     file = ActiveSupport::JSON.decode(File.read("spec/fixtures/conversations_join.json"))
     channel_created = Events::ChannelCreated.new
