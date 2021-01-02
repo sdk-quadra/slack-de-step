@@ -5,7 +5,6 @@ class User < ApplicationRecord
   has_many :workspaces, through: :possessions
 
   validates :email, presence: true
-  validates :name, presence: true
 
   extend CurlBuilder
   extend SlackApiBaseurl
@@ -35,11 +34,9 @@ class User < ApplicationRecord
   end
 
   def self.create_user(users_identity)
-    user_name = users_identity["user"]["name"]
     user_email = users_identity["user"]["email"]
 
     user = User.find_or_create_by!(email: user_email) do |u|
-      u.name = user_name
       u.email = user_email
     end
     user
