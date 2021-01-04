@@ -10,7 +10,7 @@
         = @app_info[:real_name]
 
       .channel-message-data__content
-        = simple_format(message.message)
+        == Rinku.auto_link(simple_format(message.message), :all, 'target="_blank"')
         = image_tag(message.image_url, { class: "channel-message-data__image" }) if message.image_url
 
       .channel-message-data__state

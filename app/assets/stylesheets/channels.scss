@@ -154,6 +154,10 @@
   &__content {
     color: $stronggray;
   }
+  &__content > p > a {
+    color: $slackblue;
+    text-decoration: none;
+  }
   &__image {
     max-width: 250px;
     max-height: 250px;
