@@ -230,7 +230,7 @@ RSpec.describe "messages", type: :system do
         find("#message_push_timing_attributes_time").set("#{hour}:#{minutes}")
         click_button "テスト送信"
 
-        expect(page).to have_content "テスト送信しました"
+        expect(find("#overlay-test-submit", visible: true)).to be_visible
       end
 
       it "メッセージ登録後、modalが表示される事", js: true do
@@ -244,7 +244,7 @@ RSpec.describe "messages", type: :system do
         find("#message_push_timing_attributes_time").set("#{hour}:#{minutes}")
         click_button "登録"
 
-        expect(page).to have_content "メッセージを登録しました"
+        expect(find("#overlay-commit-message", visible: true)).to be_visible
       end
     end
   end
