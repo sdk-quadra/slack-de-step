@@ -18,8 +18,9 @@ class ChannelsController < ApplicationController
     bot_user_id = @workspace.app.bot_user_id
 
     users_info = users_info(bot_token, bot_user_id)
-    @user_info_realname = JSON.parse(users_info[0])["user"]["real_name"]
-    @user_info_profile_image = JSON.parse(users_info[0])["user"]["profile"]["image_192"]
+    @app_info = {}
+    @app_info.store(:real_name, JSON.parse(users_info[0])["user"]["real_name"])
+    @app_info.store(:icon_url, JSON.parse(users_info[0])["user"]["profile"]["image_192"])
 
     @messages = sort_messages
   end
