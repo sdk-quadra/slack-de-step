@@ -80,6 +80,9 @@ jobs:
           name: Request Test
           command: bundle exec rspec spec/requests
 
+      - store_artifacts:
+          path: tmp/capybara/
+
 workflows:
   version: 2
 
