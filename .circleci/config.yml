@@ -69,15 +69,11 @@ jobs:
           command: bundle exec rails db:schema:load
 
       - run:
-          name: save screenshots
-          command: mkdir /tmp/screenshots
-
-      - run:
           name: System Test
           command: bundle exec rspec spec/system
 
       - store_artifacts:
-          path: /tmp/screenshots/
+          path: abc
 
       - run:
           name: Model Test
