@@ -82,10 +82,17 @@ jobs:
 
       - run:
           name: save screenshots
-          command: mkdir /tmp/artifacts
+          command: |
+            echo "my artifact file" > /slack-de-step/artifact-1;
+            mkdir /slack-de-step/artifacts;
+            echo "my artifact files in a dir" > /slack-de-step/artifacts/artifact-2;
 
       - store_artifacts:
-          path: tmp/artifacts/
+          path: /slack-de-step/artifact-1
+          destination: artifact-file
+
+      - store_artifacts:
+          path: slack-de-step/artifacts/
 
 workflows:
   version: 2
