@@ -1,0 +1,31 @@
+{
+  "name": "Slack De Step",
+  "description": "相対日時でメッセージを送るslackアプリ",
+  "repository": "https://github.com/sdk-quadra/slack-de-step",
+  "keywords": ["slack", "schedule", "timer"],
+  "env": {
+    "SALTED_KEY": {
+      "description": "32byteのSALTを記述してください",
+      "value": "c7cbfa4c305aa86134z914che12950b8"
+    },
+    "SLACK_CLIENT_ID": {
+      "description": "slackのclient_idを記入してください",
+      "value": "1094413380114.1026551694009"
+    },
+    "SLACK_CLIENT_SECRET": {
+      "description": "slackのclient_secretを記入してください",
+      "value": "e6013cf33b5056ls4353f11ffe51f8"
+    },
+    "AWS_ACCESS_KEY": {
+      "description": "画像はS3にアップされます。AWSのアクセスキーを記入してください",
+      "value": "AKIBVAFLWMM58J0DL70DS"
+    },
+    "AWS_SECRET_ACCESS_KEY": {
+      "description": "画像はS3にアップされます。AWSのシークレットキーを記入してください",
+      "value": "E9rOGq14CTCpFQ3=Vv3gwh@1BL0bS0GvelHWSX1f"
+    }
+  },
+  "addons": [
+    "redis"
+  ]
+}
