@@ -69,8 +69,15 @@ jobs:
           command: bundle exec rails db:schema:load
 
       - run:
+          name: save screenshots
+          command: mkdir /tmp/screenshots
+
+      - run:
           name: System Test
           command: bundle exec rspec spec/system
+
+      - store_artifacts:
+          path: /tmp/screenshots/
 
       - run:
           name: Model Test
@@ -79,20 +86,6 @@ jobs:
       - run:
           name: Request Test
           command: bundle exec rspec spec/requests
-
-      - run:
-          name: save screenshots
-          command: |
-            echo "my artifact file" > /slack-de-step/artifact-1;
-            mkdir /slack-de-step/artifacts;
-            echo "my artifact files in a dir" > /slack-de-step/artifacts/artifact-2;
-
-      - store_artifacts:
-          path: /slack-de-step/artifact-1
-          destination: artifact-file
-
-      - store_artifacts:
-          path: slack-de-step/artifacts/
 
 workflows:
   version: 2
