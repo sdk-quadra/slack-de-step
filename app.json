@@ -26,6 +26,6 @@
     }
   },
   "addons": [
-    "redis"
+    "openredis"
   ]
 }
