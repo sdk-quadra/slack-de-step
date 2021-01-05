@@ -193,6 +193,7 @@ GEM
       redis (>= 3.0.4)
     regexp_parser (1.8.2)
     rexml (3.2.4)
+    rinku (2.0.6)
     rspec-core (3.9.2)
       rspec-support (~> 3.9.3)
     rspec-expectations (3.9.2)
@@ -317,6 +318,7 @@ DEPENDENCIES
   rails (~> 6.0.3, >= 6.0.3.4)
   rails-i18n
   redis-namespace
+  rinku
   rspec-rails
   rubocop
   rubocop-performance
