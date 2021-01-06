@@ -27,7 +27,7 @@ RSpec.describe "messages", type: :system do
       find("#message_push_timing_attributes_time").set("#{hour}:#{minutes}")
 
       click_button "登録"
-      expect(page).to have_selector ".modal__title", text: "メッセージを登録しました"
+      expect(find("#overlay-commit-message", visible: true)).to be_visible
     end
 
     it "テキストメッセージを編集できる事" do
@@ -44,7 +44,8 @@ RSpec.describe "messages", type: :system do
       find("#message_push_timing_attributes_time").set("#{hour}:#{minutes}")
 
       click_button "登録"
-      expect(page).to have_selector ".modal__title", text: "メッセージを登録しました"
+      # expect(page).to have_selector ".modal__title", text: "メッセージを登録しました"
+      expect(find("#overlay-commit-message", visible: true)).to be_visible
     end
 
     it "現在時刻の5分以内はメッセージを登録できない事" do
@@ -196,7 +197,7 @@ RSpec.describe "messages", type: :system do
         minutes = Time.now.since(5400).strftime("%M")
 
         find("#message_push_timing_attributes_in_x_days").set("1")
-        find("#message_push_timing_attributes_time").set("#{hour}:#{minutes}")
+        find("#message_push_timing_attributes_time").set("#{hour}:#{minutes}AM")
         find(".message-form__delete-img").click
 
         click_button "削除する"
@@ -225,15 +226,9 @@ RSpec.describe "messages", type: :system do
 
         hour = Time.now.since(5400).strftime("%H")
         minutes = Time.now.since(5400).strftime("%M")
-        p "--modal test--"
-        p "#{hour}:#{minutes}"
-        time = "#{hour}:#{minutes}"
-        p time
 
         find("#message_push_timing_attributes_in_x_days").set("1")
-        find("#message_push_timing_attributes_time").set("10:00AM")
-        # fill_in "message_push_timing_attributes_time", with: "23:45"
-        sleep 2
+        find("#message_push_timing_attributes_time").set("#{hour}:#{minutes}AM")
         click_button "テスト送信"
 
         expect(find("#overlay-test-submit", visible: true)).to be_visible
@@ -247,7 +242,7 @@ RSpec.describe "messages", type: :system do
         minutes = Time.now.since(5400).strftime("%M")
 
         find("#message_push_timing_attributes_in_x_days").set("1")
-        find("#message_push_timing_attributes_time").set("#{hour}:#{minutes}")
+        find("#message_push_timing_attributes_time").set("#{hour}:#{minutes}AM")
         click_button "登録"
 
         expect(find("#overlay-commit-message", visible: true)).to be_visible
