@@ -231,8 +231,9 @@ RSpec.describe "messages", type: :system do
         p time
 
         find("#message_push_timing_attributes_in_x_days").set("1")
-        find("#message_push_timing_attributes_time").set("9:12")
+        find("#message_push_timing_attributes_time").set("9"+":"+"12")
         # fill_in "message_push_timing_attributes_time", with: "23:45"
+        sleep 2
         click_button "テスト送信"
 
         expect(find("#overlay-test-submit", visible: true)).to be_visible
