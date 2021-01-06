@@ -60,7 +60,7 @@ RSpec.describe "messages", type: :system do
       expect(page).to have_content "現在時刻より10分以上後を指定してください"
     end
 
-    it "セットしたばかりのメッセージは編集、削除できない事", js: true do
+    it "セットしたばかりのメッセージは編集、削除できない事" do
       visit new_channel_message_path(@channel.id)
       fill_in "メッセージ *", with: "メッセージ登録テスト"
 
@@ -71,7 +71,7 @@ RSpec.describe "messages", type: :system do
       find("#message_push_timing_attributes_time").set("#{hour}:#{minutes}")
 
       click_button "登録"
-      expect(page).to_not have_content "現在処理中です。編集、削除はしばらく経ってからにしてください"
+      expect(page).to have_content "現在処理中です。編集、削除はしばらく経ってからにしてください"
     end
 
     it "テキスト未入力の場合は新規登録できない事" do
@@ -227,9 +227,11 @@ RSpec.describe "messages", type: :system do
         minutes = Time.now.since(5400).strftime("%M")
         p "--modal test--"
         p "#{hour}:#{minutes}"
+        time = "#{hour}:#{minutes}"
+        p time
 
         find("#message_push_timing_attributes_in_x_days").set("1")
-        find("#message_push_timing_attributes_time").set("#{hour}:#{minutes}")
+        find("#message_push_timing_attributes_time").set(time)
         click_button "テスト送信"
 
         expect(find("#overlay-test-submit", visible: true)).to be_visible
