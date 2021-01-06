@@ -62,7 +62,7 @@ jobs:
 
       - run:
           name: rubocop
-          command: bundle exec rubocop -c .rubocop.yml -A
+          command: bundle exec rubocop -c .rubocop.yml -a
 
       - run:
           name: db migration
