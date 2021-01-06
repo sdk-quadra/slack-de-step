@@ -90,7 +90,7 @@ RSpec.describe "messages", type: :system do
       expect(page).to have_content "○日後を入力してください"
     end
 
-    it "時刻を入力していない場合は新規登録できない事" do
+    it "時刻を入力していない場合は新規登録できない事", js: true do
       visit new_channel_message_path(@channel.id)
       find("#message_push_timing_attributes_in_x_days").set("1")
 
