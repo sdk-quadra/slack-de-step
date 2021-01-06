@@ -71,7 +71,7 @@ RSpec.describe "messages", type: :system do
       find("#message_push_timing_attributes_time").set("#{hour}:#{minutes}")
 
       click_button "登録"
-      expect(page).to have_content "現在処理中です。編集、削除はしばらく経ってからにしてください"
+      expect(page).to_not have_content "現在処理中です。編集、削除はしばらく経ってからにしてください"
     end
 
     it "テキスト未入力の場合は新規登録できない事" do
