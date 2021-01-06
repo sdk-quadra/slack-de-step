@@ -60,7 +60,7 @@ RSpec.describe "messages", type: :system do
       expect(page).to have_content "現在時刻より10分以上後を指定してください"
     end
 
-    it "セットしたばかりのメッセージは編集、削除できない事" do
+    it "セットしたばかりのメッセージは編集、削除できない事", js: true do
       visit new_channel_message_path(@channel.id)
       fill_in "メッセージ *", with: "メッセージ登録テスト"
 
