@@ -69,6 +69,11 @@ jobs:
           command: bundle exec rails db:schema:load
 
       - run:
+          name: Install Japanese font
+          command: |
+            sudo apt-get install fonts-migmix
+
+      - run:
           name: System Test
           command: bundle exec rspec spec/system
 
