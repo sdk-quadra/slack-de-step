@@ -165,7 +165,7 @@ RSpec.describe "messages", type: :system do
       expect(page).to have_selector ".channel-message__post-datetime", text: "1日後の23:45"
     end
 
-    it "1つのchannelにメッセージを50以上登録できない事", js: true do
+    it "1つのchannelにメッセージを50以上登録できない事" do
       50.times {
         @message = FactoryBot.create(:message, channel_id: @channel.id)
         @push_timing = FactoryBot.create(:push_timing, message_id: @message.id)
@@ -177,7 +177,7 @@ RSpec.describe "messages", type: :system do
 
       fill_in "メッセージ *", with: "メッセージ登録テスト"
       click_button "登録"
-      expect(page).to have_content "最大メッセージ数は1つのchannelで50までです~"
+      expect(page).to have_content "最大メッセージ数は1つのchannelで50までです"
     end
 
     context "jsを伴うtest" do
@@ -231,7 +231,7 @@ RSpec.describe "messages", type: :system do
         p time
 
         find("#message_push_timing_attributes_in_x_days").set("1")
-        find("#message_push_timing_attributes_time").set("12:34:56")
+        find("#message_push_timing_attributes_time").set("10:00AM")
         # fill_in "message_push_timing_attributes_time", with: "23:45"
         sleep 2
         click_button "テスト送信"
