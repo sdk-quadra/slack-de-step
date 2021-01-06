@@ -225,6 +225,8 @@ RSpec.describe "messages", type: :system do
 
         hour = Time.now.since(5400).strftime("%H")
         minutes = Time.now.since(5400).strftime("%M")
+        p "--modal test--"
+        p "#{hour}:#{minutes}"
 
         find("#message_push_timing_attributes_in_x_days").set("1")
         find("#message_push_timing_attributes_time").set("#{hour}:#{minutes}")
