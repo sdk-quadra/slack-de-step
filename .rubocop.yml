@@ -167,8 +167,8 @@ Style/StringLiterals:
   EnforcedStyle: double_quotes
 
 # Detect hard tabs, no hard tabs.
-Layout/IndentationStyle:
-  Enabled: true
+#Layout/IndentationStyle:
+#  Enabled: true
 
 # Empty lines should not have any spaces.
 Layout/TrailingEmptyLines:

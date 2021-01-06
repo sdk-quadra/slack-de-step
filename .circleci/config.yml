@@ -17,6 +17,7 @@ jobs:
     working_directory: ~/slack-de-step
     environment:
       TZ: "Asia/Tokyo"
+      TEST_RESULTS: /tmp/test-results
 
     steps:
       - checkout
@@ -62,7 +63,7 @@ jobs:
 
       - run:
           name: rubocop
-          command: bundle exec rubocop -c .rubocop.yml -A
+          command: bundle exec rubocop -c .rubocop.yml -a
 
       - run:
           name: db migration
@@ -72,9 +73,6 @@ jobs:
           name: System Test
           command: bundle exec rspec spec/system
 
-      - store_artifacts:
-          path: abc
-
       - run:
           name: Model Test
           command: bundle exec rspec spec/models
@@ -82,6 +80,9 @@ jobs:
       - run:
           name: Request Test
           command: bundle exec rspec spec/requests
+
+      - store_test_results:
+          path: /tmp/test-results
 
 workflows:
   version: 2
