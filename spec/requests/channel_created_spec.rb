@@ -8,7 +8,7 @@ RSpec.describe "Messages", type: :request do
     channel_created = Events::ChannelCreated.new
     allow(channel_created).to receive(:curl_exec).and_return(file)
 
-    curl_exec = channel_created.curl_exec(base_url: "https://slack.com/api/conversations.join", headers: { "Authorization": "Bearer " + ENV["OAUTH_BOT_TOKEN"] },
+    curl_exec = channel_created.curl_exec(base_url: "https://slack.com/api/conversations.join", headers: { "Authorization": "Bearer " + "test_oauth_bot_token" },
                                   params: { "channel": "U010BU9GGBX" })
 
     expect(curl_exec["ok"]).to eq true
@@ -20,7 +20,7 @@ RSpec.describe "Messages", type: :request do
     allow(channel_created).to receive(:curl_exec).and_return(file)
 
     curl_exec = channel_created.curl_exec(base_url: "https://slack.com/api/conversations.info",
-                                          params: { "token": ENV["OAUTH_BOT_TOKEN"], "channel": "U010BU9GGBX" })
+                                          params: { "token": "test_oauth_bot_token", "channel": "U010BU9GGBX" })
 
     expect(curl_exec["ok"]).to eq true
   end
@@ -30,7 +30,7 @@ RSpec.describe "Messages", type: :request do
     channel_created = Events::ChannelCreated.new
     allow(channel_created).to receive(:curl_exec).and_return(file)
 
-    curl_exec = channel_created.curl_exec(base_url: "https://slack.com/api/conversations.members", headers: { "Authorization": "Bearer " + ENV["OAUTH_BOT_TOKEN"] },
+    curl_exec = channel_created.curl_exec(base_url: "https://slack.com/api/conversations.members", headers: { "Authorization": "Bearer " + "test_oauth_bot_token" },
                                           params: { "channel": "U010BU9GGBX" })
 
     expect(curl_exec["ok"]).to eq true

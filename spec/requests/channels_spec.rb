@@ -8,7 +8,7 @@ RSpec.describe "Messages", type: :request do
     channel = ChannelsController.new
     allow(channel).to receive(:curl_exec).and_return(file)
 
-    curl_exec = channel.curl_exec(base_url: "https://slack.com/api/users.info?user=U01B6RZ33L5", headers: { "Authorization": "Bearer " + ENV["OAUTH_BOT_TOKEN"] })
+    curl_exec = channel.curl_exec(base_url: "https://slack.com/api/users.info?user=U01B6RZ33L5", headers: { "Authorization": "Bearer " + "test_oauth_bot_token" })
 
     expect(curl_exec["ok"]).to eq true
   end
