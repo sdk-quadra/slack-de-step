@@ -33,5 +33,5 @@
   .lp-how-to-use__cta
     h3
       | 今すぐ無料で使ってみる<br />↓↓↓
-    = link_to "https://slack.com/oauth/v2/authorize?client_id=1014153380854.1396596614065&scope=channels:history,channels:join,channels:read,chat:write,files:write,im:history,im:read,team:read,users:read&user_scope=identity.avatar,identity.basic,identity.email,identity.team", class: "lp__sign-in-link" do
+    = link_to "https://slack.com/oauth/v2/authorize?client_id=#{ENV["SLACK_CLIENT_ID"]}&scope=channels:history,channels:join,channels:read,chat:write,files:write,im:history,im:read,team:read,users:read&user_scope=identity.avatar,identity.basic,identity.email,identity.team", class: "lp__sign-in-link" do
       = image_tag "sign_in_with_slack@2x.png", class: "lp__sign-in-image-large"
