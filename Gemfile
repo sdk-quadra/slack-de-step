@@ -21,6 +21,7 @@ gem "sidekiq"
 gem "rails-i18n"
 gem "slim-rails"
 gem "rinku"
+gem "parser", "~> 2.6.3.0"
 
 group :development, :test do
   gem "byebug", platforms: %i[mri mingw x64_mingw]
