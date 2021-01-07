@@ -16,7 +16,7 @@ RSpec.describe "Messages", type: :request do
     allow(message).to receive(:curl_exec).and_return(file)
 
     curl_exec = message.curl_exec(base_url: "https://slack.com/api/chat.postMessage",
-                                  params: { "token": ENV["OAUTH_BOT_TOKEN"], "channel": "U010BU9GGBX", "blocks": "[{\"block_id\": \"test_message\", \"type\": \"section\",\"text\": {\"type\": \"plain_text\", \"text\": \"#{@message.message}\" }}]" })
+                                  params: { "token": "test_oauth_bot_token", "channel": "U010BU9GGBX", "blocks": "[{\"block_id\": \"test_message\", \"type\": \"section\",\"text\": {\"type\": \"plain_text\", \"text\": \"#{@message.message}\" }}]" })
 
     expect(curl_exec["ok"]).to eq true
   end
@@ -27,7 +27,7 @@ RSpec.describe "Messages", type: :request do
     allow(message).to receive(:curl_exec).and_return(file)
 
     curl_exec = message.curl_exec(base_url: "https://slack.com/api/chat.scheduleMessage",
-                                  params: { "token": ENV["OAUTH_BOT_TOKEN"], "channel": "U010BU9GGBX", "post_at": "1617202800", "blocks": "[{\"block_id\": \"#{@message.id}\", \"type\": \"section\",\"text\": {\"type\": \"plain_text\", \"text\": \"#{@message.message}\" }}]" })
+                                  params: { "token": "test_oauth_bot_token", "channel": "U010BU9GGBX", "post_at": "1617202800", "blocks": "[{\"block_id\": \"#{@message.id}\", \"type\": \"section\",\"text\": {\"type\": \"plain_text\", \"text\": \"#{@message.message}\" }}]" })
 
     expect(curl_exec["ok"]).to eq true
   end
@@ -38,7 +38,7 @@ RSpec.describe "Messages", type: :request do
     allow(message).to receive(:curl_exec).and_return(file)
 
     curl_exec = message.curl_exec(base_url: "https://slack.com/api/chat.deleteScheduledMessage",
-                                  params: { "token": ENV["OAUTH_BOT_TOKEN"], "channel": "U010BU9GGBX", "scheduled_message_id": "Q01EYP5BLF9" })
+                                  params: { "token": "test_oauth_bot_token", "channel": "U010BU9GGBX", "scheduled_message_id": "Q01EYP5BLF9" })
 
     expect(curl_exec["ok"]).to eq true
   end

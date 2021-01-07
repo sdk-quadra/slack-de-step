@@ -18,7 +18,7 @@ RSpec.describe "Messages", type: :request do
     session = SessionsController.new
     allow(session).to receive(:curl_exec).and_return(file)
 
-    curl_exec = session.curl_exec(base_url: "https://slack.com/api/users.identity", headers: { "Authorization": "Bearer " + ENV["OAUTH_BOT_TOKEN"] })
+    curl_exec = session.curl_exec(base_url: "https://slack.com/api/users.identity", headers: { "Authorization": "Bearer " + "test_oauth_bot_token" })
 
     expect(curl_exec["ok"]).to eq true
   end
@@ -28,7 +28,7 @@ RSpec.describe "Messages", type: :request do
     session = SessionsController.new
     allow(session).to receive(:curl_exec).and_return(file)
 
-    curl_exec = session.curl_exec(base_url: "https://slack.com/api/conversations.list", headers: { "Authorization": "Bearer " + ENV["OAUTH_BOT_TOKEN"] })
+    curl_exec = session.curl_exec(base_url: "https://slack.com/api/conversations.list", headers: { "Authorization": "Bearer " + "test_oauth_bot_token" })
 
     expect(curl_exec["ok"]).to eq true
   end
@@ -38,7 +38,7 @@ RSpec.describe "Messages", type: :request do
     session = SessionsController.new
     allow(session).to receive(:curl_exec).and_return(file)
 
-    curl_exec = session.curl_exec(base_url: "https://slack.com/api/users.list", headers: { "Authorization": "Bearer " + ENV["OAUTH_BOT_TOKEN"] })
+    curl_exec = session.curl_exec(base_url: "https://slack.com/api/users.list", headers: { "Authorization": "Bearer " + "test_oauth_bot_token" })
 
     expect(curl_exec["ok"]).to eq true
   end
