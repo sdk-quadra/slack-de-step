@@ -5,24 +5,19 @@
   "keywords": ["slack", "schedule", "timer"],
   "env": {
     "SALTED_KEY": {
-      "description": "32byteのSALTを記入してください",
-      "value": "1234567890abcdefghijklmnopqurstu"
+      "description": "32byteのSALTを記入してください"
     },
     "SLACK_CLIENT_ID": {
-      "description": "slackのclient_idを記入してください（slackでアプリを作成している必要があります）",
-      "value": "1111111111111.0000000000000"
+      "description": "slackのclient_idを記入してください（slackでアプリを作成している必要があります）"
     },
     "SLACK_CLIENT_SECRET": {
-      "description": "slackのclient_secretを記入してください（slackでアプリを作成している必要があります）",
-      "value": "abcdefghijklmnopqrstuvwxyz123456"
+      "description": "slackのclient_secretを記入してください（slackでアプリを作成している必要があります）"
     },
     "AWS_ACCESS_KEY": {
-      "description": "画像はAWSにアップされます。S3のアクセスキーを記入してください",
-      "value": "AKIAABCDEFGHIJKLMNOP"
+      "description": "画像はAWSにアップされます。S3のアクセスキーを記入してください"
     },
     "AWS_SECRET_ACCESS_KEY": {
-      "description": "画像はAWSにアップされます。S3のシークレットキーを記入してください",
-      "value": "abcDEF789+=-mnoPQU012^/*yzaBCD345][>efgH"
+      "description": "画像はAWSにアップされます。S3のシークレットキーを記入してください"
     }
   },
   "addons": [
