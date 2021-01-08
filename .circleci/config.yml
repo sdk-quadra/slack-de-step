@@ -42,9 +42,9 @@ jobs:
           name: update & exec Chromedriver
           command: |
             CHROME_VERSION=$(google-chrome --version | sed -r 's/[^0-9]+([0-9]+\.[0-9]+\.[0-9]+).*/\1/g')
-               CHROMEDRIVER_VERSION=$(curl -s https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION)
-               bundle exec chromedriver-update $CHROMEDRIVER_VERSION
-               chromedriver
+            CHROMEDRIVER_VERSION=$(curl -s https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION)
+            bundle exec chromedriver-update $CHROMEDRIVER_VERSION
+            chromedriver
           background: true
 
       - restore_cache:
