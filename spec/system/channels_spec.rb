@@ -3,10 +3,12 @@
 require "rails_helper"
 
 RSpec.describe "channels", type: :system do
+  # before do
   before(:context) do
     @user = FactoryBot.create(:user)
     @workspace = FactoryBot.create(:workspace)
     @possession = FactoryBot.create(:possession, user_id: @user.id, workspace_id: @workspace.id)
+    # @appは予約されているのでit内で使う場合は別名で
     @app = FactoryBot.create(:app, workspace_id: @workspace.id)
     @channel = FactoryBot.create(:channel, app_id: @app.id)
     @companion = FactoryBot.create(:companion, app_id: @app.id)
