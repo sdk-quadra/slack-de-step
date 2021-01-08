@@ -4,9 +4,6 @@
   "repository": "https://github.com/sdk-quadra/slack-de-step",
   "keywords": ["slack", "schedule", "timer"],
   "env": {
-    "SALTED_KEY": {
-      "description": "32byteのSALTを記入してください"
-    },
     "SLACK_CLIENT_ID": {
       "description": "slackのclient_idを記入してください（slackでアプリを作成している必要があります）"
     },
