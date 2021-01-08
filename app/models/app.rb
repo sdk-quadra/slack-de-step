@@ -4,6 +4,7 @@ class App < ApplicationRecord
   belongs_to :workspace
   has_many :channels, dependent: :destroy
   has_many :companions, dependent: :destroy
+
   extend CryptBuilder
 
   def self.create_app(auth, workspace)

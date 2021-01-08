@@ -5,5 +5,6 @@ FactoryBot.define do
     sequence(:workspace_id) { 1 }
     sequence(:oauth_bot_token) { ENV["OAUTH_BOT_TOKEN"] }
     sequence(:bot_user_id) { "U01B6RZ33L5" }
+    sequence(:salt) { ENV["SALTED_KEY"] }
   end
 end

@@ -81,6 +81,7 @@ class MessagesController < ApplicationController
     end
 
     def set_bot_token
-      @bot_token = decrypt_token(Workspace.find(session[:workspace_id]).app.oauth_bot_token)
+      oauth_bot_token = App.find_by(workspace_id: session[:workspace_id]).oauth_bot_token
+      @bot_token = decrypt_token(oauth_bot_token)
     end
 end
