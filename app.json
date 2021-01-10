@@ -10,11 +10,14 @@
     "SLACK_CLIENT_SECRET": {
       "description": "slackのclient_secretを記入してください（slackでアプリを作成している必要があります）"
     },
+    "AWS_BUCKET": {
+      "description": "画像はAWSにアップされます。画像を保存するS3のバケット名を記入してください"
+    },
     "AWS_ACCESS_KEY": {
-      "description": "画像はAWSにアップされます。S3のアクセスキーを記入してください"
+      "description": "画像はAWSにアップされます。画像を保存するS3のアクセスキーを記入してください"
     },
     "AWS_SECRET_ACCESS_KEY": {
-      "description": "画像はAWSにアップされます。S3のシークレットキーを記入してください"
+      "description": "画像はAWSにアップされます。画像を保存するS3のシークレットキーを記入してください"
     }
   },
   "addons": [
