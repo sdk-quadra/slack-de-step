@@ -43,8 +43,11 @@ slackとの連携の為。[Create New Appで取得](https://api.slack.com/apps)
 `worker bundle exec sidekiq`
 をonにしてください
 
+* herokuの管理画面でdeployしたアプリを選択後、SettingのConfig Varsで
+`TZ = Asia/Tokyo`を追加してください（KEYに`TZ`、VALUEに`Asia/Tokyo`）
+
 * もしdeploy to herokuでアプリを立ち上げた時に設定した環境変数の値を変更したいなら、
-herokuの管理画面のSettingから行ってください
+このSettingのConfig Varsから行ってください
 
 
 ### 権限・認証・スコープ
