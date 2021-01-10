@@ -6,6 +6,8 @@ class App < ApplicationRecord
   has_many :companions, dependent: :destroy
 
   extend CryptBuilder
+  extend CurlBuilder
+  extend SlackApiBaseurl
 
   def self.create_app(auth, workspace)
     oauth_bot_token = auth["access_token"]
@@ -22,5 +24,18 @@ class App < ApplicationRecord
       bot_user_id: bot_user_id
     )
     app
+  end
+
+  def self.bot_user_id(oauth_bot_token, app_name)
+    users_list = curl_exec(base_url: url_users_list, headers: { "Authorization": "Bearer " + oauth_bot_token })
+    users = JSON.parse(users_list[0])["members"]
+
+    bot_user_id = ""
+    users.each do |user|
+      if user["name"] != "slackbot" && user["is_bot"] == true && user["real_name"] == app_name
+        bot_user_id = user["id"]
+      end
+    end
+    bot_user_id
   end
 end
