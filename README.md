@@ -20,6 +20,8 @@ heroku buttonを使うには、以下の環境変数の情報が必要です↓
 #### slack 情報
 slackとの連携の為。[Create New Appで取得](https://api.slack.com/apps)
 
+情報入力後、Basic Informationの所にあります
+
 * ENV["SLACK_CLIENT_ID"]
 * ENV["SLACK_CLIENT_SECRET]
 
@@ -32,21 +34,22 @@ slackとの連携の為。[Create New Appで取得](https://api.slack.com/apps)
 
 ----------heroku buttonを使ってアプリを立ち上げる場合、ここから下は herokuにdeployしてから実行してください-------------
 
+* アプリのURLは、`入力したApp name+herokuapp.com`です
+
+  * App nameがcat-and-dogの場合：`https://cat-and-dog.herokuapp.com/`
 
 * herokuの管理画面でdeployしたアプリを選択後、Resourceで
 `worker bundle exec sidekiq`
 をonにしてください
 
-* もしdeploy to herokuの時に設定した環境変数の値を変更したいなら、
+* もしdeploy to herokuでアプリを立ち上げた時に設定した環境変数の値を変更したいなら、
 herokuの管理画面のSettingから行ってください
-
---------
 
 
 ### 権限・認証・スコープ
 slack apiの権限・認証・スコープ周りの設定は以下の通りです。
 
-上記の [Create New Appで取得](https://api.slack.com/apps) の時に、OAuth & Permissionsと Event Subscriptions
+上記の [Create New Appで取得](https://api.slack.com/apps) の時に、Permissions（OAuth & Permissions）と Event Subscriptions
 を 以下の様に設定してください
 
 この設定を行う時、chromeの翻訳機能でページが日本語化されているとエラーになるので注意してください。
@@ -54,7 +57,7 @@ slack apiの権限・認証・スコープ周りの設定は以下の通りで�
 #### OAuth & Permissions
 
 ##### OAuth Tokens & Redirect URLs
-`install to workspace`をクリックして、tokenを発行してください
+`install to workspace`をクリックして、tokenを発行してください（先に以下のScopesを設定している必要があります）
 
 ##### Redirect URLs
 `/auth/slack/callback`を指定してください。
@@ -98,7 +101,7 @@ Enable Events をonにしてから、以下を設定してください
 例：`https://your.app.com/server`
 
 
-##### Subscribe to bot events
+###### Subscribe to bot events
 
 * app_home_opened
 * channel_created
@@ -111,20 +114,20 @@ Enable Events をonにしてから、以下を設定してください
 * team_join
 
 
------------------
+---------
 
 #### Manage distribution
 
-Manage distributionで`Distribute App`をクリックして、アプリの配布設定をします。
+Manage distributionでアプリの配布設定をします。
 
 Remove Hard Coded Informationの
 `I’ve reviewed and removed any hard-coded information.`
 にcheckを入れて、`Activate Public Distribution`をクリックしてください
 
-------------
+---------
 
 
-以上でアプリを使えるようになっているはずです。
+以上ここまででアプリを使えるようになっているはずです。
 
 
 もしそれでもページが表示されないなら、環境変数の値が間違っている可能性があります。
@@ -132,17 +135,14 @@ Remove Hard Coded Informationの
 
 
 
-
-
-
-----------
+---------
 
 ------------ここから下は、localで動かす際の情報です------------
 
 ### メッセージ送信
-多数のメッセージを捌く為、sidekiqを使用しています
+多数のメッセージを捌く為、sidekiqを使用しています。redisとsidekiqを起動してください
 
-* $ redis-server
+* redisを起動後、
 * $ bundle exec sidekiq
 ---------
 
@@ -150,20 +150,18 @@ Remove Hard Coded Informationの
 ### イベント受信
 slack上で発生したイベントを受信する為に、[ngrok](https://api.slack.com/tutorials/tunneling-with-ngrok) の利用を推奨
 
----------
+ngrokを使う場合は、上記で触れた`Redirect URLs`と`Request URL`をngrokが発行したURLに書き換えてください
 
+Redirect URLs例：`https://66ab700b7e7d.ngrok.io/auth/slack/callback`
 
-### 送信対象
-SlackとSlack De Stepを連携してから「以降」にチャンネルに参加した人が対象。
-
-連携時、すでにチャンネルに参加している人に対して、遡って対象にする事はできません。
+Request URL例：`https://66ab700b7e7d.ngrok.io/server`
 
 
 ---------
 
 ### テスト
 
-テストを実行するには、特定の環境変数の設定が必要です。
+localでテストを実行するには、上記の環境変数4つに加え、追加で以下の3つの環境変数設定が必要です。
 
 `$ rails c` して以下を行います。
 
@@ -175,16 +173,40 @@ irb> salt = SecureRandom.hex(len)
 irb> token = "<※注１>"
 
 irb> encrypted_token = App.encrypt_token(salt, token)
+
+irb> app_name = "<※注２>"
+
+irb> bot_user_id = App.bot_user_id(token, app_name)
 ```
 ※注１：上記の [Create New Appで取得](https://api.slack.com/apps) の
 OAuth & Permissionsにある、`xoxb-`で始まる Bot User OAuth Access Token を指定してください
 
+※注２：上記の [Create New Appで取得](https://api.slack.com/apps) の
+Basic Information > Display Information の App nameにある名前 を指定してください
 
 上記で生成した`salt`を ENV["SALTED_KEY"]に、
 
-`encrypted_token` を ENV["OAUTH_BOT_TOKEN"]に入れてからテストを実行してください
+`encrypted_token` を ENV["OAUTH_BOT_TOKEN"]に、
+
+`bot_user_id` を ENV["BOT_USER_ID"]に入れてからテストを実行してください
+
+テストはrspecです
 
 `$ bundle exec rspec spec`
+
+
+
+
+---------
+
+
+### その他
+
+##### 送信対象
+SlackとSlack De Stepを連携してから「以降」にチャンネルに参加した人が対象。
+
+連携時、すでにチャンネルに参加している人に対して、遡って対象にする事はできません。
+
 
 
 ---------
