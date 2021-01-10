@@ -7,7 +7,7 @@ CarrierWave.configure do |config|
     aws_secret_access_key: ENV["AWS_SECRET_ACCESS_KEY"],
     region: "ap-northeast-1"
   }
-  config.fog_directory = "s3-slack-de-step"
-  config.asset_host = "https://s3-slack-de-step.s3.amazonaws.com"
+  config.fog_directory = ENV["AWS_BUCKET"]
+  config.asset_host = "https://#{ENV["AWS_BUCKET"]}.s3.amazonaws.com"
   config.cache_storage = :fog
 end

@@ -29,6 +29,7 @@ slackとの連携の為。[Create New Appで取得](https://api.slack.com/apps)
 #### AWS情報
 画像保存の為。
 
+* ENV["AWS_BUCKET"]
 * ENV["AWS_ACCESS_KEY"]
 * ENV["AWS_SECRET_ACCESS_KEY"]
 
@@ -161,7 +162,7 @@ Request URL例：`https://66ab700b7e7d.ngrok.io/server`
 
 ### テスト
 
-localでテストを実行するには、上記の環境変数4つに加え、追加で以下の3つの環境変数設定が必要です。
+localでテストを実行するには、上記の環境変数5つに加え、追加で以下の3つの環境変数設定が必要です。
 
 `$ rails c` して以下を行います。
 

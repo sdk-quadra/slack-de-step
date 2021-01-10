@@ -21,10 +21,10 @@ jobs:
     steps:
       - checkout
 
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "Gemfile.lock" }}
-            - v1-dependencies-
+#      - restore_cache:
+#          keys:
+#            - v1-dependencies-{{ checksum "Gemfile.lock" }}
+#            - v1-dependencies-
 
       - run: gem install bundler
 
@@ -39,13 +39,12 @@ jobs:
           key: v1-dependencies-{{ checksum "Gemfile.lock" }}
 
       - run:
-          name: update & exec Chromedriver
+          name: Update Chromedriver
           command: |
-            CHROME_VERSION=$(google-chrome --version | sed -r 's/[^0-9]+([0-9]+\.[0-9]+\.[0-9]+).*/\1/g')
-            CHROMEDRIVER_VERSION=$(curl -s https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION)
-            bundle exec rake webdrivers:chromedriver:update
-            chromedriver
-          background: true
+            wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+            sudo sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
+            sudo apt-get update
+            sudo apt-get --only-upgrade install google-chrome-stable
 
       - restore_cache:
           keys:
