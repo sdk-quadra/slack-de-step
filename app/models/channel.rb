@@ -36,6 +36,6 @@ class Channel < ApplicationRecord
 
     def self.bot_join_to_channel(bot_token, channel)
       curl_exec(base_url: url_conversations_join, headers: { "Authorization": "Bearer " + bot_token },
-                params: { "channel": channel[:id] })
+                params: { "channel": channel["id"] })
     end
 end
