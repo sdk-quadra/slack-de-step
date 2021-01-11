@@ -67,7 +67,7 @@ class MessagesController < ApplicationController
 
   private
     def message_params
-      params.require(:message).permit(:message, :image,
+      params.require(:message).permit(:message, :image, :image_cache,
                                       push_timing_attributes: [:id, :in_x_days, :time])
           .merge(channel_id: @channel.id)
     end

@@ -2,6 +2,7 @@
 p
   = m.label :image, "<i class='fas fa-upload fa-sm'><span>画像を選択</span></i>".html_safe
   = m.file_field :image, accept: "image/*", class: "hidden message-form__file"
+  = m.hidden_field :image_cache
 
 - if @message.image_url.present?
   p
