@@ -2,11 +2,13 @@ i[class="fas fa-ellipsis-v channel-message-data__modification-icon"]
 ul.channel-message-data__modification-menu
   - if message.modifiable == true
     = link_to edit_channel_message_path(message.channel_id, message.id), class: "channel-message-data__modification-link" do
-      li.channel-message-data__modification-list
-        | 編集
+      li[class="channel-message-data__modification-list channel-message-data__modification-list-edit"]
+        i[class="fas fa-pen"]
+        |  編集
     data[class="channel-message-data__delete-message-confirm" value="message-#{message.id}"]
-      li.channel-message-data__modification-list
-        | 削除
+      li[class="channel-message-data__modification-list channel-message-data__modification-list-delete"]
+        i[class="fas fa-trash-alt"]
+        |  削除
 
     = link_to "削除", channel_message_path(message.channel_id, message.id), class: "channel-message-data__delete-message-link", id: "message-#{message.id}", method: :delete
 
