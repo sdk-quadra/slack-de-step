@@ -197,7 +197,13 @@
     text-align: center;
   }
   &__modification-list:hover {
+  }
+  &__modification-list-edit:hover {
     background-color: $gainsboro;
+  }
+  &__modification-list-delete:hover {
+    background-color: $slackpink;
+    color: $white;
   }
   &__modification-link {
     color: $stronggray;
@@ -216,6 +222,14 @@
   &__delete-message-link {
     display: none;
   }
+}
+
+.fa-pen {
+  font-size: 0.8rem;
+}
+
+.fa-trash-alt {
+  font-size: 0.8rem;
 }
 
 .channel-message-divider {
