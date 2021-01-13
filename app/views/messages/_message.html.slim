@@ -1,4 +1,4 @@
-= m.text_area :message, size: "62x12", class: "message-form__textarea"
+= m.text_area :message, size: "55x12", class: "message-form__textarea", placeholder: "ようこそ、今日は入社1日目ですね！\nこれからよろしくお願いします！"
 p
   = m.label :image, "<i class='fas fa-upload fa-sm'><span>画像を選択</span></i>".html_safe
   = m.file_field :image, accept: "image/*", class: "hidden message-form__file"
