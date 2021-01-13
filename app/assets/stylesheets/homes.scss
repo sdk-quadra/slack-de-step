@@ -77,6 +77,7 @@
   }
   &__title {
     text-align: center;
+    font-size: 2rem;
   }
   &__step {
     display: flex;
@@ -86,6 +87,8 @@
   }
   &__step-title {
     margin-top: 0;
+    margin-bottom: 1rem;
+    font-size: 2rem;
   }
   &__step-text {
     width: 35%;
@@ -93,7 +96,7 @@
   }
   &__step-image {
     width: 50%;
-    border-radius: 400px;
+    border-radius: 5px;
   }
   &__cta {
     text-align: center;
