@@ -37,6 +37,7 @@
 
 .channel {
   padding: 1rem 1.5rem;
+  display: flex;
 
   &:hover {
     background-color: $lightsilver;
@@ -53,8 +54,7 @@
     font-weight: bold;
   }
   &__number-of-people {
-    color: $stronggray;
-    font-size: $littlesmaller;
+    width: 3rem;
   }
   &__e__selected {
     background-color: $lightsilver;
