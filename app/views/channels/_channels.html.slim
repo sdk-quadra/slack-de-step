@@ -8,9 +8,9 @@
     = link_to channel.id.to_s, class: "channel__name-link" do
       div[class="channel #{"channel__e__selected" if channel.id == @channel.id}"]
         .channel__name
-          = channel.name
+          = "# #{channel.name}"
         .channel__number-of-people
-          = "#{channel.member_count}人"
+          = "(#{channel.member_count})"
 
   .channels__about-number-of-people
     i[class="fas fa-info"]
