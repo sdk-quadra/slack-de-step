@@ -49,10 +49,12 @@
   &__number {
     padding: 0.3rem;
     border: 1px solid $lightsilver;
+    font-size: $formfontsize;
   }
   &__time {
     padding: 0.2rem;
     border: 1px solid $lightsilver;
+    font-size: $formfontsize;
   }
   &__title-message {
     font-weight: bold;
@@ -63,6 +65,10 @@
     padding: 0.5rem;
     color: $stronggray;
     border: 1px solid $lightsilver;
+    font-size: $formfontsize;
+  }
+  &__textarea::placeholder {
+    color: #AAAAAA;
   }
 
   &__submit {
@@ -114,7 +120,6 @@
 .message-body {
   width:  30rem;
   margin: 0 auto;
-  font-size: $littlesmaller;
 }
 
 .fa-upload {
