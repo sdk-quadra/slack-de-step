@@ -231,6 +231,8 @@ RSpec.describe "messages", type: :system do
         find("#message_push_timing_attributes_time").set("#{hour}:#{minutes}AM")
         click_button "テスト送信"
 
+        sleep 5
+
         expect(find("#overlay-test-submit", visible: true)).to be_visible
       end
 
@@ -244,6 +246,8 @@ RSpec.describe "messages", type: :system do
         find("#message_push_timing_attributes_in_x_days").set("1")
         find("#message_push_timing_attributes_time").set("#{hour}:#{minutes}AM")
         click_button "登録"
+
+        sleep 5
 
         expect(find("#overlay-commit-message", visible: true)).to be_visible
       end
