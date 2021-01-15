@@ -24,52 +24,69 @@
   &__logo {
     margin-left: 1rem;
     flex-grow: 1;
-    color: white;
+    color: $white;
+    font-family: 'Yanone Kaffeesatz', sans-serif;
+    font-size: 1.8rem;
   }
   &__header-sign-in-image {
     width: 180px;
     padding: 1rem 1rem 0.6rem 0;
   }
-  &__sign-in-image {
-    width: 180px;
-  }
-  &__sign-in-image-large {
-    width: 240px;
-  }
   &__firstview {
-    max-width: $lpwidth;
-    margin: 2rem auto 4rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-  }
-  &__firstview-text > h1 {
-    margin-top: 0;
-  }
-  &__firstview-text > h1 > span {
-    font-size: 1.2rem;
+    margin-bottom: 4rem;
   }
   &__firstview-image {
-    width: 50%;
-  }
-  &__features {
-    display: flex;
+    line-height: 1.2;
+    text-align: center;
+    padding-top: 2rem;
     max-width: $lpwidth;
-    margin: 2rem auto 4rem;
+    margin: 2rem auto 0rem;
+    background: url("conversation_bg.png") no-repeat;
+    background-size: $lpwidth;
+    height: 570px;
   }
-  &__feature {
-    width: 360px;
-    padding: 0 20px;
+  &__firstview-image > h1 {
+    font-size: 5rem;
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+    font-family: 'Yanone Kaffeesatz', sans-serif;
   }
-  &__feature-image {
-    width: 250px;
-    height: 180px;
+  &__firstview-image > p {
+    font-size: 1.2rem;
+    text-align: center;
+    line-height: 1.8;
+    margin: 0;
+  }
+  &__firstview-image > p > span {
+    font-size: 1.4rem;
+    font-weight: bold;
+  }
+  &__firstview-cta {
+    text-align: center;
+    font-size: 1.2rem;
+    line-height: 1.8;
+    margin: 0;
+  }
+  &__firstview-cta > p {
+    margin-bottom: 0;
+  }
+  &__firstview-cta > p > span {
+    font-size: 1.4rem;
+    font-weight: bold;
+  }
+  &__firstview-cta-arrow {
+    width: 200px;
+    height: 100px;
+    margin: 0.5rem auto;
+    display: block;
+  }
+  &__firstview-cta-sign-in {
+    width: 240px;
   }
 }
 
 .lp-how-to-use {
   background-color: #f6f6f6;
-
   &__wrapper {
     max-width: $lpwidth;
     margin: 0 auto;
@@ -100,5 +117,19 @@
   }
   &__cta {
     text-align: center;
+  }
+  &__cta > p {
+    margin-bottom: 0;
+    font-size: 1.4rem;
+    font-weight: bold;
+  }
+  &__cta-arrow {
+    width: 200px;
+    height: 100px;
+    margin: 0.5rem auto;
+    display: block;
+  }
+  &__cta-sign-in {
+    width: 240px;
   }
 }

@@ -20,7 +20,7 @@ RSpec.describe "channels", type: :system do
     it "ログアウトするとログインページに戻る事" do
       visit channel_path(@channel.id)
       click_link "ログアウト"
-      expect(page).to have_content "\"〇日目\"の人にメッセージを送る"
+      expect(page).to have_content "\"○日目\"の人にDMします"
     end
 
     it "channel一覧サイドバーにchannel名が表示されている事" do
