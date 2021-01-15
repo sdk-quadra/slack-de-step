@@ -3,8 +3,8 @@
 class HomesController < ApplicationController
   ## TODO: cross origin対策
   protect_from_forgery except: :server
-  skip_before_action :check_logined
-  before_action :already_logined
+  skip_before_action :check_logged_in
+  before_action :already_logged_in
 
   include ChannelBuilder
   include CryptBuilder
@@ -51,7 +51,7 @@ class HomesController < ApplicationController
   end
 
   private
-    def already_logined
+    def already_logged_in
       if session[:workspace_id]
         app_id = Companion.find_by(slack_user_id: session[:authed_slack_user_id]).app_id
         redirect_to channel_path(general_channel(app_id))

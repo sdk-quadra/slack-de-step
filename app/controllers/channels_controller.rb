@@ -8,7 +8,7 @@ class ChannelsController < ApplicationController
   include SlackApiBaseurl
 
   def show
-    @channels = sort_channels
+    @channels = sorted_channels
 
     posted_messages = Transception.where(message_id: @channel.messages.map(&:id))
     @pushed_count = posted_messages.count
@@ -22,7 +22,7 @@ class ChannelsController < ApplicationController
     @app_info.store(:real_name, JSON.parse(users_info[0])["user"]["real_name"])
     @app_info.store(:icon_url, JSON.parse(users_info[0])["user"]["profile"]["image_192"])
 
-    @messages = sort_messages
+    @messages = sorted_messages
   end
 
   private
@@ -34,7 +34,7 @@ class ChannelsController < ApplicationController
       @channel = Channel.find(params[:id])
     end
 
-    def sort_channels
+    def sorted_channels
       channels = App.find_by(workspace_id: @workspace.id).channels.sort do |x, y|
         [-x[:member_count], x[:name]] <=> [-y[:member_count], y[:name]]
       end
@@ -47,7 +47,7 @@ class ChannelsController < ApplicationController
       sorted_channels
     end
 
-    def sort_messages
+    def sorted_messages
       messages = Message.where(channel_id: params[:id]).sort_by do |message|
         [message.push_timing.in_x_days, message.push_timing.time.to_i]
       end
