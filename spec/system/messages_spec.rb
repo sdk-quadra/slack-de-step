@@ -197,7 +197,7 @@ RSpec.describe "messages", type: :system do
         minutes = Time.now.since(5400).strftime("%M")
 
         find("#message_push_timing_attributes_in_x_days").set("1")
-        find("#message_push_timing_attributes_time").set("#{hour}:#{minutes}AM")
+        find("#message_push_timing_attributes_time").set("#{hour}:#{minutes}")
         find(".message-form__delete-img").click
 
         click_button "削除する"
@@ -228,10 +228,8 @@ RSpec.describe "messages", type: :system do
         minutes = Time.now.since(5400).strftime("%M")
 
         find("#message_push_timing_attributes_in_x_days").set("1")
-        find("#message_push_timing_attributes_time").set("#{hour}:#{minutes}AM")
+        find("#message_push_timing_attributes_time").set("#{hour}:#{minutes}")
         click_button "テスト送信"
-
-        sleep 5
 
         expect(find("#overlay-test-submit", visible: true)).to be_visible
       end
@@ -244,10 +242,8 @@ RSpec.describe "messages", type: :system do
         minutes = Time.now.since(5400).strftime("%M")
 
         find("#message_push_timing_attributes_in_x_days").set("1")
-        find("#message_push_timing_attributes_time").set("#{hour}:#{minutes}AM")
+        find("#message_push_timing_attributes_time").set("#{hour}:#{minutes}")
         click_button "登録"
-
-        sleep 5
 
         expect(find("#overlay-commit-message", visible: true)).to be_visible
       end
