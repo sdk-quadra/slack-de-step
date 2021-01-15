@@ -21,10 +21,10 @@ jobs:
     steps:
       - checkout
 
-#      - restore_cache:
-#          keys:
-#            - v1-dependencies-{{ checksum "Gemfile.lock" }}
-#            - v1-dependencies-
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "Gemfile.lock" }}
+            - v1-dependencies-
 
       - run: gem install bundler
 
@@ -83,6 +83,13 @@ jobs:
       - run:
           name: Request Test
           command: bundle exec rspec spec/requests
+
+      - store_test_results:
+          path: tmp/test-results
+
+      - store_artifacts:
+          path: tmp/screenshots
+          destination: screenshots
 
 workflows:
   version: 2
