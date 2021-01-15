@@ -31,7 +31,8 @@
     = image_tag "step_3.png", class: "lp-how-to-use__step-image"
 
   .lp-how-to-use__cta
-    h3
-      | 今すぐ無料で使ってみる<br />↓↓↓
-    = link_to "https://slack.com/oauth/v2/authorize?client_id=#{ENV["SLACK_CLIENT_ID"]}&scope=channels:history,channels:join,channels:read,chat:write,files:write,im:history,im:read,team:read,users:read&user_scope=identity.avatar,identity.basic,identity.email,identity.team", class: "lp__sign-in-link" do
-      = image_tag "sign_in_with_slack@2x.png", class: "lp__sign-in-image-large"
+    p
+      | 今すぐslackアカウントでログインする
+    = image_tag "arrow_to_cta.png", class: "lp-how-to-use__cta-arrow"
+    = link_to "https://slack.com/oauth/v2/authorize?client_id=#{ENV["SLACK_CLIENT_ID"]}&scope=channels:history,channels:join,channels:read,chat:write,files:write,im:history,im:read,team:read,users:read&user_scope=identity.avatar,identity.basic,identity.email,identity.team", class: "lp-how-to-use__sign-in-link" do
+      = image_tag "sign_in_with_slack@2x.png", class: "lp-how-to-use__cta-sign-in"

@@ -1,9 +1,18 @@
-.lp__firstview-text
+.lp__firstview-image
   h1
-    span
-      | "〇日目"の人にメッセージを送る<br />
     | Slack De Step
-  = link_to "https://slack.com/oauth/v2/authorize?client_id=#{ENV["SLACK_CLIENT_ID"]}&scope=channels:history,channels:join,channels:read,chat:write,files:write,im:history,im:read,team:read,users:read&user_scope=identity.avatar,identity.basic,identity.email,identity.team", class: "lp__sign-in-link" do
-    = image_tag "sign_in_with_slack@2x.png", class: "lp__sign-in-image"
+  p
+    | チャンネルに参加してから<br>
+    span
+      | "○日目"の人にDMします
 
-= image_tag "maintenance.svg", class: "lp__firstview-image"
+.lp__firstview-cta
+  p
+    | ...こんなDMを自動で送れます。<br>
+    span
+      | slackアカウントでログインするだけ！すぐに始められます！
+
+  = image_tag "arrow_to_cta.png", class: "lp__firstview-cta-arrow"
+
+  = link_to "https://slack.com/oauth/v2/authorize?client_id=#{ENV["SLACK_CLIENT_ID"]}&scope=channels:history,channels:join,channels:read,chat:write,files:write,im:history,im:read,team:read,users:read&user_scope=identity.avatar,identity.basic,identity.email,identity.team", class: "lp__firstview-sign-in-link" do
+    = image_tag "sign_in_with_slack@2x.png", class: "lp__firstview-cta-sign-in"
