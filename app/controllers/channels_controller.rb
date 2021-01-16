@@ -42,8 +42,7 @@ class ChannelsController < ApplicationController
       general_channel = channels[general_index]
 
       channels.reject! { |c| c.name == "general" }
-      sorted_channels = channels.unshift(general_channel)
-      sorted_channels
+      channels.unshift(general_channel)
     end
 
     def sorted_messages
@@ -54,8 +53,7 @@ class ChannelsController < ApplicationController
     end
 
     def users_info(bot_token, bot_user_id)
-      users_info = curl_exec(base_url: SlackApiBaseurl::USERS_INFO, headers: { "Authorization": "Bearer " + bot_token },
+      curl_exec(base_url: SlackApiBaseurl::USERS_INFO, headers: { "Authorization": "Bearer " + bot_token },
                              params: { "user": bot_user_id })
-      users_info
     end
 end

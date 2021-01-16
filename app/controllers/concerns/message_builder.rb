@@ -68,7 +68,6 @@ module MessageBuilder
   private
     def push_datetime(participation_datetime, in_x_days, time)
       push_date = participation_datetime + in_x_days.to_i.days
-      push_datetime = Time.parse(push_date.strftime("%Y-%m-%d #{time}"))
-      push_datetime
+      Time.parse(push_date.strftime("%Y-%m-%d #{time}"))
     end
 end

@@ -27,7 +27,6 @@ class Companion < ApplicationRecord
 
   private
     def self.users_list(oauth_bot_token)
-      users_list = curl_exec(base_url: SlackApiBaseurl::USERS_LIST, headers: { "Authorization": "Bearer " + oauth_bot_token })
-      users_list
+      curl_exec(base_url: SlackApiBaseurl::USERS_LIST, headers: { "Authorization": "Bearer " + oauth_bot_token })
     end
 end

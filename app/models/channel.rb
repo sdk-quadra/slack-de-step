@@ -29,8 +29,7 @@ class Channel < ApplicationRecord
 
   private
     def self.conversations_list(oauth_bot_token)
-      conversations_list = curl_exec(base_url: SlackApiBaseurl::CONVERSATIONS_LIST, headers: { "Authorization": "Bearer " + oauth_bot_token })
-      conversations_list
+      curl_exec(base_url: SlackApiBaseurl::CONVERSATIONS_LIST, headers: { "Authorization": "Bearer " + oauth_bot_token })
     end
 
     def self.bot_join_to_channel(bot_token, channel)
