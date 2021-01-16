@@ -21,10 +21,10 @@ jobs:
     steps:
       - checkout
 
-#      - restore_cache:
-#          keys:
-#            - v1-dependencies-{{ checksum "Gemfile.lock" }}
-#            - v1-dependencies-
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "Gemfile.lock" }}
+            - v1-dependencies-
 
       - run: gem install bundler
 
@@ -68,9 +68,9 @@ jobs:
           name: db migration
           command: bundle exec rails db:schema:load
 
-#      - run:
-#          name: Install Japanese font
-#          command: sudo apt-get install fonts-migmix
+      - run:
+          name: Install Japanese font
+          command: sudo apt-get install fonts-migmix
 
       - run:
           name: System Test
