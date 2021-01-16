@@ -9,7 +9,6 @@ module ChannelBuilder
   end
 
   def general_channel(app_id)
-    general_channel = Channel.where(name: "general").find_by(app_id: app_id)
-    general_channel
+    Channel.where(name: "general").find_by(app_id: app_id)
   end
 end

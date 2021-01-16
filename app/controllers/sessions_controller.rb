@@ -26,7 +26,6 @@ class SessionsController < ApplicationController
   end
 
   def oauth_v2_access(code)
-    oauth_v2_access = curl_exec(base_url: "https://slack.com/api/oauth.v2.access", params: { "code": code, "client_id": ENV["SLACK_CLIENT_ID"], "client_secret": ENV["SLACK_CLIENT_SECRET"] })
-    oauth_v2_access
+    curl_exec(base_url: "https://slack.com/api/oauth.v2.access", params: { "code": code, "client_id": ENV["SLACK_CLIENT_ID"], "client_secret": ENV["SLACK_CLIENT_SECRET"] })
   end
 end

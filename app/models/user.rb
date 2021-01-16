@@ -42,7 +42,7 @@ class User < ApplicationRecord
   end
 
   def self.users_identity(oauth_user_token)
-    users_identity = curl_exec(base_url: SlackApiBaseurl::USERS_IDENTITY, headers: { "Authorization": "Bearer " + oauth_user_token })
-    users_identity
+    curl_exec(base_url: SlackApiBaseurl::USERS_IDENTITY,
+              headers: { "Authorization": "Bearer " + oauth_user_token })
   end
 end

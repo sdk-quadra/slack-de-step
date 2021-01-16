@@ -40,26 +40,22 @@ class Events::ChannelCreated
 
     def channel_name(bot_token, channel)
       conversations_info = conversations_info(bot_token, channel)
-      channel_name = JSON.parse(conversations_info[0])["channel"]["name"]
-      channel_name
+      JSON.parse(conversations_info[0])["channel"]["name"]
     end
 
     def conversations_info(bot_token, channel)
-      conversations_info = curl_exec(base_url: SlackApiBaseurl::CONVERSATIONS_INFO,
+      curl_exec(base_url: SlackApiBaseurl::CONVERSATIONS_INFO,
                                     params: { "token": bot_token, "channel": channel })
-      conversations_info
     end
 
     def channel_members(bot_token, channel)
       conversations_members = conversations_members(bot_token, channel)
-      members = JSON.parse(conversations_members[0])["members"]
-      members
+      JSON.parse(conversations_members[0])["members"]
     end
 
     def conversations_members(bot_token, channel)
-      conversations_members = curl_exec(base_url: SlackApiBaseurl::CONVERSATIONS_MEMBERS, headers: { "Authorization": "Bearer " + bot_token },
+      curl_exec(base_url: SlackApiBaseurl::CONVERSATIONS_MEMBERS, headers: { "Authorization": "Bearer " + bot_token },
                                         params: { "channel": channel[:id] })
-      conversations_members
     end
 
     def participate_channel(members, channel)
