@@ -84,6 +84,13 @@ jobs:
           name: Request Test
           command: bundle exec rspec spec/requests
 
+      - store_test_results:
+          path: tmp/test-results
+
+      - store_artifacts:
+          path: tmp/screenshots
+          destination: screenshots
+
 workflows:
   version: 2
 

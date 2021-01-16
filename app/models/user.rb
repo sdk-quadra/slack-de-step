@@ -19,13 +19,13 @@ class User < ApplicationRecord
 
     if workspace.new_record?
       workspace.save!
-      first_regist(JSON.parse(auth[0]), user, workspace)
+      first_registration(JSON.parse(auth[0]), user, workspace)
     end
 
     workspace
   end
 
-  def self.first_regist(auth, user, workspace)
+  def self.first_registration(auth, user, workspace)
     app = App.create_app(auth, workspace)
 
     Possession.create_possession(user, workspace)
