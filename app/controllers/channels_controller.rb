@@ -5,7 +5,6 @@ class ChannelsController < ApplicationController
   before_action :set_channel, only: [:show]
   include CurlBuilder
   include CryptBuilder
-  include SlackApiBaseurl
 
   def show
     @channels = sorted_channels
@@ -55,7 +54,7 @@ class ChannelsController < ApplicationController
     end
 
     def users_info(bot_token, bot_user_id)
-      users_info = curl_exec(base_url: url_users_info, headers: { "Authorization": "Bearer " + bot_token },
+      users_info = curl_exec(base_url: SlackApiBaseurl::USERS_INFO, headers: { "Authorization": "Bearer " + bot_token },
                              params: { "user": bot_user_id })
       users_info
     end

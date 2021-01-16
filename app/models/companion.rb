@@ -9,7 +9,6 @@ class Companion < ApplicationRecord
   validates :slack_user_id, presence: true
 
   extend CurlBuilder
-  extend SlackApiBaseurl
 
   def self.create_companions(auth, app)
     oauth_bot_token = auth["access_token"]
@@ -28,7 +27,7 @@ class Companion < ApplicationRecord
 
   private
     def self.users_list(oauth_bot_token)
-      users_list = curl_exec(base_url: url_users_list, headers: { "Authorization": "Bearer " + oauth_bot_token })
+      users_list = curl_exec(base_url: SlackApiBaseurl::USERS_LIST, headers: { "Authorization": "Bearer " + oauth_bot_token })
       users_list
     end
 end

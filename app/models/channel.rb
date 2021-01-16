@@ -10,7 +10,6 @@ class Channel < ApplicationRecord
   validates :slack_channel_id, presence: true
 
   extend CurlBuilder
-  extend SlackApiBaseurl
 
   def self.create_channels(auth, app)
     oauth_bot_token = auth["access_token"]
@@ -30,12 +29,12 @@ class Channel < ApplicationRecord
 
   private
     def self.conversations_list(oauth_bot_token)
-      conversations_list = curl_exec(base_url: url_conversations_list, headers: { "Authorization": "Bearer " + oauth_bot_token })
+      conversations_list = curl_exec(base_url: SlackApiBaseurl::CONVERSATIONS_LIST, headers: { "Authorization": "Bearer " + oauth_bot_token })
       conversations_list
     end
 
     def self.bot_join_to_channel(bot_token, channel)
-      curl_exec(base_url: url_conversations_join, headers: { "Authorization": "Bearer " + bot_token },
+      curl_exec(base_url: SlackApiBaseurl::CONVERSATIONS_JOIN, headers: { "Authorization": "Bearer " + bot_token },
                 params: { "channel": channel["id"] })
     end
 end

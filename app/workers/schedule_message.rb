@@ -10,10 +10,10 @@ class ScheduleMessage
     message = Message.find(message_id)
 
     if message.image_url
-      scheduled_message = curl_exec(base_url: url_chat_schedule_message,
+      scheduled_message = curl_exec(base_url: SlackApiBaseurl::CHAT_SCHEDULE_MESSAGE,
                                     params: { "token": bot_token, "channel": member, "post_at": push_timestamp, "blocks": schedule_blocks_text_with_image(message) })
     else
-      scheduled_message = curl_exec(base_url: url_chat_schedule_message,
+      scheduled_message = curl_exec(base_url: SlackApiBaseurl::CHAT_SCHEDULE_MESSAGE,
                                     params: { "token": bot_token, "channel": member, "post_at": push_timestamp, "blocks": schedule_blocks_text(message) })
     end
 

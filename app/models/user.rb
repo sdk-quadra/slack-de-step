@@ -7,7 +7,6 @@ class User < ApplicationRecord
   validates :email, presence: true
 
   extend CurlBuilder
-  extend SlackApiBaseurl
 
   def self.find_or_create_from_auth(auth)
     oauth_user_token = JSON.parse(auth[0])["authed_user"]["access_token"]
@@ -43,7 +42,7 @@ class User < ApplicationRecord
   end
 
   def self.users_identity(oauth_user_token)
-    users_identity = curl_exec(base_url: url_users_identity, headers: { "Authorization": "Bearer " + oauth_user_token })
+    users_identity = curl_exec(base_url: SlackApiBaseurl::USERS_IDENTITY, headers: { "Authorization": "Bearer " + oauth_user_token })
     users_identity
   end
 end
