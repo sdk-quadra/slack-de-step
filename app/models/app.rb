@@ -7,7 +7,6 @@ class App < ApplicationRecord
 
   extend CryptBuilder
   extend CurlBuilder
-  extend SlackApiBaseurl
 
   def self.create_app(auth, workspace)
     oauth_bot_token = auth["access_token"]
@@ -27,7 +26,7 @@ class App < ApplicationRecord
   end
 
   def self.bot_user_id(oauth_bot_token, app_name)
-    users_list = curl_exec(base_url: url_users_list, headers: { "Authorization": "Bearer " + oauth_bot_token })
+    users_list = curl_exec(base_url: SlackApiBaseurl::USERS_LIST, headers: { "Authorization": "Bearer " + oauth_bot_token })
     users = JSON.parse(users_list[0])["members"]
 
     bot_user_id = ""

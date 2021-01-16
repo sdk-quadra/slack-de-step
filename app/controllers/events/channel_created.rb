@@ -3,7 +3,6 @@
 class Events::ChannelCreated
   include CurlBuilder
   include ChannelBuilder
-  include SlackApiBaseurl
 
   def execute(bot_token, params)
     # #
@@ -24,7 +23,7 @@ class Events::ChannelCreated
 
   private
     def bot_join_to_channel(bot_token, channel)
-      curl_exec(base_url: url_conversations_join, headers: { "Authorization": "Bearer " + bot_token },
+      curl_exec(base_url: SlackApiBaseurl::CONVERSATIONS_JOIN, headers: { "Authorization": "Bearer " + bot_token },
                 params: { "channel": channel[:id] })
     end
 
@@ -46,7 +45,7 @@ class Events::ChannelCreated
     end
 
     def conversations_info(bot_token, channel)
-      conversations_info = curl_exec(base_url: url_conversations_info,
+      conversations_info = curl_exec(base_url: SlackApiBaseurl::CONVERSATIONS_INFO,
                                     params: { "token": bot_token, "channel": channel })
       conversations_info
     end
@@ -58,7 +57,7 @@ class Events::ChannelCreated
     end
 
     def conversations_members(bot_token, channel)
-      conversations_members = curl_exec(base_url: url_conversations_members, headers: { "Authorization": "Bearer " + bot_token },
+      conversations_members = curl_exec(base_url: SlackApiBaseurl::CONVERSATIONS_MEMBERS, headers: { "Authorization": "Bearer " + bot_token },
                                         params: { "channel": channel[:id] })
       conversations_members
     end
