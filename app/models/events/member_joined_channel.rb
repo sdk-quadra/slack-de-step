@@ -16,14 +16,15 @@ class Events::MemberJoinedChannel
     channel = params[:event][:channel]
     channel_to_join = Channel.find_by(slack_channel_id: channel)
 
-    # 新規参加userの場合
-    companion = Companion.register_companion(team, user)
-    Participation.participate_channel(user, channel_to_join, companion)
+    unless App.exists?(bot_user_id: user)
+      companion = Companion.register_companion(team, user)
+      Participation.participate_channel(user, channel_to_join, companion)
 
-    member_count(channel)
+      member_count(channel)
 
-    # channelにセットされているmessageを取得
-    messages = channel_to_join.messages
-    Message.reserve_messages(bot_token, companion, channel_to_join, messages)
+      # channelにセットされているmessageを取得
+      messages = channel_to_join.messages
+      Message.reserve_messages(bot_token, companion, channel_to_join, messages)
+    end
   end
 end
