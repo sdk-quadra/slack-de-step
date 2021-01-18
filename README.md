@@ -112,6 +112,8 @@ Enable Events をonにしてから、以下を設定してください
 * channel_deleted
 * channel_left
 * channel_rename
+* channel_archive
+* channel_unarchive
 * member_joined_channel
 * member_left_channel
 * message.im
