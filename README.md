@@ -33,7 +33,7 @@ slackとの連携の為。[Create New Appで取得](https://api.slack.com/apps)
 * ENV["AWS_ACCESS_KEY"]
 * ENV["AWS_SECRET_ACCESS_KEY"]
 
-----------heroku buttonを使ってアプリを立ち上げる場合、ここから下は herokuにdeployしてから実行してください-------------
+※※※ heroku buttonを使ってアプリを立ち上げる場合、ここから下は herokuにdeployしてから実行してください ※※※
 
 * アプリのURLは、`入力したApp name+herokuapp.com`です
 
@@ -141,7 +141,7 @@ Remove Hard Coded Informationの
 
 ---------
 
-------------ここから下は、localで動かす際の情報です------------
+※※※ ここから下は、localで動かす際の情報です ※※※
 
 ### メッセージ送信
 多数のメッセージを捌く為、sidekiqを使用しています。redisとsidekiqを起動してください
