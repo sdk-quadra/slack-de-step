@@ -5,7 +5,7 @@ class ApplicationController < ActionController::Base
 
   private
     def check_logged_in
-      if session[:workspace_id] == nil
+      unless session[:workspace_id]
         redirect_to root_path
       end
     end

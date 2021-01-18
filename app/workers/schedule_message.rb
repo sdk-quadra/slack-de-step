@@ -17,7 +17,7 @@ class ScheduleMessage
                                     params: { "token": bot_token, "channel": member, "post_at": push_timestamp, "blocks": schedule_blocks_text(message) })
     end
 
-    save_individual_messages(member, message, scheduled_message)
+    IndividualMessage.save_individual_messages(member, message, scheduled_message)
 
     # queueがなくなったら修正可能にする
     queues = Sidekiq::ScheduledSet.new

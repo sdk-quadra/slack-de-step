@@ -52,19 +52,6 @@ module MessageBuilder
     DeleteScheduledMessage.perform_in(index * MIN_POLLING_TIME.seconds, bot_token, individual_message.companion.slack_user_id, individual_message.scheduled_message_id)
   end
 
-  def save_individual_messages(member, message, scheduled_message)
-    companion_id = Companion.find_by(slack_user_id: member).id
-    message_id = message.id
-    scheduled_message_id = JSON.parse(scheduled_message[0])["scheduled_message_id"]
-    scheduled_timestamp = JSON.parse(scheduled_message[0])["post_at"]
-
-    individual_message = IndividualMessage.find_or_initialize_by(message_id: message_id, companion_id: companion_id)
-    individual_message.update_attributes(
-      scheduled_message_id: scheduled_message_id,
-      scheduled_datetime: Time.at(scheduled_timestamp)
-    )
-  end
-
   private
     def push_datetime(participation_datetime, in_x_days, time)
       push_date = participation_datetime + in_x_days.to_i.days
