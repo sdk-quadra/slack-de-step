@@ -5,6 +5,7 @@ class ScheduleMessage
   sidekiq_options queue: :schedule_message, retry: 5
 
   include MessageBuilder
+  MAX_WAIT_TIME = 5400
 
   def perform(bot_token, member, push_timestamp, message_id)
     message = Message.find(message_id)
@@ -23,7 +24,12 @@ class ScheduleMessage
     queues = Sidekiq::ScheduledSet.new
 
     if queues.size <= 0
-      message.update(modifiable: true)
+      Message.update_all(modifiable: true)
+
+    # queueが入れられ続けて編集可能にならない場合を想定
+    else
+      modifiable_message = Message.where("modifiable = ? and updated_at < ?", "false", Time.now.ago(MAX_WAIT_TIME))
+      modifiable_message.update_all(modifiable: true)
     end
   end
 end
