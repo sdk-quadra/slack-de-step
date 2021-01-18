@@ -7,6 +7,7 @@ class Events::Message
     # #
 
     return if params[:event][:subtype].present?
+    return if params[:event][:user] == "USLACKBOT"
 
     user = params[:event][:user]
     channel = params[:event][:channel]

@@ -1,15 +1,15 @@
 # frozen_string_literal: true
 
-class Events::ChannelCreated
+class Events::ChannelUnarchived
   include CurlBuilder
   include ChannelBuilder
 
   def execute(bot_token, params)
     # #
-    # channelを新規作成した時の処理
+    # channelをunarchiveした時の処理。channelを新規作成した時と同じ挙動
     # #
 
-    channel = params[:event][:channel][:id]
+    channel = params[:event][:channel]
     team = params[:team_id]
 
     # botをchannel登録する。botがchannelに入らないとchannelのeventを検知できないので

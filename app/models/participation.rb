@@ -6,18 +6,16 @@ class Participation < ApplicationRecord
 
   class << self
     def participate_channel(user, channel_to_join, companion)
-      unless App.exists?(bot_user_id: user)
-        Participation.find_or_create_by!(companion_id: companion.id, channel_id: channel_to_join.id) do |p|
-          p.companion_id = companion.id
-          p.channel_id = channel_to_join.id
-        end
+      Participation.find_or_create_by!(companion_id: companion.id, channel_id: channel_to_join.id) do |p|
+        p.companion_id = companion.id
+        p.channel_id = channel_to_join.id
       end
     end
 
     def participate_new_channel(members, channel)
       members.each do |member|
         companion_id = Companion.find_by(slack_user_id: member).id
-        channel_id = Channel.find_by(slack_channel_id: channel[:id]).id
+        channel_id = Channel.find_by(slack_channel_id: channel).id
 
         unless App.exists?(bot_user_id: member)
           Participation.find_or_create_by!(companion_id: companion_id, channel_id: channel_id) do |p|

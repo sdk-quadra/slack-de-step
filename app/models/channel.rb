@@ -30,13 +30,13 @@ class Channel < ApplicationRecord
     end
 
     def create_channel(bot_token, team, channel)
-      name = channel_name(bot_token, channel[:id])
+      name = channel_name(bot_token, channel)
       app_id = Workspace.find_by(slack_ws_id: team).app.id
 
-      Channel.find_or_create_by!(app_id: app_id, slack_channel_id: channel[:id]) do |c|
+      Channel.find_or_create_by!(app_id: app_id, slack_channel_id: channel) do |c|
         c.app_id = app_id
         c.name = name
-        c.slack_channel_id = channel[:id]
+        c.slack_channel_id = channel
       end
     end
 
@@ -59,7 +59,7 @@ class Channel < ApplicationRecord
 
     def bot_join_to_new_channel(bot_token, channel)
       curl_exec(base_url: SlackApiBaseurl::CONVERSATIONS_JOIN,
-                headers: { "Authorization": "Bearer " + bot_token }, params: { "channel": channel[:id] })
+                headers: { "Authorization": "Bearer " + bot_token }, params: { "channel": channel })
     end
 
     def event_case(params, event_type)
@@ -68,6 +68,12 @@ class Channel < ApplicationRecord
       case event_type
       when "channel_created"
         Events::ChannelCreated.new.execute(bot_token, params)
+
+      when "channel_unarchive"
+        Events::ChannelUnarchived.new.execute(bot_token, params)
+
+      when "channel_archive"
+        Events::ChannelArchived.new.execute(bot_token, params)
 
       when "channel_deleted"
         Events::ChannelDeleted.new.execute(bot_token, params)
@@ -97,7 +103,7 @@ class Channel < ApplicationRecord
 
       def conversations_members(bot_token, channel)
         curl_exec(base_url: SlackApiBaseurl::CONVERSATIONS_MEMBERS,
-                  headers: { "Authorization": "Bearer " + bot_token }, params: { "channel": channel[:id] })
+                  headers: { "Authorization": "Bearer " + bot_token }, params: { "channel": channel })
       end
 
       def conversations_info(bot_token, channel)
