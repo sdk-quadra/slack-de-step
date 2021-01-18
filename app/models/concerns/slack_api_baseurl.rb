@@ -3,6 +3,7 @@
 module SlackApiBaseurl
   extend ActiveSupport::Concern
 
+  OAUTH_V2_ACCESS = "https://slack.com/api/oauth.v2.access"
   USERS_IDENTITY = "https://slack.com/api/users.identity"
   USERS_LIST = "https://slack.com/api/users.list"
   CONVERSATIONS_LIST = "https://slack.com/api/conversations.list"
