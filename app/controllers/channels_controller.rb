@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 class ChannelsController < ApplicationController
-  before_action :set_workspace, only: [:show]
-  before_action :set_channel, only: [:show]
+  before_action :set_workspace, :set_channel, :inaccessible_others_channel, only: [:show]
   include CryptBuilder
+  include OwnChecker
 
   def show
     @channels = Channel.sort_channels(@workspace)
@@ -30,5 +30,9 @@ class ChannelsController < ApplicationController
 
     def set_channel
       @channel = Channel.find(params[:id])
+    end
+
+    def inaccessible_others_channel
+      check_channel_owner(session[:workspace_id], @channel.id)
     end
 end
