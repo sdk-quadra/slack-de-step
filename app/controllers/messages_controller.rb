@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
 class MessagesController < ApplicationController
-  before_action :set_channel, only: [:new, :create, :edit, :update, :destroy]
-  before_action :set_bot_token, only: [:new, :create, :edit, :update, :destroy]
-
+  before_action :set_channel, :set_bot_token, :inaccessible_others_channel, only: [:new, :create, :edit, :update, :destroy]
+  before_action :set_message, :inaccessible_others_message,  only: [:edit, :update, :destroy]
   include MessageBuilder
   include CryptBuilder
+  include OwnChecker
 
   def new
     @message = Message.new
@@ -30,12 +30,10 @@ class MessagesController < ApplicationController
   end
 
   def edit
-    @message = Message.find(params[:id])
     inaccessible_while_processing(@message)
   end
 
   def update
-    @message = Message.find(params[:id])
     inaccessible_while_processing(@message)
 
     @message.image = nil if params["delete-image"]
@@ -57,7 +55,6 @@ class MessagesController < ApplicationController
   end
 
   def destroy
-    @message = Message.find(params[:id])
     inaccessible_while_processing(@message)
 
     build_delete_message(@bot_token, @message.id)
@@ -80,8 +77,20 @@ class MessagesController < ApplicationController
       @channel = Channel.find(params[:channel_id])
     end
 
+    def set_message
+      @message = Message.find(params[:id])
+    end
+
     def set_bot_token
       oauth_bot_token = App.find_by(workspace_id: session[:workspace_id]).oauth_bot_token
       @bot_token = decrypt_token(oauth_bot_token)
+    end
+
+    def inaccessible_others_channel
+      check_channel_owner(session[:workspace_id], @channel.id)
+    end
+
+    def inaccessible_others_message
+      check_message_owner(session[:workspace_id], @message.id)
     end
 end
