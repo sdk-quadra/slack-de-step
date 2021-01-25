@@ -6,8 +6,7 @@ class SessionsController < ApplicationController
   include CurlBuilder
 
   def create
-    code = params[:code]
-    oauth_v2_access = User.oauth_v2_access(code)
+    oauth_v2_access = User.oauth_v2_access(params[:code])
 
     if oauth_v2_access.present?
       workspace = User.find_or_create_from_auth(oauth_v2_access)
