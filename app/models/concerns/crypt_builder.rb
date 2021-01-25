@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 module CryptBuilder
-  extend ActiveSupport::Concern
-
   def encrypt_token(salt, oauth_bot_token)
     crypt = message_encryptor(salt)
     crypt.encrypt_and_sign(oauth_bot_token)

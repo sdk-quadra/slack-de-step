@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 module OwnChecker
-  extend ActiveSupport::Concern
-
   def check_channel_owner(workspace_id, channel_id)
     accessible_channels = accessible_channels(workspace_id)
 
