@@ -5,14 +5,8 @@ class Events::ChannelCreated
   include ChannelBuilder
 
   def execute(bot_token, params)
-    # #
-    # channelを新規作成した時の処理
-    # #
-
     channel = params[:event][:channel][:id]
     team = params[:team_id]
-
-    # botをchannel登録する。botがchannelに入らないとchannelのeventを検知できないので
     Channel.bot_join_to_new_channel(bot_token, channel)
 
     Channel.create_channel(bot_token, team, channel)

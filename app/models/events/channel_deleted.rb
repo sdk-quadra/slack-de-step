@@ -4,12 +4,7 @@ class Events::ChannelDeleted
   include MessageBuilder
 
   def execute(bot_token, params)
-    # #
-    # channelを削除した時の処理
-    # #
-
     channel = params[:event][:channel]
-
     message_ids = Channel.find_by(slack_channel_id: channel).messages.map(&:id)
     build_delete_message(bot_token, message_ids) unless message_ids.nil?
 

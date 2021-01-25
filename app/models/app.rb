@@ -16,7 +16,6 @@ class App < ApplicationRecord
 
       encrypt_token = encrypt_token(salt, oauth_bot_token)
 
-      # workspace_idがすでにあれば、更新する。bot_tokenが変わった場合を想定
       app = App.find_or_initialize_by(workspace_id: workspace.id)
       app.update_attributes(
         oauth_bot_token: encrypt_token,

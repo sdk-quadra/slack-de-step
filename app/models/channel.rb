@@ -24,7 +24,7 @@ class Channel < ApplicationRecord
           channel.slack_channel_id = conversation["id"]
           channel.name = conversation["name"]
         end
-        # botをpublic channelに参加させる
+
         bot_join_to_channel(oauth_bot_token, conversation)
       end
     end

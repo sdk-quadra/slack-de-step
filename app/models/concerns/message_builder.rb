@@ -43,7 +43,6 @@ module MessageBuilder
   end
 
   def schedule_message(bot_token, member, push_datetime, message, index = 1)
-    # 予約が完了するまで編集不可にする
     message.update(modifiable: false)
     ScheduleMessage.perform_in(index * MIN_POLLING_TIME.seconds, bot_token, member.slack_user_id, push_datetime.to_i, message.id)
   end
