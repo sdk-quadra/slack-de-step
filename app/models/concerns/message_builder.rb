@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module MessageBuilder
-  extend ActiveSupport::Concern
   include CurlBuilder
   include SlackApiBlocks
   MIN_POLLING_TIME = 5

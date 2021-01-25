@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module CurlBuilder
-  extend ActiveSupport::Concern
   def curl_build(base_url:, method: "GET", params: {}, headers: {}, body_filename: nil, verbose: true, silent: true, options: "")
     url = base_url
     url += "?" + URI.encode_www_form(params) unless params.empty?
