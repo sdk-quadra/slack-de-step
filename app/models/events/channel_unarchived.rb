@@ -5,14 +5,8 @@ class Events::ChannelUnarchived
   include ChannelBuilder
 
   def execute(bot_token, params)
-    # #
-    # channelをunarchiveした時の処理。channelを新規作成した時と同じ挙動
-    # #
-
     channel = params[:event][:channel]
     team = params[:team_id]
-
-    # botをchannel登録する。botがchannelに入らないとchannelのeventを検知できないので
     Channel.bot_join_to_new_channel(bot_token, channel)
 
     Channel.create_channel(bot_token, team, channel)

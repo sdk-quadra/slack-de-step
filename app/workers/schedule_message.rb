@@ -20,13 +20,11 @@ class ScheduleMessage
 
     IndividualMessage.save_individual_messages(member, message, scheduled_message)
 
-    # queueがなくなったら修正可能にする
     queues = Sidekiq::ScheduledSet.new
 
     if queues.size <= 0
       Message.update_all(modifiable: true)
 
-    # queueが入れられ続けて編集可能にならない場合を想定
     else
       modifiable_message = Message.where("modifiable = ? and updated_at < ?", "false", Time.now.ago(MAX_WAIT_TIME))
       modifiable_message.update_all(modifiable: true)

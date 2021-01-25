@@ -13,7 +13,6 @@ class User < ApplicationRecord
       oauth_user_token = JSON.parse(auth[0])["authed_user"]["access_token"]
       users_identity = users_identity(oauth_user_token)
 
-      # 同じworkspaceでもそれまでと違うuserがログインする場合を考慮し、create_workspaceの先にcreate_userする
       user = create_user(JSON.parse(users_identity[0]))
       workspace = Workspace.create_workspace(JSON.parse(users_identity[0]))
 

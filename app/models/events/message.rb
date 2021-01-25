@@ -2,10 +2,6 @@
 
 class Events::Message
   def execute(params)
-    # #
-    # messageを受信した時の処理
-    # #
-
     return if params[:event][:subtype].present?
     return if params[:event][:user] == "USLACKBOT"
 

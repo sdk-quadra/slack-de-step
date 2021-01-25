@@ -4,10 +4,6 @@ class Events::MemberLeftChannel
   include ChannelBuilder
 
   def execute(bot_token, params)
-    # #
-    # channelからuserが退出した時の処理
-    # #
-
     user = params[:event][:user]
     channel = params[:event][:channel]
     companion = Companion.find_by(slack_user_id: user)
@@ -17,7 +13,6 @@ class Events::MemberLeftChannel
 
     member_count(channel)
 
-    # message予約キャンセル
     Message.cancel_reserved_messages(bot_token, user, channel)
   end
 end
