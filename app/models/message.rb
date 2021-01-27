@@ -10,7 +10,7 @@ class Message < ApplicationRecord
   accepts_nested_attributes_for :push_timing
   mount_uploader :image, ImageUploader
 
-  extend MessageBuilder
+  extend Builders::MessageBuilder
 
   validates :message, presence: true
   with_options if: -> { message.present? } do

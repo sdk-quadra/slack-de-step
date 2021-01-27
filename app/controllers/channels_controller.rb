@@ -2,8 +2,8 @@
 
 class ChannelsController < ApplicationController
   before_action :set_workspace, :set_channel, :inaccessible_others_channel, only: [:show]
-  include CryptBuilder
-  include OwnChecker
+  include Builders::CryptBuilder
+  include Checkers::OwnChecker
 
   def show
     @channels = Channel.sort_channels(@workspace)

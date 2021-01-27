@@ -3,9 +3,9 @@
 class MessagesController < ApplicationController
   before_action :set_channel, :set_bot_token, :inaccessible_others_channel, only: [:new, :create, :edit, :update, :destroy]
   before_action :set_message, :inaccessible_others_message,  only: [:edit, :update, :destroy]
-  include MessageBuilder
-  include CryptBuilder
-  include OwnChecker
+  include Builders::MessageBuilder
+  include Builders::CryptBuilder
+  include Checkers::OwnChecker
 
   def new
     @message = Message.new

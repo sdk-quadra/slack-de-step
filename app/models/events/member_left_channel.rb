@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Events::MemberLeftChannel
-  include ChannelBuilder
+  include Builders::ChannelBuilder
 
   def execute(bot_token, params)
     user = params[:event][:user]

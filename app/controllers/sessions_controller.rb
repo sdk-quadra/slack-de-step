@@ -2,8 +2,8 @@
 
 class SessionsController < ApplicationController
   skip_before_action :check_logged_in
-  include ChannelBuilder
-  include CurlBuilder
+  include Builders::ChannelBuilder
+  include Builders::CurlBuilder
 
   def create
     oauth_v2_access = User.oauth_v2_access(params[:code])

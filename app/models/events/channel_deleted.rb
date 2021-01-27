@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Events::ChannelDeleted
-  include MessageBuilder
+  include Builders::MessageBuilder
 
   def execute(bot_token, params)
     channel = params[:event][:channel]

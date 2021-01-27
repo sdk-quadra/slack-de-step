@@ -8,7 +8,7 @@ class Companion < ApplicationRecord
 
   validates :slack_user_id, presence: true
 
-  extend CurlBuilder
+  extend Builders::CurlBuilder
 
   class << self
     def create_companions(auth, app)
