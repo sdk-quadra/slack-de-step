@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Events::ChannelArchived
-  include MessageBuilder
+  include Builders::MessageBuilder
   def execute(bot_token, params)
     channel = params[:event][:channel]
     message_ids = Channel.find_by(slack_channel_id: channel).messages.map(&:id)

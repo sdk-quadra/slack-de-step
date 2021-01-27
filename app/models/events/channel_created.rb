@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 class Events::ChannelCreated
-  include CurlBuilder
-  include ChannelBuilder
+  include Builders::CurlBuilder
+  include Builders::ChannelBuilder
 
   def execute(bot_token, params)
     channel = params[:event][:channel][:id]

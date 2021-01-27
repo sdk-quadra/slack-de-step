@@ -6,8 +6,8 @@ class HomesController < ApplicationController
   skip_before_action :check_logged_in
   before_action :already_logged_in
 
-  include ChannelBuilder
-  include CryptBuilder
+  include Builders::ChannelBuilder
+  include Builders::CryptBuilder
 
   def index
   end

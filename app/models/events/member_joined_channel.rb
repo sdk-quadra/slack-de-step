@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Events::MemberJoinedChannel
-  include ChannelBuilder
+  include Builders::ChannelBuilder
 
   def execute(bot_token, params)
     return if params[:authorizations][0][:is_bot] == "true"

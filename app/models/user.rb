@@ -6,7 +6,7 @@ class User < ApplicationRecord
 
   validates :email, presence: true
 
-  extend CurlBuilder
+  extend Builders::CurlBuilder
 
   class << self
     def find_or_create_from_auth(auth)
@@ -42,21 +42,21 @@ class User < ApplicationRecord
     end
 
     def users_identity(oauth_user_token)
-      curl_exec(base_url: SlackApiBaseurl::USERS_IDENTITY,
+      curl_exec(base_url: SlackApis::Baseurl::USERS_IDENTITY,
                 headers: { "Authorization": "Bearer " + oauth_user_token })
     end
 
     def users_info(oauth_bot_token, bot_user_id)
-      curl_exec(base_url: SlackApiBaseurl::USERS_INFO, headers: { "Authorization": "Bearer " + oauth_bot_token },
+      curl_exec(base_url: SlackApis::Baseurl::USERS_INFO, headers: { "Authorization": "Bearer " + oauth_bot_token },
                 params: { "user": bot_user_id })
     end
 
     def users_list(oauth_bot_token)
-      curl_exec(base_url: SlackApiBaseurl::USERS_LIST, headers: { "Authorization": "Bearer " + oauth_bot_token })
+      curl_exec(base_url: SlackApis::Baseurl::USERS_LIST, headers: { "Authorization": "Bearer " + oauth_bot_token })
     end
 
     def oauth_v2_access(code)
-      curl_exec(base_url: SlackApiBaseurl::OAUTH_V2_ACCESS, params: { "code": code, "client_id": ENV["SLACK_CLIENT_ID"], "client_secret": ENV["SLACK_CLIENT_SECRET"] })
+      curl_exec(base_url: SlackApis::Baseurl::OAUTH_V2_ACCESS, params: { "code": code, "client_id": ENV["SLACK_CLIENT_ID"], "client_secret": ENV["SLACK_CLIENT_SECRET"] })
     end
   end
 end
