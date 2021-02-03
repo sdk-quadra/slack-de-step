@@ -20,6 +20,9 @@ class HomesController < ApplicationController
     end
   end
 
+  def privacy_policy
+  end
+
   private
     def event(params)
       event_type = params[:event][:type]

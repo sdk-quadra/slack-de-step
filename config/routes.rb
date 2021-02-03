@@ -14,6 +14,8 @@ Rails.application.routes.draw do
   get "server" => "homes#server"
   post "server" => "homes#server"
 
+  get "privacy_policy" => "homes#privacy_policy"
+
   # sidekiq管理画面
   require "sidekiq/web"
   mount Sidekiq::Web, at: "/sidekiq"
