@@ -1,6 +1,7 @@
 .lp__header-items
   h3.lp__logo
-    | Slack De Step
+    a[href="/" class="lp__logo-link"]
+      | Slack De Step
 
   = link_to "https://slack.com/oauth/v2/authorize?client_id=#{ENV["SLACK_CLIENT_ID"]}&scope=channels:history,channels:join,channels:read,chat:write,files:write,im:history,im:read,team:read,users:read&user_scope=identity.avatar,identity.basic,identity.email,identity.team", class: "lp__sign-in-link" do
     = image_tag "sign_in_with_slack@2x.png", class: "lp__header-sign-in-image"
