@@ -1,0 +1,4 @@
+ul.contact-form__errors
+  - contact.errors.full_messages.each do |error|
+    li.contact-form__error
+      = error

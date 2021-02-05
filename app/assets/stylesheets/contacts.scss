@@ -1,0 +1,57 @@
+@import "variables";
+
+.contact {
+  max-width: $lpwidth;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.contact-form {
+  padding: 1rem;
+  width: $formwidth;
+  margin: 0 auto;
+
+  &__errors {
+    margin-bottom: 2.5rem;
+    padding-bottom: 2.5rem;
+    border-bottom: 1px solid $weakgray;
+    color: $slackpink;
+  }
+
+  &__title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+  }
+  &__email {
+    display: block;
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+    color: $stronggray;
+    border: 1px solid $lightsilver;
+    font-size: $formfontsize;
+  }
+  &__email::placeholder {
+    color: $placeholder;
+  }
+  &__message {
+    display: block;
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+    color: $stronggray;
+    border: 1px solid $lightsilver;
+    font-size: $formfontsize;
+  }
+  &__message::placeholder {
+    color: $placeholder;
+  }
+  &__submit {
+    background: none;
+    border-radius: 3px;
+    border: 1px solid $slackblue;
+    color: $slackblue;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    width: 8rem;
+  }
+}

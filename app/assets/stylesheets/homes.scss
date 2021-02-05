@@ -35,15 +35,6 @@
     width: 180px;
     padding: 1rem 1rem 0.6rem 0;
   }
-  &__contents {
-    max-width: $lpwidth;
-    margin: 0 auto;
-  }
-  &__contents-privacy-policy {
-    line-height: 2;
-    margin-bottom: 5rem;
-    padding: 2rem;
-  }
   &__firstview {
     margin-bottom: 4rem;
   }
@@ -155,4 +146,5 @@ footer {
 footer > a {
   color: $stronggray;
   text-decoration: none;
+  margin: 0 0.5rem;
 }

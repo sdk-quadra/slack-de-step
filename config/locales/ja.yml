@@ -12,6 +12,9 @@ ja:
         time: 時刻
         in_x_days: ○日後
         time_now: 現在
+      contact:
+        email: email
+        message: お問い合わせ内容
   errors:
     format: "%{attribute}%{message}"
     messages:

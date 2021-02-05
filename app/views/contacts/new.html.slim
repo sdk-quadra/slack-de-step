@@ -1,0 +1,21 @@
+.lp
+  = render partial: "homes/flash"
+  .lp__header
+    = render partial: "homes/header"
+
+.contact
+  .contact-form
+    .contact-form__title
+      | お問い合わせ
+    = form_with(model: @contact, local: true) do |m|
+      - if @contact.errors.any?
+        label[for="message_errors" class="message-form__errors-title"]
+          | 以下の内容を修正して下さい *
+        = render partial: "error_messages", locals: {contact: @contact}
+      label[for="contact_email" class="contact-form__title-email"]
+        | email
+      = m.text_field :email, size: "57", placeholder: "example@gmail.com", class: "contact-form__email"
+      label[for="contact_message" class="contact-form__title-message"]
+        | 内容
+      = m.text_area :message, size: "50x6", placeholder: "お問い合わせ内容", class: "contact-form__message"
+      = m.submit "送信", class: "contact-form__submit"
