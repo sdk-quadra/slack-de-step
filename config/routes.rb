@@ -15,6 +15,7 @@ Rails.application.routes.draw do
   post "server" => "homes#server"
 
   get "privacy_policy" => "homes#privacy_policy"
+  resources :contacts, only: [:new, :create]
 
   # sidekiq管理画面
   require "sidekiq/web"

@@ -68,7 +68,7 @@
     font-size: $formfontsize;
   }
   &__textarea::placeholder {
-    color: #AAAAAA;
+    color: $placeholder;
   }
 
   &__submit {
@@ -118,7 +118,7 @@
 }
 
 .message-body {
-  width:  30rem;
+  width:  $formwidth;
   margin: 0 auto;
 }
 
