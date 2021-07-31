@@ -12,10 +12,10 @@ class ScheduleMessage
 
     if message.image_url
       scheduled_message = curl_exec(base_url: SlackApis::Baseurl::CHAT_SCHEDULE_MESSAGE,
-                                    params: { "token": bot_token, "channel": member, "post_at": push_timestamp, "blocks": schedule_blocks_text_with_image(message) })
+                                    params: { "token": bot_token, "channel": member, "post_at": push_timestamp, "blocks": schedule_blocks_text_with_image(message), "text": "dammy-text" })
     else
       scheduled_message = curl_exec(base_url: SlackApis::Baseurl::CHAT_SCHEDULE_MESSAGE,
-                                    params: { "token": bot_token, "channel": member, "post_at": push_timestamp, "blocks": schedule_blocks_text(message) })
+                                    params: { "token": bot_token, "channel": member, "post_at": push_timestamp, "blocks": schedule_blocks_text(message), "text": "dammy-text" })
     end
 
     IndividualMessage.save_individual_messages(member, message, scheduled_message)
