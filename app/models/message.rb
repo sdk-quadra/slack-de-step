@@ -7,6 +7,7 @@ class Message < ApplicationRecord
   has_many :individual_messages, dependent: :destroy
   has_many :transceptions, dependent: :destroy
   belongs_to :channel
+
   accepts_nested_attributes_for :push_timing
   mount_uploader :image, ImageUploader
 
