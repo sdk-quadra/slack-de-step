@@ -1,6 +1,9 @@
 # Slack De Step
 Slack De Stepはslackでメッセージを自動送信するアプリです。
 
+## demo
+* demoは[こちら](https://slack-de-step.com/)
+
 Slackの特定のチャンネルに参加して「**○日目**」の人に送信します。
 固定化された新人教育を自動化するなど、一定日数経った人に特別なメッセージを送る場合に利用します。
 
@@ -48,6 +51,10 @@ slackとの連携の為。[Create New Appで取得](https://api.slack.com/apps)
 
 * もしdeploy to herokuでアプリを立ち上げた時に設定した環境変数の値を変更したいなら、
 このSettingのConfig Varsから行ってください
+
+* もしpumaやsidekiqをheroku管理画面から起動しない場合は、以下のコマンドで起動してください
+* `$ heroku ps:scale web=1 --app slack-de-step`
+* `$ heroku ps:scale worker=1 --app slack-de-step`
 
 
 ### 権限・認証・スコープ
