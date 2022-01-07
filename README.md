@@ -1,8 +1,9 @@
 # Slack De Step
 Slack De Stepはslackでメッセージを自動送信するアプリです。
 
-## demo
-* demoは[こちら](https://slack-de-step.com/)
+
+![image](https://user-images.githubusercontent.com/39234092/148474905-dd3e95c2-6ace-4a32-9e0d-3a9d23561b3e.png)
+
 
 Slackの特定のチャンネルに参加して「**○日目**」の人に送信します。
 固定化された新人教育を自動化するなど、一定日数経った人に特別なメッセージを送る場合に利用します。
