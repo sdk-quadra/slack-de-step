@@ -2,7 +2,7 @@
 Slack De Stepはslackでメッセージを自動送信するアプリです。
 
 ### URL
-* http://slack-de-step.com
+* https://slack-de-step.herokuapp.com
 
 ![image](https://user-images.githubusercontent.com/39234092/148474905-dd3e95c2-6ace-4a32-9e0d-3a9d23561b3e.png)
 
